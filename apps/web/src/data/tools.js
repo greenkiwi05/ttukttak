@@ -22,17 +22,17 @@ export const CATEGORIES = {
 export const TOOLS = [
   // 날짜
   { slug: 'korean-age', title: '만 나이 계산기', short: '생년월일로 만 나이와 연 나이를 바로 계산', category: 'date', status: 'live' },
-  { slug: 'd-day', title: 'D-day 계산기', short: '목표일까지 남은 날, 지난 날 계산', category: 'date', status: 'planned' },
-  { slug: 'couple-anniversary', title: '커플 기념일 계산기', short: '사귄 날로 100일·1000일·주년 날짜 한눈에', category: 'date', status: 'planned' },
-  { slug: 'days-between', title: '날짜 사이 일수 계산', short: '두 날짜 사이의 일수·주·개월 계산', category: 'date', status: 'planned' },
+  { slug: 'd-day', title: 'D-day 계산기', short: '목표일까지 남은 날, 지난 날 계산', category: 'date', status: 'live' },
+  { slug: 'couple-anniversary', title: '커플 기념일 계산기', short: '사귄 날로 100일·1000일·주년 날짜 한눈에', category: 'date', status: 'live' },
+  { slug: 'days-between', title: '날짜 사이 일수 계산', short: '두 날짜 사이의 일수·주·개월 계산', category: 'date', status: 'live' },
   // 생활 계산
-  { slug: 'pyeong', title: '평수 계산기 (평 ↔ ㎡)', short: '평과 제곱미터를 바로 변환', category: 'calc', status: 'planned' },
-  { slug: 'percent', title: '퍼센트·할인율 계산기', short: '할인가, 증감률, 비율 계산', category: 'calc', status: 'planned' },
+  { slug: 'pyeong', title: '평수 계산기 (평 ↔ ㎡)', short: '평과 제곱미터를 바로 변환', category: 'calc', status: 'live' },
+  { slug: 'percent', title: '퍼센트·할인율 계산기', short: '할인가, 증감률, 비율 계산', category: 'calc', status: 'live' },
   { slug: 'loan-repayment', title: '대출 원리금 상환 계산기', short: '원리금균등·원금균등 상환표', category: 'calc', status: 'planned' },
   { slug: 'savings-interest', title: '적금·예금 이자 계산기', short: '단리·월복리, 세전·세후 이자', category: 'calc', status: 'planned' },
   // 파일 변환
   { slug: 'heic-to-jpg', title: 'HEIC JPG 변환', short: '아이폰 사진(HEIC)을 JPG로, 서버 업로드 없이', category: 'file', status: 'planned' },
-  { slug: 'image-compress', title: '이미지 용량 줄이기 (MB 지정)', short: '"2MB 이하"처럼 목표 용량에 맞춰 압축', category: 'file', status: 'planned' },
+  { slug: 'image-compress', title: '이미지 용량 줄이기 (MB 지정)', short: '"2MB 이하"처럼 목표 용량에 맞춰 압축', category: 'file', status: 'live' },
   { slug: 'pdf-merge-split', title: 'PDF 합치기·나누기', short: 'PDF 여러 개 합치기, 페이지 나누기', category: 'file', status: 'planned' },
   { slug: 'hwp-to-pdf', title: 'HWP PDF 변환', short: '한글 파일을 설치 없이 열고 PDF로', category: 'file', status: 'planned' },
   // 사진

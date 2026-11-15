@@ -8,13 +8,13 @@ Orca에서 항목 하나를 worktree 하나에 배정한다. 같은 단계 안�
 - [x] 참고 구현: 만 나이 계산기 (`korean-age`)
 - [x] 개인정보처리방침, 소개, 404, robots.txt, favicon
 
-## 1단계 — 쉬운 도구 (병렬 6개)
-- [ ] `d-day` D-day 계산기
-- [ ] `couple-anniversary` 커플 기념일 계산기
-- [ ] `days-between` 날짜 사이 일수 계산
-- [ ] `pyeong` 평수 계산기
-- [ ] `percent` 퍼센트·할인율 계산기
-- [ ] `image-compress` 이미지 용량 줄이기
+## 1단계 — 쉬운 도구 (병렬 6개) ✅ 완료
+- [x] `d-day` D-day 계산기
+- [x] `couple-anniversary` 커플 기념일 계산기
+- [x] `days-between` 날짜 사이 일수 계산
+- [x] `pyeong` 평수 계산기
+- [x] `percent` 퍼센트·할인율 계산기
+- [x] `image-compress` 이미지 용량 줄이기
 
 > 1단계가 끝나면 도메인 연결 + 배포 + 구글 서치 콘솔 등록 (`docs/DEPLOY.md`). 색인은 빨리 시작할수록 좋다.
 
