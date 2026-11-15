@@ -28,17 +28,17 @@ export const TOOLS = [
   // 생활 계산
   { slug: 'pyeong', title: '평수 계산기 (평 ↔ ㎡)', short: '평과 제곱미터를 바로 변환', category: 'calc', status: 'live' },
   { slug: 'percent', title: '퍼센트·할인율 계산기', short: '할인가, 증감률, 비율 계산', category: 'calc', status: 'live' },
-  { slug: 'loan-repayment', title: '대출 원리금 상환 계산기', short: '원리금균등·원금균등 상환표', category: 'calc', status: 'planned' },
-  { slug: 'savings-interest', title: '적금·예금 이자 계산기', short: '단리·월복리, 세전·세후 이자', category: 'calc', status: 'planned' },
+  { slug: 'loan-repayment', title: '대출 원리금 상환 계산기', short: '원리금균등·원금균등 상환표', category: 'calc', status: 'live' },
+  { slug: 'savings-interest', title: '적금·예금 이자 계산기', short: '단리·월복리, 세전·세후 이자', category: 'calc', status: 'live' },
   // 파일 변환
-  { slug: 'heic-to-jpg', title: 'HEIC JPG 변환', short: '아이폰 사진(HEIC)을 JPG로, 서버 업로드 없이', category: 'file', status: 'planned' },
+  { slug: 'heic-to-jpg', title: 'HEIC JPG 변환', short: '아이폰 사진(HEIC)을 JPG로, 서버 업로드 없이', category: 'file', status: 'live' },
   { slug: 'image-compress', title: '이미지 용량 줄이기 (MB 지정)', short: '"2MB 이하"처럼 목표 용량에 맞춰 압축', category: 'file', status: 'live' },
-  { slug: 'pdf-merge-split', title: 'PDF 합치기·나누기', short: 'PDF 여러 개 합치기, 페이지 나누기', category: 'file', status: 'planned' },
+  { slug: 'pdf-merge-split', title: 'PDF 합치기·나누기', short: 'PDF 여러 개 합치기, 페이지 나누기', category: 'file', status: 'live' },
   { slug: 'hwp-to-pdf', title: 'HWP PDF 변환', short: '한글 파일을 설치 없이 열고 PDF로', category: 'file', status: 'planned' },
   // 사진
   { slug: 'id-photo', title: '증명사진 규격 맞추기', short: '이력서·여권·반명함 사이즈로 자르기', category: 'photo', status: 'planned' },
   // 문구 생성
-  { slug: 'greeting-message', title: '경조사 문구 생성기', short: '축하·조의·감사·명절 인사 문구를 상황에 맞게', category: 'text', status: 'planned' },
+  { slug: 'greeting-message', title: '경조사 문구 생성기', short: '축하·조의·감사·명절 인사 문구를 상황에 맞게', category: 'text', status: 'live' },
 ];
 
 export const liveTools = () => TOOLS.filter((t) => t.status === 'live');

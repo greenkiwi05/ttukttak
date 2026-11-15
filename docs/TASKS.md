@@ -18,12 +18,12 @@ Orca에서 항목 하나를 worktree 하나에 배정한다. 같은 단계 안�
 
 > 1단계가 끝나면 도메인 연결 + 배포 + 구글 서치 콘솔 등록 (`docs/DEPLOY.md`). 색인은 빨리 시작할수록 좋다.
 
-## 2단계 — 중간 난이도 (병렬 5개)
-- [ ] `heic-to-jpg` HEIC JPG 변환
-- [ ] `pdf-merge-split` PDF 합치기·나누기
-- [ ] `loan-repayment` 대출 원리금 상환 계산기
-- [ ] `savings-interest` 적금·예금 이자 계산기
-- [ ] `greeting-message` 경조사 문구 생성기
+## 2단계 — 중간 난이도 (병렬 5개) ✅ 완료
+- [x] `heic-to-jpg` HEIC JPG 변환
+- [x] `pdf-merge-split` PDF 합치기·나누기
+- [x] `loan-repayment` 대출 원리금 상환 계산기
+- [x] `savings-interest` 적금·예금 이자 계산기
+- [x] `greeting-message` 경조사 문구 생성기
 
 ## 3단계 — 어려운 도구
 - [ ] `id-photo` 증명사진 규격 맞추기 (크롭·리사이즈)
