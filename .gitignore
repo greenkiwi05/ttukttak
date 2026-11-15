@@ -4,3 +4,19 @@ dist/
 .env
 .env.*
 .DS_Store
+
+# 비밀정보 (public 저장소 — 절대 커밋 금지)
+.dev.vars
+.wrangler/
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+id_rsa*
+id_ed25519*
+credentials*.json
+service-account*.json
+secrets.*
+*.secret
+.npmrc
