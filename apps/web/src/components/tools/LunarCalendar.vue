@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // 음력 ↔ 양력 변환 UI. 로직은 src/lib/lunar.js (변환표 내장, 오프라인)
 import { ref, computed } from 'vue';
+import DateInput from '../DateInput.vue';
 import { solarToLunar, lunarToSolar, lunarBirthdays } from '../../lib/lunar.js';
 import { todayKST, formatKo, parseDate } from '../../lib/date.js';
 
@@ -27,7 +28,7 @@ const table = computed(() => (lm.value && ld.value ? lunarBirthdays(Number(lm.va
   </div>
 
   <template v-if="tab === 's2l'">
-    <div class="field"><label for="sd">양력 날짜</label><input id="sd" v-model="solar" type="date" min="1000-02-13" max="2050-12-31" /></div>
+    <div class="field"><label for="sd">양력 날짜</label><DateInput id="sd" v-model="solar" min="1000-02-13" max="2050-12-31" /></div>
     <p v-if="s2l && 'error' in s2l" class="error">{{ s2l.error }}</p>
     <div v-else-if="s2l" class="result" aria-live="polite">
       <div class="sub">{{ formatKo(solar) }}은 음력으로</div>

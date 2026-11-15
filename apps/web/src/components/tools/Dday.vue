@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // D-day 계산기 UI. 로직은 src/lib/dday.js
 import { ref, computed } from 'vue';
+import DateInput from '../DateInput.vue';
 import { calcDday } from '../../lib/dday.js';
 import { todayKST, formatKo } from '../../lib/date.js';
 
@@ -18,11 +19,11 @@ const fmt = (n: number) => n.toLocaleString('ko-KR');
   <div class="row">
     <div class="field">
       <label for="target">목표일</label>
-      <input id="target" v-model="target" type="date" />
+      <DateInput id="target" v-model="target" placeholder="예: 2026.12.25" />
     </div>
     <div class="field">
       <label for="base">기준일 <small class="muted">(기본: 오늘)</small></label>
-      <input id="base" v-model="base" type="date" />
+      <DateInput id="base" v-model="base" />
     </div>
   </div>
   <label class="check"><input v-model="includeToday" type="checkbox" /> 기준일(오늘)을 1일로 포함해서 세기</label>

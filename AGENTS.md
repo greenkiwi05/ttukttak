@@ -30,6 +30,7 @@ apps/
     src/layouts/Base.astro    HTML 뼈대, meta/OG/canonical, AdSense 스크립트
     src/layouts/ToolLayout.astro  도구 페이지 공통 틀 (제목→도구→광고→설명→FAQ→다른 도구, JSON-LD 자동)
     src/components/AdSlot.astro   광고 자리 (AdSense ID 없으면 렌더링 안 함)
+    src/components/DateInput.vue     공용 날짜 입력 (키보드 19980510·1998.5.10 + 연·월 선택 달력). 날짜 입력은 type="date" 대신 이걸 쓴다
     src/components/SiteHeader.astro  상단바 (카테고리 메뉴, CSS 드롭다운 · 모바일 가로 스크롤)
     src/pages/category/[key].astro  카테고리 페이지 (tools.js의 CATEGORIES에서 자동 생성)
     src/components/tools/*.vue    도구별 UI

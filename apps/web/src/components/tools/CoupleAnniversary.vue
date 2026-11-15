@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // 커플 기념일 계산기 UI. 로직은 src/lib/anniversary.js
 import { ref, computed } from 'vue';
+import DateInput from '../DateInput.vue';
 import { anniversaries } from '../../lib/anniversary.js';
 import { todayKST, formatKo } from '../../lib/date.js';
 
@@ -21,7 +22,7 @@ const dText = (d: number) => (d === 0 ? '오늘' : d > 0 ? `D-${fmt(d)}` : `D+${
 <template>
   <div class="field">
     <label for="start">사귄 날 (처음 만난 날)</label>
-    <input id="start" v-model="start" type="date" :max="today" />
+    <DateInput id="start" v-model="start" :max="today" placeholder="예: 2025.03.14" />
   </div>
   <label class="check"><input v-model="startIsDay1" type="checkbox" /> 사귄 날을 1일로 세기 (보통 이렇게 세요)</label>
   <p v-if="error" class="error" role="alert">{{ error }}</p>

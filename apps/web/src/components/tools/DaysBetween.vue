@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // 날짜 사이 일수 계산 UI. 로직은 src/lib/daysBetween.js
 import { ref, computed } from 'vue';
+import DateInput from '../DateInput.vue';
 import { daysBetween } from '../../lib/daysBetween.js';
 import { todayKST } from '../../lib/date.js';
 
@@ -18,11 +19,11 @@ const fmt = (n: number) => n.toLocaleString('ko-KR');
   <div class="row">
     <div class="field">
       <label for="start">시작일</label>
-      <input id="start" v-model="start" type="date" />
+      <DateInput id="start" v-model="start" />
     </div>
     <div class="field">
       <label for="end">종료일</label>
-      <input id="end" v-model="end" type="date" />
+      <DateInput id="end" v-model="end" placeholder="예: 2026.12.31" />
     </div>
   </div>
   <label class="check"><input v-model="includeStart" type="checkbox" /> 시작일도 1일로 포함 (예: 근무일·여행 일수)</label>
