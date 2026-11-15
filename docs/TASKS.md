@@ -29,6 +29,16 @@ Orca에서 항목 하나를 worktree 하나에 배정한다. 같은 단계 안�
 - [x] `id-photo` 증명사진 규격 맞추기 (크롭·리사이즈)
 - [x] `hwp-to-pdf` 스파이크 완료 (`docs/spikes/hwp.md`) → 실제 파일로 품질 확인 후 진행 여부 결정
 
+## 4단계 — 추가 도구 (병렬 8개) ✅ 완료
+- [x] `char-count` 글자수 세기
+- [x] `jpg-to-pdf` JPG PDF 변환
+- [x] `image-convert` 이미지 변환·크기 조절
+- [x] `qr-code` QR코드 만들기
+- [x] `lunar-calendar` 음력 양력 변환
+- [x] `ladder` 사다리타기
+- [x] `random-pick` 제비뽑기·랜덤 뽑기
+- [x] `exif-remove` 사진 위치정보 지우기
+
 ## 공통 개선 (아무 때나, 단독 worktree)
 - [ ] 홈 화면 도구 검색창 (클라이언트 필터)
 - [ ] Lighthouse 모바일 성능·SEO·접근성 90+ 확인 및 개선
