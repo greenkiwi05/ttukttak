@@ -44,13 +44,16 @@ const jsonLd = [
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: SITE.name, item: new URL('/', Astro.site).href },
-      { '@type': 'ListItem', position: 2, name: tool.title, item: url },
+      { '@type': 'ListItem', position: 2, name: CATEGORIES[tool.category].label, item: new URL(`/category/${tool.category}/`, Astro.site).href },
+      { '@type': 'ListItem', position: 3, name: tool.title, item: url },
     ],
   },
 ];
 ---
-<Base title={tool.title} description={description} jsonLd={jsonLd}>
-  <p class="lead" style="margin-bottom:4px">{CATEGORIES[tool.category].emoji} {CATEGORIES[tool.category].label}</p>
+<Base title={tool.title} description={description} jsonLd={jsonLd} active={tool.category}>
+  <nav class="crumb" aria-label="현재 위치">
+    <a href="/">홈</a> › <a href={`/category/${tool.category}/`}>{CATEGORIES[tool.category].label}</a>
+  </nav>
   <h1>{tool.title}</h1>
   <p class="lead">{lead}</p>
 

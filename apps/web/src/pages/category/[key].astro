@@ -1,0 +1,47 @@
+---
+// 카테고리 페이지 (/category/{key}/). 상단바 메뉴의 목적지이자 검색 유입용 목록 페이지.
+import Base from '../../layouts/Base.astro';
+import { CATEGORIES, toolsIn } from '../../data/tools.js';
+import { SITE } from '../../data/site.js';
+
+export function getStaticPaths() {
+  return Object.keys(CATEGORIES).map((key) => ({ params: { key } }));
+}
+
+const { key } = Astro.params as { key: keyof typeof CATEGORIES };
+const cat = CATEGORIES[key];
+const tools = toolsIn(key);
+const title = `${cat.label} 도구 모음`;
+const url = new URL(`/category/${key}/`, Astro.site).href;
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: SITE.name, item: new URL('/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: title, item: url },
+    ],
+  },
+];
+---
+<Base title={title} description={cat.desc} jsonLd={jsonLd} active={key}>
+  <nav class="crumb" aria-label="현재 위치"><a href="/">홈</a> › {cat.label}</nav>
+  <h1><span aria-hidden="true">{cat.emoji}</span> {title}</h1>
+  <p class="lead">{cat.desc}</p>
+
+  <div class="tool-grid">
+    {tools.map((t) =>
+      t.status === 'live' ? (
+        <a class="tool-card" href={`/tools/${t.slug}/`}>
+          <strong>{t.title}</strong>
+          <small>{t.short}</small>
+        </a>
+      ) : (
+        <div class="tool-card planned" aria-disabled="true">
+          <strong>{t.title}</strong>
+          <small>준비 중</small>
+        </div>
+      )
+    )}
+  </div>
+</Base>

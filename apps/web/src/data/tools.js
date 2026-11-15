@@ -2,11 +2,11 @@
 // 새 도구를 만들면 여기에 한 줄 추가하고 status를 'live'로 바꾼다.
 
 export const CATEGORIES = {
-  file: { label: '파일 변환', emoji: '📁' },
-  photo: { label: '사진', emoji: '📷' },
-  date: { label: '날짜', emoji: '📅' },
-  calc: { label: '생활 계산', emoji: '🧮' },
-  text: { label: '문구 생성', emoji: '💌' },
+  file: { label: '파일 변환', emoji: '📁', desc: 'HEIC, PDF, 이미지 파일을 설치 없이 바꾸고 줄여요. 파일은 서버로 올라가지 않고 내 브라우저 안에서만 처리돼요.' },
+  photo: { label: '사진', emoji: '📷', desc: '증명사진처럼 규격이 정해진 사진을 원하는 크기로 바로 맞춰요. 사진은 서버로 올라가지 않아요.' },
+  date: { label: '날짜', emoji: '📅', desc: '만 나이, D-day, 기념일, 두 날짜 사이 기간까지. 날짜 계산을 한 번에 끝내요.' },
+  calc: { label: '생활 계산', emoji: '🧮', desc: '평수 변환, 할인율, 대출 상환, 적금 이자처럼 생활에서 자주 하는 계산을 바로 해요.' },
+  text: { label: '문구 생성', emoji: '💌', desc: '경조사, 명절, 감사 인사처럼 쓰기 어려운 문구를 상황에 맞게 골라 복사해요.' },
 };
 
 /**
@@ -42,6 +42,8 @@ export const TOOLS = [
 ];
 
 export const liveTools = () => TOOLS.filter((t) => t.status === 'live');
+/** 카테고리별 도구 (live 먼저) */
+export const toolsIn = (cat) => TOOLS.filter((t) => t.category === cat).sort((a, b) => (a.status === 'live' ? 0 : 1) - (b.status === 'live' ? 0 : 1));
 export const getTool = (slug) => TOOLS.find((t) => t.slug === slug);
 
 /** 같은 카테고리 우선, 그다음 다른 live 도구 */

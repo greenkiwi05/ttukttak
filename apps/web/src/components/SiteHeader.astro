@@ -1,0 +1,59 @@
+---
+// 상단바: 로고 + 카테고리 메뉴. JS 없이 CSS만으로 동작한다 (홈 JS 0 유지).
+// 데스크톱: 카테고리에 마우스를 올리거나 Tab으로 포커스하면 도구 목록이 펼쳐진다.
+// 모바일: 카테고리가 가로로 스크롤되는 버튼 줄이 되고, 누르면 카테고리 페이지로 간다.
+import { CATEGORIES, toolsIn } from '../data/tools.js';
+
+interface Props {
+  active?: string; // 현재 카테고리 key
+}
+const { active } = Astro.props;
+const cats = Object.entries(CATEGORIES).map(([key, c]) => ({
+  key,
+  ...c,
+  tools: toolsIn(key).filter((t) => t.status === 'live'),
+}));
+const path = Astro.url.pathname;
+---
+<header class="site-header">
+  <div class="header-inner">
+    <a class="logo" href="/" aria-label="뚝딱 홈">뚝<span>딱</span></a>
+    <nav class="cat-nav" aria-label="도구 카테고리">
+      <ul>
+        {cats.map((c) => (
+          <li class="cat-item">
+            <a
+              class:list={['cat-link', { active: active === c.key }]}
+              href={`/category/${c.key}/`}
+              aria-current={active === c.key ? 'page' : undefined}
+            >
+              <span aria-hidden="true">{c.emoji}</span>{c.label}
+            </a>
+            {c.tools.length > 0 && (
+              <div class="cat-menu">
+                {c.tools.map((t) => (
+                  <a href={`/tools/${t.slug}/`} aria-current={path === `/tools/${t.slug}/` ? 'page' : undefined}>
+                    <strong>{t.title}</strong>
+                    <small>{t.short}</small>
+                  </a>
+                ))}
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+{active && (
+  <script is:inline>
+    // 모바일 가로 메뉴에서 현재 카테고리가 화면 밖에 있으면 보이도록 스크롤 (페이지 스크롤은 건드리지 않음)
+    (() => {
+      const nav = document.querySelector('.cat-nav');
+      const a = nav && nav.querySelector('.cat-link.active');
+      if (!a || nav.scrollWidth <= nav.clientWidth) return;
+      const n = nav.getBoundingClientRect(), r = a.getBoundingClientRect();
+      nav.scrollLeft += r.left - n.left - (n.width - r.width) / 2;
+    })();
+  </script>
+)}

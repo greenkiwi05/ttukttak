@@ -1,13 +1,15 @@
 ---
 import '../styles/global.css';
 import { SITE } from '../data/site.js';
+import SiteHeader from '../components/SiteHeader.astro';
 
 interface Props {
   title: string;
   description: string;
   jsonLd?: object[];
+  active?: string; // 상단바에서 강조할 카테고리
 }
-const { title, description, jsonLd = [] } = Astro.props;
+const { title, description, jsonLd = [], active } = Astro.props;
 const fullTitle = title === SITE.name ? `${SITE.name} | ${SITE.tagline}` : `${title} | ${SITE.name}`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 ---
@@ -37,12 +39,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     )}
   </head>
   <body>
-    <header class="site-header">
-      <div class="container">
-        <a class="logo" href="/">뚝<span>딱</span></a>
-        <nav><a href="/">모든 도구</a></nav>
-      </div>
-    </header>
+    <SiteHeader active={active} />
     <main class="container">
       <slot />
     </main>

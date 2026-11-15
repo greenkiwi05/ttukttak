@@ -1,21 +1,23 @@
 ---
 import Base from '../layouts/Base.astro';
-import { TOOLS, CATEGORIES } from '../data/tools.js';
+import { CATEGORIES, toolsIn } from '../data/tools.js';
 import { SITE } from '../data/site.js';
 
-const groups = Object.entries(CATEGORIES).map(([key, cat]) => ({
-  ...cat,
-  tools: TOOLS.filter((t) => t.category === key),
-}));
+const groups = Object.entries(CATEGORIES).map(([key, cat]) => ({ key, ...cat, tools: toolsIn(key) }));
 ---
 <Base title={SITE.name} description="만 나이, D-day, 평수 변환부터 HEIC·PDF 변환까지. 설치·회원가입 없이 브라우저에서 바로 쓰는 무료 생활 도구 모음.">
-  <h1>필요한 계산, 뚝딱 끝</h1>
-  <p class="lead">설치·가입 없이 바로 쓰는 생활 도구. 파일은 서버로 올라가지 않아요.</p>
+  <section class="hero">
+    <h1>필요한 계산, <span>뚝딱</span> 끝</h1>
+    <p class="lead">설치·가입 없이 바로 쓰는 생활 도구. 파일은 서버로 올라가지 않아요.</p>
+  </section>
 
   {groups.map((g) => (
-    <section>
-      <h2>{g.emoji} {g.label}</h2>
-      <div class="tool-grid">
+    <section class="home-group" id={g.key}>
+      <div class="group-head">
+        <h2><span aria-hidden="true">{g.emoji}</span> {g.label}</h2>
+        <a class="more" href={`/category/${g.key}/`}>전체 보기 →</a>
+      </div>
+      <div class="tool-grid compact">
         {g.tools.map((t) =>
           t.status === 'live' ? (
             <a class="tool-card" href={`/tools/${t.slug}/`}>
