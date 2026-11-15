@@ -38,6 +38,7 @@ Orca에서 항목 하나를 worktree 하나에 배정한다. 같은 단계 안�
 - [x] `ladder` 사다리타기
 - [x] `random-pick` 제비뽑기·랜덤 뽑기
 - [x] `exif-remove` 사진 위치정보 지우기
+- [x] `travel-payment` 해외 결제 수수료 계산기
 
 ## 공통 개선 (아무 때나, 단독 worktree)
 - [ ] 홈 화면 도구 검색창 (클라이언트 필터)
