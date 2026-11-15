@@ -38,6 +38,6 @@ Orca에서 항목 하나를 worktree 하나에 배정한다. 같은 단계 안�
 ## 에이전트에게 줄 프롬프트 예시
 ```
 AGENTS.md와 docs/TOOLS.md를 읽고, `d-day` 도구를 만들어줘.
-참고 구현(korean-age)과 같은 구조로: src/lib + tests + Vue 컴포넌트 + 페이지(guide, faq).
+참고 구현(korean-age)과 같은 구조로: apps/web의 src/lib + tests + Vue 컴포넌트 + 페이지(guide, faq).
 끝나면 tools.js에서 d-day status를 live로 바꾸고 npm test && npm run build 통과시켜줘.
 ```

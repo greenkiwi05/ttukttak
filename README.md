@@ -8,7 +8,11 @@
 - 계산 로직은 순수 함수로 분리, `node:test`로 테스트
 - Cloudflare Pages 배포, JSON-LD 구조화 데이터·사이트맵으로 SEO 대응
 
-## 실행
+## 구조
+- `apps/web` — 프론트엔드 (Astro 정적 사이트)
+- `apps/api` — 백엔드 자리 (예정)
+
+## 실행 (저장소 루트에서)
 ```bash
 npm install
 npm run dev     # http://localhost:4321
