@@ -36,7 +36,7 @@ export const TOOLS = [
   { slug: 'pdf-merge-split', title: 'PDF 합치기·나누기', short: 'PDF 여러 개 합치기, 페이지 나누기', category: 'file', status: 'live' },
   { slug: 'hwp-to-pdf', title: 'HWP PDF 변환', short: '한글 파일을 설치 없이 열고 PDF로', category: 'file', status: 'planned' },
   // 사진
-  { slug: 'id-photo', title: '증명사진 규격 맞추기', short: '이력서·여권·반명함 사이즈로 자르기', category: 'photo', status: 'planned' },
+  { slug: 'id-photo', title: '증명사진 규격 맞추기', short: '이력서·여권·반명함 사이즈로 자르기', category: 'photo', status: 'live' },
   // 문구 생성
   { slug: 'greeting-message', title: '경조사 문구 생성기', short: '축하·조의·감사·명절 인사 문구를 상황에 맞게', category: 'text', status: 'live' },
 ];
