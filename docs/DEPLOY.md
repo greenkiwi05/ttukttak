@@ -15,7 +15,7 @@
 2. Project name: `ttukttak` (wrangler.jsonc의 `name`과 같아야 함)
 3. Build command: `npm run build` / Deploy command: `npx wrangler deploy` (기본값 그대로)
 4. Node 버전은 루트 `.node-version`(24)을 따름. Astro 7은 Node 22.23 이상 필요
-5. 배포 후 Settings → Domains & Routes에서 구매한 도메인 연결
+5. 배포 후 프로젝트 상단 **Domains** 탭에서 `ttukttaktools.com`, `www.ttukttaktools.com` 추가 (DNS·HTTPS 자동)
 6. 이후 main 브랜치에 push하면 자동 배포, 다른 브랜치는 미리보기 배포
 - 로컬 확인: `npm run build && npx wrangler deploy --dry-run`
 
