@@ -2,7 +2,7 @@
 export const SITE = {
   name: '뚝딱',
   tagline: '생활 계산·파일 변환 도구, 뚝딱 끝',
-  url: 'https://example.com', // TODO: 실제 도메인으로 교체
+  url: 'https://ttukttaktools.com',
   lang: 'ko',
   // AdSense 승인 후 'ca-pub-XXXXXXXXXXXXXXXX' 형태로 입력. 비어 있으면 광고 스크립트를 넣지 않는다.
   adsenseClient: '',
