@@ -14,5 +14,8 @@
     "test": "npm test --workspaces --if-present",
     "prepare": "git config core.hooksPath .githooks",
     "check:secrets": "node scripts/check-secrets.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^4.156.0"
   }
 }

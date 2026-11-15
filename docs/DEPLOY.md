@@ -9,11 +9,15 @@
 - .com → Cloudflare Registrar(원가 판매, DNS 한곳 관리) / .kr → 가비아 등 국내 업체
 - 구매 후 `apps/web/src/data/site.js`의 `url`, `apps/web/public/robots.txt`의 Sitemap 주소 교체
 
-## 3. Cloudflare Pages
-1. Cloudflare 대시보드 → Workers & Pages → Create → Pages → GitHub 저장소 연결
-2. Framework preset: Astro / Build command: `npm run build` / Output: `apps/web/dist` (Root directory는 비워 둠 = 저장소 루트)
-3. Custom domains에 구매한 도메인 연결
-4. 이후 main 브랜치에 push하면 자동 배포
+## 3. Cloudflare Workers (정적 자산)
+설정 파일은 저장소 루트 `wrangler.jsonc` (빌드 결과 `apps/web/dist`를 정적 자산으로 배포, 서버 코드 없음).
+1. Cloudflare 대시보드 → Workers & Pages → Create → GitHub 저장소 `ttukttak` 연결
+2. Project name: `ttukttak` (wrangler.jsonc의 `name`과 같아야 함)
+3. Build command: `npm run build` / Deploy command: `npx wrangler deploy` (기본값 그대로)
+4. Node 버전은 루트 `.node-version`(24)을 따름. Astro 7은 Node 22.23 이상 필요
+5. 배포 후 Settings → Domains & Routes에서 구매한 도메인 연결
+6. 이후 main 브랜치에 push하면 자동 배포, 다른 브랜치는 미리보기 배포
+- 로컬 확인: `npm run build && npx wrangler deploy --dry-run`
 
 ## 4. 검색 등록
 - Google Search Console: 도메인 속성 추가 → `https://도메인/sitemap-index.xml` 제출

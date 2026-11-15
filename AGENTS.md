@@ -18,7 +18,7 @@
 ## 기술 스택
 - Astro 7 (정적 빌드) + `@astrojs/vue` (Vue 3 `<script setup lang="ts">`) + `@astrojs/sitemap`
 - 스타일: `apps/web/src/styles/global.css` 하나 (CSS 변수). Tailwind 등 추가하지 않는다.
-- 배포: Cloudflare Pages (`npm run build` → `apps/web/dist/`), 백엔드는 추후 Cloudflare Workers
+- 배포: Cloudflare Workers 정적 자산 (`wrangler.jsonc`, `npm run build` → `apps/web/dist/`), 백엔드도 추후 Workers
 
 ## 폴더 구조
 npm workspaces 모노레포. 프론트와 백엔드를 폴더로 분리한다.

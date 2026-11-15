@@ -1,0 +1,13 @@
+// Cloudflare Workers 배포 설정 (정적 사이트 = Worker 정적 자산).
+// 빌드 결과 apps/web/dist를 그대로 올린다. 서버 코드 없음.
+// 비밀 값은 여기에 넣지 않는다 (필요하면 `wrangler secret put`).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ttukttak",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./apps/web/dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}
