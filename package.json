@@ -1,0 +1,19 @@
+{
+  "name": "ttukttak",
+  "version": "0.1.0",
+  "description": "한국 생활 도구 모음 사이트 (계산기 + 파일 변환)",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@astrojs/vue": "^7.1.5",
+    "astro": "^7.4.11",
+    "vue": "^3.5.45"
+  },
+  "private": true,
+  "type": "module"
+}

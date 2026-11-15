@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import { TOOLS, CATEGORIES } from '../data/tools.js';
+import { SITE } from '../data/site.js';
+
+const groups = Object.entries(CATEGORIES).map(([key, cat]) => ({
+  ...cat,
+  tools: TOOLS.filter((t) => t.category === key),
+}));
+---
+<Base title={SITE.name} description="만 나이, D-day, 평수 변환부터 HEIC·PDF 변환까지. 설치·회원가입 없이 브라우저에서 바로 쓰는 무료 생활 도구 모음.">
+  <h1>필요한 계산, 뚝딱 끝</h1>
+  <p class="lead">설치·가입 없이 바로 쓰는 생활 도구. 파일은 서버로 올라가지 않아요.</p>
+
+  {groups.map((g) => (
+    <section>
+      <h2>{g.emoji} {g.label}</h2>
+      <div class="tool-grid">
+        {g.tools.map((t) =>
+          t.status === 'live' ? (
+            <a class="tool-card" href={`/tools/${t.slug}/`}>
+              <strong>{t.title}</strong>
+              <small>{t.short}</small>
+            </a>
+          ) : (
+            <div class="tool-card planned" aria-disabled="true">
+              <strong>{t.title}</strong>
+              <small>준비 중</small>
+            </div>
+          )
+        )}
+      </div>
+    </section>
+  ))}
+</Base>

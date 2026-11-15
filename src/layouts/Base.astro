@@ -1,0 +1,56 @@
+---
+import '../styles/global.css';
+import { SITE } from '../data/site.js';
+
+interface Props {
+  title: string;
+  description: string;
+  jsonLd?: object[];
+}
+const { title, description, jsonLd = [] } = Astro.props;
+const fullTitle = title === SITE.name ? `${SITE.name} | ${SITE.tagline}` : `${title} | ${SITE.name}`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+---
+<!doctype html>
+<html lang={SITE.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content="ko_KR" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {jsonLd.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
+    {SITE.adsenseClient && (
+      <script
+        async
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${SITE.adsenseClient}`}
+        crossorigin="anonymous"
+      ></script>
+    )}
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a class="logo" href="/">뚝<span>딱</span></a>
+        <nav><a href="/">모든 도구</a></nav>
+      </div>
+    </header>
+    <main class="container">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        © {new Date().getFullYear()} {SITE.name} · 모든 계산과 파일 처리는 내 브라우저 안에서만 이루어지며 서버로 전송되지 않습니다.
+        · <a href="/about/">소개</a> · <a href="/privacy/">개인정보처리방침</a>
+      </div>
+    </footer>
+  </body>
+</html>
