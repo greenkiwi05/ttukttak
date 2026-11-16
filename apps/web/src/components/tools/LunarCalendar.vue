@@ -18,6 +18,9 @@ const s2l = computed(() => {
   return p ? solarToLunar(p.y, p.m, p.d) : null;
 });
 const l2s = computed(() => (ly.value && lm.value && ld.value ? lunarToSolar(Number(ly.value), Number(lm.value), Number(ld.value), leap.value) : null));
+const s2lOk = computed(() => (s2l.value && 'lunar' in s2l.value ? s2l.value : null));
+const l2sOk = computed(() => (l2s.value && 'solar' in l2s.value ? l2s.value : null));
+const errOf = (r: object | null) => (r && 'error' in r ? String(r.error) : '');
 const table = computed(() => (lm.value && ld.value ? lunarBirthdays(Number(lm.value), Number(ld.value), leap.value, thisYear, 10) : []));
 </script>
 
@@ -29,11 +32,11 @@ const table = computed(() => (lm.value && ld.value ? lunarBirthdays(Number(lm.va
 
   <template v-if="tab === 's2l'">
     <div class="field"><label for="sd">양력 날짜</label><DateInput id="sd" v-model="solar" min="1000-02-13" max="2050-12-31" /></div>
-    <p v-if="s2l && 'error' in s2l" class="error">{{ s2l.error }}</p>
-    <div v-else-if="s2l" class="result" aria-live="polite">
+    <p v-if="errOf(s2l)" class="error">{{ errOf(s2l) }}</p>
+    <div v-else-if="s2lOk" class="result" aria-live="polite">
       <div class="sub">{{ formatKo(solar) }}은 음력으로</div>
-      <div class="big">{{ s2l.lunar.year }}년 {{ s2l.lunar.leap ? '윤' : '' }}{{ s2l.lunar.month }}월 {{ s2l.lunar.day }}일</div>
-      <div v-if="s2l.gapja" class="sub">{{ s2l.gapja }}</div>
+      <div class="big">{{ s2lOk.lunar.year }}년 {{ s2lOk.lunar.leap ? '윤' : '' }}{{ s2lOk.lunar.month }}월 {{ s2lOk.lunar.day }}일</div>
+      <div v-if="s2lOk.gapja" class="sub">{{ s2lOk.gapja }}</div>
     </div>
   </template>
 
@@ -44,11 +47,11 @@ const table = computed(() => (lm.value && ld.value ? lunarBirthdays(Number(lm.va
       <div class="field"><label for="ld">일</label><input id="ld" v-model.number="ld" type="number" min="1" max="30" /></div>
     </div>
     <label class="check"><input v-model="leap" type="checkbox" /> 윤달</label>
-    <p v-if="l2s && 'error' in l2s" class="error">{{ l2s.error }}</p>
-    <div v-else-if="l2s" class="result" aria-live="polite">
+    <p v-if="errOf(l2s)" class="error">{{ errOf(l2s) }}</p>
+    <div v-else-if="l2sOk" class="result" aria-live="polite">
       <div class="sub">음력 {{ ly }}년 {{ leap ? '윤' : '' }}{{ lm }}월 {{ ld }}일은 양력으로</div>
-      <div class="big">{{ formatKo(l2s.solar) }}</div>
-      <div v-if="l2s.gapja" class="sub">{{ l2s.gapja }}</div>
+      <div class="big">{{ formatKo(l2sOk.solar) }}</div>
+      <div v-if="l2sOk.gapja" class="sub">{{ l2sOk.gapja }}</div>
     </div>
 
     <template v-if="table.length">

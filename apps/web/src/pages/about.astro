@@ -1,12 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
 import { SITE } from '../data/site.js';
+import { liveTools } from '../data/tools.js';
+const count = liveTools().length;
 ---
-<Base title="소개" description={`${SITE.name}는 설치·가입 없이 바로 쓰는 무료 생활 도구 모음입니다.`}>
+<Base title="소개" description={`${SITE.name}는 만 나이·D-day 같은 생활 계산부터 HEIC·PDF 변환까지, 설치·가입 없이 브라우저에서 바로 쓰는 무료 도구 모음이에요. 파일은 서버로 올라가지 않아요.`}>
   <h1>{SITE.name} 소개</h1>
   <div class="prose">
-    <p>{SITE.name}는 일상에서 자주 필요한 계산과 파일 변환을 설치·회원가입 없이 바로 할 수 있게 만든 무료 도구 모음입니다.</p>
-    <p>모든 도구는 브라우저 안에서만 동작합니다. 입력한 정보나 파일은 서버로 올라가지 않으니 안심하고 사용하세요.</p>
-    <p>필요한 도구가 있거나 오류를 발견하면 알려주세요: TODO-연락용 이메일</p>
+    <p>{SITE.name}는 일상에서 자주 필요한 계산과 파일 변환을 설치·회원가입 없이 바로 할 수 있게 만든 무료 도구 모음이에요. 지금 {count}개의 도구가 있어요.</p>
+    <p>모든 도구는 브라우저 안에서만 동작해요. 입력한 정보나 파일은 서버로 올라가지 않으니 안심하고 쓰세요.</p>
+    <p>계산 결과는 참고용이에요. 금융·법률처럼 중요한 결정에는 해당 기관의 안내를 함께 확인해 주세요.</p>
   </div>
 </Base>

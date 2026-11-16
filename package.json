@@ -12,6 +12,7 @@
     "build": "npm run build -w apps/web",
     "preview": "npm run preview -w apps/web",
     "test": "npm test --workspaces --if-present",
+    "check": "npm run check -w apps/web",
     "prepare": "git config core.hooksPath .githooks",
     "check:secrets": "node scripts/check-secrets.mjs"
   },

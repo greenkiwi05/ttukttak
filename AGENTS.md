@@ -12,8 +12,8 @@
 2. **정부 기준값(세율, 최저임금, 4대보험 요율, 소득기준 등)을 하드코딩하는 도구는 만들지 않는다.** 금리·시급처럼 바뀌는 값은 사용자가 입력하게 한다.
 3. **로직과 UI 분리.** 계산·변환 로직은 `apps/web/src/lib/*.js` 순수 함수로 두고 `apps/web/tests/*.test.js`에 `node:test` 테스트를 붙인다. UI는 Vue 컴포넌트.
 4. **SEO 우선.** 도구 페이지마다 설명글(guide)과 FAQ를 반드시 채운다. 계산기만 있는 빈 페이지는 AdSense 심사에서 떨어진다.
-6. **비밀정보 커밋 금지 (public 저장소).** 비밀번호, DB 접속 정보, API 키·토큰, 개인키, 개인 이메일·전화번호 등은 코드·문서·테스트·커밋 메시지 어디에도 넣지 않는다. 필요하면 `.env`/`.dev.vars`(gitignore됨)나 Cloudflare 환경변수로 둔다. pre-commit 훅(`scripts/check-secrets.mjs`)이 검사하며, 훅을 `--no-verify`로 우회하지 않는다. 예시 값은 `example.com`, `XXXX` 같은 자리표시자만 쓴다.
 5. **가볍게.** 무거운 라이브러리(WASM 등)는 해당 도구 페이지에서만 동적 `import()`로 불러온다. 홈 화면 JS는 0에 가깝게 유지.
+6. **비밀정보 커밋 금지 (public 저장소).** 비밀번호, DB 접속 정보, API 키·토큰, 개인키, 개인 이메일·전화번호 등은 코드·문서·테스트·커밋 메시지 어디에도 넣지 않는다. 필요하면 `.env`/`.dev.vars`(gitignore됨)나 Cloudflare 환경변수로 둔다. pre-commit 훅(`scripts/check-secrets.mjs`)이 검사하며, 훅을 `--no-verify`로 우회하지 않는다. 예시 값은 `example.com`, `XXXX` 같은 자리표시자만 쓴다.
 
 ## 기술 스택
 - Astro 7 (정적 빌드) + `@astrojs/vue` (Vue 3 `<script setup lang="ts">`) + `@astrojs/sitemap`
@@ -50,22 +50,23 @@ docs/                   스펙·작업 목록·배포 가이드
 3. `apps/web/src/components/tools/{Name}.vue`에 UI 작성 (기존 CSS 클래스 `field`, `btn`, `result`, `big`, `sub`, `error` 재사용)
 4. `apps/web/src/pages/tools/{slug}.astro` 생성: `ToolLayout`으로 감싸고 `<Name client:load />`, `guide` 슬롯 설명글 3~5문단, `faq` 4~6개
 5. `apps/web/src/data/tools.js`에서 해당 도구 `status: 'live'`로 변경
-6. `npm test && npm run build` 통과 확인
+6. `npm test && npm run check && npm run build` 통과 확인
 - 참고 구현: `apps/web/src/lib/age.js`, `apps/web/src/components/tools/KoreanAge.vue`, `apps/web/src/pages/tools/korean-age.astro`
 
 ## 글쓰기 규칙 (페이지 문구)
 - 한국어, 존댓말(해요체). 짧은 문장.
 - `title`은 사람들이 실제로 검색하는 표현 그대로 (예: "HEIC JPG 변환", "만 나이 계산기").
-- meta description은 120자 안팎, 무엇을 해주는지 + 차별점(서버 업로드 없음 등).
+- meta description은 70~100자, 무엇을 해주는지 + 차별점(서버 업로드 없음 등). 한글은 길면 검색 결과에서 잘린다.
 - 법·제도 언급은 확정된 사실만. 불확실하면 쓰지 않는다.
 
 ## 명령어
 - `npm run dev` 개발 서버 (http://localhost:4321)
 - `npm test` 로직 테스트
+- `npm run check` 타입 검사 (`astro check` + `vue-tsc`)
 - `npm run build` 정적 빌드 (`apps/web/dist/`)
 - 명령은 저장소 루트에서 실행한다 (루트 스크립트가 `apps/web`으로 위임). 패키지 추가는 `npm i <pkg> -w apps/web`
 
 ## 작업 방식 (Orca 병렬 worktree)
 - 한 worktree = 한 도구(= `docs/TASKS.md`의 한 항목). 다른 도구 파일은 건드리지 않는다.
 - 공용 파일(`tools.js`, `global.css`, 레이아웃)은 꼭 필요한 최소 변경만. `tools.js`는 자기 도구 줄의 `status`만 바꾼다.
-- 커밋 전 `npm test && npm run build` 필수.
+- 커밋 전 `npm test && npm run check && npm run build` 필수.
