@@ -47,7 +47,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <footer class="site-footer">
       <div class="container">
         © {new Date().getFullYear()} {SITE.name} · 모든 계산과 파일 처리는 내 브라우저 안에서만 이루어지며 서버로 전송되지 않습니다.
-        · <a href="/about/">소개</a> · <a href="/privacy/">개인정보처리방침</a>
+        · <a href="/about/">소개</a> · <a href="/privacy/">개인정보처리방침</a> · <a href={`mailto:${SITE.contactEmail}`}>문의</a>
       </div>
     </footer>
   </body>

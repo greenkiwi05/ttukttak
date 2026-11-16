@@ -22,7 +22,8 @@ const RULES = [
   ['비밀번호/시크릿 대입', /\b(pass(word|wd)?|pwd|secret|api[_-]?key|access[_-]?token|auth[_-]?token|client[_-]?secret|private[_-]?key)\b\s*[:=]\s*['"`][^'"`\s]{4,}['"`]/i],
   ['이메일 주소', /\b[A-Za-z0-9._%+-]+@(?!example\.(com|org|net)\b)(?![A-Za-z0-9-]*\.?noreply\.)[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/],
 ];
-const ALLOW_EMAILS = [/noreply@/i, /@users\.noreply\.github\.com$/i, /@example\./i];
+// 사이트 공개 문의 주소(@ttukttaktools.com, Cloudflare Email Routing으로 전달)는 허용. 개인 이메일은 계속 막는다.
+const ALLOW_EMAILS = [/noreply@/i, /@users\.noreply\.github\.com$/i, /@example\./i, /@ttukttaktools\.com$/i];
 
 const files = git('diff --cached --name-only --diff-filter=ACMR').split('\n').filter(Boolean);
 const problems = [];
