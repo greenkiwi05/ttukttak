@@ -186,7 +186,7 @@ summary { cursor: pointer; font-weight: 600; }
   background: #fff; color: var(--text); cursor: pointer; font-size: .95rem; text-decoration: none;
 }
 .btn-sub:hover { border-color: var(--accent); }
-.btn:disabled, .btn-sub:disabled { opacity: .5; cursor: not-allowed; }
+.btn:disabled, .btn-sub:disabled, .chip:disabled { opacity: .5; cursor: not-allowed; }
 .table-wrap { overflow-x: auto; margin-top: 12px; }
 .table { width: 100%; border-collapse: collapse; font-size: .95rem; background: #fff; }
 .table th, .table td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }

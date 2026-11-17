@@ -48,6 +48,10 @@ Orca에서 항목 하나를 worktree 하나에 배정한다. 같은 단계 안�
 - [x] `unit-convert` 단위 변환기
 - [x] `lotto` 로또 번호 생성기
 
+## 6단계 ✅ 완료
+- [x] `video-compress` 동영상 용량 줄이기
+- [x] `image-compress` 사진 용량 줄이기로 개편 (여러 장 + ZIP)
+
 ## 공통 개선 (아무 때나, 단독 worktree)
 - [ ] 홈 화면 도구 검색창 (클라이언트 필터)
 - [ ] Lighthouse 모바일 성능·SEO·접근성 90+ 확인 및 개선

@@ -38,10 +38,11 @@ export const TOOLS = [
   { slug: 'savings-interest', title: '적금·예금 이자 계산기', short: '단리·월복리, 세전·세후 이자', category: 'calc', status: 'live' },
   // 파일 변환
   { slug: 'heic-to-jpg', title: 'HEIC JPG 변환', short: '아이폰 사진(HEIC)을 JPG로, 서버 업로드 없이', category: 'file', status: 'live' },
-  { slug: 'image-compress', title: '이미지 용량 줄이기 (MB 지정)', short: '"2MB 이하"처럼 목표 용량에 맞춰 압축', category: 'file', status: 'live' },
+  { slug: 'image-compress', title: '사진 용량 줄이기', short: '"2MB 이하"처럼 목표 용량에 맞춰, 여러 장 한 번에', category: 'file', status: 'live' },
   { slug: 'pdf-merge-split', title: 'PDF 합치기·나누기', short: 'PDF 여러 개 합치기, 페이지 나누기', category: 'file', status: 'live' },
   { slug: 'jpg-to-pdf', title: 'JPG PDF 변환', short: '사진 여러 장을 PDF 하나로, 서버 업로드 없이', category: 'file', status: 'live' },
   { slug: 'image-convert', title: '이미지 변환·크기 조절', short: 'PNG·JPG·WEBP 변환, 픽셀·비율로 크기 조절', category: 'file', status: 'live' },
+  { slug: 'video-compress', title: '동영상 용량 줄이기', short: '화질·목표 용량을 골라 영상 압축, 서버 업로드 없이', category: 'file', status: 'live' },
   { slug: 'pdf-to-jpg', title: 'PDF JPG 변환', short: 'PDF 페이지를 이미지로, 서버 업로드 없이', category: 'file', status: 'live' },
   { slug: 'hwp-to-pdf', title: 'HWP PDF 변환', short: '한글 파일을 설치 없이 열고 PDF로 저장', category: 'file', status: 'live' },
   // 사진
