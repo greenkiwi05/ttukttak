@@ -57,6 +57,9 @@ export const TOOLS = [
   { slug: 'char-count', title: '글자수 세기', short: '공백 포함·제외 글자수, 바이트, 원고지 매수', keywords: '글자수, 자소서, 자기소개서, 바이트, 공백 제외, 원고지', category: 'text', status: 'live' },
   { slug: 'qr-code', title: 'QR코드 만들기', short: '링크·와이파이·연락처 QR코드 무료 생성', keywords: 'qr, 큐알코드, 와이파이, 링크, qr 생성', category: 'text', status: 'live' },
   { slug: 'greeting-message', title: '경조사 문구 생성기', short: '축하·조의·감사·명절 인사 문구를 상황에 맞게', keywords: '축하 문구, 조의, 결혼, 명절 인사, 감사 인사, 경조사', category: 'text', status: 'live' },
+  { slug: 'name-romanize', title: '한글 이름 영어 변환', short: '여권·서류용 영문 이름 표기, 성 표기 고르기', keywords: '영어이름, 영문이름, 이름 영어로, 로마자 표기, 여권 영문, 영문 성', category: 'text', status: 'live' },
+  { slug: 'stamp-maker', title: '도장 만들기', short: '이름으로 원형·사각 도장 이미지, 투명 PNG', keywords: '도장, 온라인 도장, 무료 도장 만들기, 전자 도장, 인감, 직인', category: 'text', status: 'live' },
+  { slug: 'signature-maker', title: '사인 만들기', short: '손글씨 사인 이미지, 한글·영문, 투명 PNG', keywords: '사인, 서명, 싸인, 전자서명, 이메일 서명, 손글씨', category: 'text', status: 'live' },
   // 뽑기·게임
   { slug: 'ladder', title: '사다리타기', short: '참가자와 결과를 넣고 공정하게 사다리 타기', keywords: '사다리, 사다리게임, 내기, 당첨, 뽑기', category: 'fun', status: 'live' },
   { slug: 'lotto', title: '로또 번호 생성기', short: '6/45 번호 무작위 뽑기, 고정수·제외수', keywords: '로또, 로또번호, 번호 생성, 자동번호, 6/45', category: 'fun', status: 'live' },

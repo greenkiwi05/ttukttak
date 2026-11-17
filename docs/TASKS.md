@@ -57,7 +57,8 @@ Orca에서 항목 하나를 worktree 하나에 배정한다. 같은 단계 안�
 - [x] `pdf-compress` PDF 용량 줄이기
 - [x] `time-calculator` 시간 계산기
 - [x] `calculator` 공학용 계산기
-- [ ] (다음) 한글 이름 영어 변환, 도장·사인 만들기
+- [x] `name-romanize` 한글 이름 영어 변환
+- [x] `stamp-maker`·`signature-maker` 도장·사인 만들기
 
 ## 공통 개선 (아무 때나, 단독 worktree)
 - [ ] 홈 화면 도구 검색창 (클라이언트 필터)

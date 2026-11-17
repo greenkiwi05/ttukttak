@@ -1,0 +1,39 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import DirectionTabs from '../../components/DirectionTabs.astro';
+import SignatureMaker from '../../components/tools/SignatureMaker.vue';
+
+const faq = [
+  { q: '사인 이미지는 어디에 쓰나요?', a: '전자 문서, 이메일 서명, 견적서, 디자인 작업처럼 손으로 쓴 사인이 필요한 곳에 이미지로 넣어 쓰면 돼요. 배경이 투명한 PNG로 저장돼요.' },
+  { q: '한글 이름도 되나요?', a: '네. 펜 손글씨와 붓 손글씨는 한글을 지원해요. 영문 필기체와 흘림체는 영어 이름(예: Gildong Hong)에 어울려요.' },
+  { q: '직접 손으로 그린 사인과 뭐가 다른가요?', a: '글씨체를 이용해 깔끔하게 만든 사인이라 누구나 비슷하게 만들 수 있어요. 법적으로 본인 확인이 중요한 서류에는 직접 쓴 서명을 쓰는 게 좋아요.' },
+  { q: '색과 모양을 바꿀 수 있나요?', a: '검정·파랑 잉크·빨강 중에 고를 수 있고, 밑줄 획과 기울이기를 켜고 끌 수 있어요.' },
+  { q: '입력한 이름이 저장되나요?', a: '아니요. 사인은 브라우저 안에서 그려지고 이름은 어디에도 보내거나 저장하지 않아요.' },
+];
+---
+<ToolLayout
+  slug="signature-maker"
+  description="이름을 넣으면 손글씨 사인 이미지를 바로 만들어요. 한글 펜·붓 손글씨, 영문 필기체 중에 고르고 투명 배경 PNG로 저장해요. 전자 문서·이메일 서명에 쓰세요."
+  lead="이름을 넣고 글씨체를 고르면 사인 이미지를 만들어드려요."
+  faq={faq}
+>
+  <DirectionTabs items={[{ href: '/tools/stamp-maker/', label: '도장 만들기' }, { href: '/tools/signature-maker/', label: '사인 만들기' }]} />
+  <SignatureMaker client:load />
+
+  <Fragment slot="guide">
+    <h2>사인 이미지 만들기</h2>
+    <ol>
+      <li>이름을 한글이나 영어로 넣어요.</li>
+      <li>미리보기를 보고 마음에 드는 글씨체를 골라요.</li>
+      <li>색, 밑줄 획, 기울이기를 정하고 PNG로 저장해요.</li>
+    </ol>
+    <h2>어울리는 글씨체</h2>
+    <ul>
+      <li><b>펜 손글씨</b>: 볼펜으로 쓴 듯한 자연스러운 한글 사인</li>
+      <li><b>붓 손글씨</b>: 힘 있는 붓글씨 느낌의 한글 사인</li>
+      <li><b>영문 필기체·흘림체</b>: 영어 이름을 멋스럽게</li>
+    </ul>
+    <h2>알아 두세요</h2>
+    <p>사인 이미지는 본인 이름으로만 만들어 주세요. 계약처럼 본인 확인이 중요한 서류에는 직접 손으로 쓴 서명을 쓰는 게 안전해요. 문서에 찍을 도장이 필요하면 <a href="/tools/stamp-maker/">도장 만들기</a>를 써 보세요.</p>
+  </Fragment>
+</ToolLayout>
