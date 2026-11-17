@@ -11,7 +11,7 @@ const { active } = Astro.props;
 const cats = Object.entries(CATEGORIES).map(([key, c]) => ({
   key,
   ...c,
-  tools: toolsIn(key).filter((t) => t.status === 'live'),
+  tools: toolsIn(key),
 }));
 const path = Astro.url.pathname;
 ---

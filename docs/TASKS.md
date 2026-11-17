@@ -27,7 +27,7 @@ Orca에서 항목 하나를 worktree 하나에 배정한다. 같은 단계 안�
 
 ## 3단계 — 어려운 도구
 - [x] `id-photo` 증명사진 규격 맞추기 (크롭·리사이즈)
-- [x] `hwp-to-pdf` 스파이크 완료 (`docs/spikes/hwp.md`) → 실제 파일로 품질 확인 후 진행 여부 결정
+- [x] `hwp-to-pdf` HWP 뷰어 + PDF 저장 (스파이크: `docs/spikes/hwp.md`)
 
 ## 4단계 — 추가 도구 (병렬 8개) ✅ 완료
 - [x] `char-count` 글자수 세기

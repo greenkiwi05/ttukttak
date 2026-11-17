@@ -30,18 +30,11 @@ const jsonLd = [
   <p class="lead">{cat.desc}</p>
 
   <div class="tool-grid">
-    {tools.map((t) =>
-      t.status === 'live' ? (
-        <a class="tool-card" href={`/tools/${t.slug}/`}>
-          <strong>{t.title}</strong>
-          <small>{t.short}</small>
-        </a>
-      ) : (
-        <div class="tool-card planned" aria-disabled="true">
-          <strong>{t.title}</strong>
-          <small>준비 중</small>
-        </div>
-      )
-    )}
+    {tools.map((t) => (
+      <a class="tool-card" href={`/tools/${t.slug}/`}>
+        <strong>{t.title}</strong>
+        <small>{t.short}</small>
+      </a>
+    ))}
   </div>
 </Base>

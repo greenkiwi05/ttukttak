@@ -18,19 +18,12 @@ const groups = Object.entries(CATEGORIES).map(([key, cat]) => ({ key, ...cat, to
         <a class="more" href={`/category/${g.key}/`}>전체 보기 →</a>
       </div>
       <div class="tool-grid compact">
-        {g.tools.map((t) =>
-          t.status === 'live' ? (
-            <a class="tool-card" href={`/tools/${t.slug}/`}>
-              <strong>{t.title}</strong>
-              <small>{t.short}</small>
-            </a>
-          ) : (
-            <div class="tool-card planned" aria-disabled="true">
-              <strong>{t.title}</strong>
-              <small>준비 중</small>
-            </div>
-          )
-        )}
+        {g.tools.map((t) => (
+          <a class="tool-card" href={`/tools/${t.slug}/`}>
+            <strong>{t.title}</strong>
+            <small>{t.short}</small>
+          </a>
+        ))}
       </div>
     </section>
   ))}

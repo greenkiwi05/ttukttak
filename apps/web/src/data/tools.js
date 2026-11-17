@@ -43,7 +43,7 @@ export const TOOLS = [
   { slug: 'jpg-to-pdf', title: 'JPG PDF 변환', short: '사진 여러 장을 PDF 하나로, 서버 업로드 없이', category: 'file', status: 'live' },
   { slug: 'image-convert', title: '이미지 변환·크기 조절', short: 'PNG·JPG·WEBP 변환, 픽셀·비율로 크기 조절', category: 'file', status: 'live' },
   { slug: 'pdf-to-jpg', title: 'PDF JPG 변환', short: 'PDF 페이지를 이미지로, 서버 업로드 없이', category: 'file', status: 'live' },
-  { slug: 'hwp-to-pdf', title: 'HWP PDF 변환', short: '한글 파일을 설치 없이 열고 PDF로', category: 'file', status: 'planned' },
+  { slug: 'hwp-to-pdf', title: 'HWP PDF 변환', short: '한글 파일을 설치 없이 열고 PDF로 저장', category: 'file', status: 'live' },
   // 사진
   { slug: 'id-photo', title: '증명사진 규격 맞추기', short: '이력서·여권·반명함 사이즈로 자르기', category: 'photo', status: 'live' },
   { slug: 'image-merge', title: '사진 합치기', short: '여러 장을 세로·가로로 한 장에 이어 붙이기', category: 'photo', status: 'live' },
@@ -59,8 +59,8 @@ export const TOOLS = [
 ];
 
 export const liveTools = () => TOOLS.filter((t) => t.status === 'live');
-/** 카테고리별 도구 (live 먼저) */
-export const toolsIn = (cat) => TOOLS.filter((t) => t.category === cat).sort((a, b) => (a.status === 'live' ? 0 : 1) - (b.status === 'live' ? 0 : 1));
+/** 카테고리별 공개 도구. planned(준비 중)는 홈·카테고리·메뉴 어디에도 보이지 않는다 */
+export const toolsIn = (cat) => TOOLS.filter((t) => t.category === cat && t.status === 'live');
 export const getTool = (slug) => TOOLS.find((t) => t.slug === slug);
 
 /** 같은 카테고리 우선, 그다음 다른 live 도구 */

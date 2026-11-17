@@ -78,10 +78,12 @@
 - 라이브러리: `pdf-lib` (동적 import)
 - 탭: 합치기(파일 순서 드래그), 나누기(페이지 범위 "1-3, 5" 입력 파서 → `apps/web/src/lib/pageRange.js` 테스트)
 
-### hwp-to-pdf — HWP PDF 변환 ⚠️ 기술 검증 먼저
+### hwp-to-pdf — HWP PDF 변환 ✅ (뷰어 + 화면 캡처 PDF)
 - 주 키워드: HWP PDF 변환 / 보조: 한글 파일 열기 맥, hwp 뷰어 온라인
-- 1단계(스파이크): 브라우저용 HWP 파서 후보 조사(예: `hwp.js` 계열, HWPX는 ZIP+XML이라 상대적으로 쉬움) → 표·이미지 렌더링 품질 확인 → 결과를 `docs/spikes/hwp.md`에 기록
-- 2단계: 뷰어 + `window.print()`로 PDF 저장 안내부터. 완전한 변환은 품질이 확인된 후에.
+- 엔진: `@ohah/hwpjs` 0.1.1 (버전 고정, WASM 약 7MB + worker를 `?url`로 이 페이지에서만 로드)
+- 보기: `createCanvasSurface` 읽기 전용. 배포용 문서(`content.primarySource === 'distribution_viewtext'`)는 쪽 모양을 못 그려서 열지 않고 안내
+- PDF: `toHtml`은 진단용 문구가 섞인 의미 구조 HTML이라 쓰지 않는다. 대신 뷰어 캔버스를 쪽마다 캡처 → pdf-lib (쪽 경계는 배경색 틈으로 찾음, `src/lib/pageScan.js`). 글자는 이미지라 검색·복사 불가를 안내
+- 상세 조사: `docs/spikes/hwp.md`
 
 ---
 
