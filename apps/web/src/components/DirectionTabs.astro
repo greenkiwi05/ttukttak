@@ -1,0 +1,14 @@
+---
+// 짝을 이루는 도구(예: JPG→PDF / PDF→JPG)를 한 도구처럼 오가게 하는 탭. 페이지는 검색용으로 따로 둔다.
+// JS 없이 링크만 쓴다.
+interface Props {
+  items: { href: string; label: string }[];
+}
+const { items } = Astro.props;
+const path = Astro.url.pathname;
+---
+<nav class="tabs dir-tabs" aria-label="변환 방향">
+  {items.map((it) => (
+    <a href={it.href} aria-current={path === it.href ? 'page' : undefined}>{it.label}</a>
+  ))}
+</nav>

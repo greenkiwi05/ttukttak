@@ -173,6 +173,13 @@ summary { cursor: pointer; font-weight: 600; }
   background: #fff; color: var(--text); cursor: pointer; font-size: .95rem;
 }
 .tabs button[aria-selected='true'], .chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+/* 링크로 된 탭 (짝 도구 오가기) */
+.dir-tabs a {
+  flex: 1; text-align: center; padding: 10px 14px; border: 1px solid var(--line); border-radius: 999px;
+  background: #fff; color: var(--text); text-decoration: none; font-weight: 700;
+}
+.dir-tabs a:hover { border-color: var(--accent); }
+.dir-tabs a[aria-current='page'] { background: var(--accent); border-color: var(--accent); color: #fff; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 .btn-sub {
   display: inline-block; padding: 9px 14px; border: 1px solid var(--line); border-radius: 10px;

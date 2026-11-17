@@ -1,5 +1,6 @@
 ---
 import ToolLayout from '../../layouts/ToolLayout.astro';
+import DirectionTabs from '../../components/DirectionTabs.astro';
 import PdfToJpg from '../../components/tools/PdfToJpg.vue';
 
 const faq = [
@@ -17,6 +18,7 @@ const faq = [
   lead="PDF를 넣으면 페이지마다 이미지로 바꿔드려요. 서버 업로드 없이요."
   faq={faq}
 >
+  <DirectionTabs items={[{ href: '/tools/jpg-to-pdf/', label: 'JPG → PDF' }, { href: '/tools/pdf-to-jpg/', label: 'PDF → JPG' }]} />
   <PdfToJpg client:load />
 
   <Fragment slot="guide">
