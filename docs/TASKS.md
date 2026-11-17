@@ -40,6 +40,14 @@ Orca에서 항목 하나를 worktree 하나에 배정한다. 같은 단계 안�
 - [x] `exif-remove` 사진 위치정보 지우기
 - [x] `travel-payment` 해외 결제 수수료 계산기
 
+## 5단계 — 추가 도구 (6개) ✅ 완료
+- [x] `dutch-pay` 더치페이 계산기
+- [x] `work-hours` 근무시간 계산기
+- [x] `pdf-to-jpg` PDF JPG 변환
+- [x] `image-merge` 사진 합치기
+- [x] `unit-convert` 단위 변환기
+- [x] `lotto` 로또 번호 생성기
+
 ## 공통 개선 (아무 때나, 단독 worktree)
 - [ ] 홈 화면 도구 검색창 (클라이언트 필터)
 - [ ] Lighthouse 모바일 성능·SEO·접근성 90+ 확인 및 개선
