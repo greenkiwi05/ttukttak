@@ -57,7 +57,7 @@ function run() {
       <li v-for="x in result.order" :key="x" style="font-weight: 600">{{ x }}</li>
     </ol>
   </div>
-  <p class="muted" style="margin: 10px 0 0">브라우저의 보안 난수(crypto)로 섞어서 누구에게도 유리하지 않아요.</p>
+  <p class="muted" style="margin: 10px 0 0">브라우저의 보안 난수로 섞어서 누구에게도 유리하지 않아요.</p>
 </template>
 
 <style scoped>

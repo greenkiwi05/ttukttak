@@ -46,6 +46,9 @@ async function clean() {
 const saveOne = (i: number) => downloadBlob(items.value[i].out!, outNames.value[i]);
 const saveZip = () => downloadZip(items.value.map((it, i) => ({ it, name: outNames.value[i] })).filter((x) => x.it.out).map((x) => ({ name: x.name, blob: x.it.out! })), 'photos_clean.zip');
 const coord = (n: number) => n.toFixed(5);
+// 찾은 정보 이름을 쉬운 말로
+const LABELS: Record<string, string> = { EXIF: '촬영 정보(EXIF)', XMP: '편집 프로그램 기록', IPTC: '작성자·저작권 정보', 주석: '메모' };
+const friendly = (found: string[]) => [...new Set(found.map((f) => LABELS[f] ?? (f.startsWith('PNG') ? '텍스트 정보' : '기타 정보')))].join(', ');
 const mapUrl = (g: { lat: number; lon: number }) => `https://www.openstreetmap.org/?mlat=${g.lat}&mlon=${g.lon}#map=15/${g.lat}/${g.lon}`;
 </script>
 
@@ -70,13 +73,13 @@ const mapUrl = (g: { lat: number; lon: number }) => `https://www.openstreetmap.o
           <div v-else class="muted">위치정보 없음</div>
           <div v-if="it.meta.make || it.meta.model" class="muted">📷 {{ [it.meta.make, it.meta.model].filter(Boolean).join(' ') }}</div>
           <div v-if="it.meta.date" class="muted">🕒 {{ it.meta.date }}</div>
-          <div class="muted">발견: {{ it.meta.found.length ? it.meta.found.join(', ') : '지울 메타데이터 없음' }}</div>
+          <div class="muted">찾은 정보: {{ it.meta.found.length ? friendly(it.meta.found) : '지울 정보 없음' }}</div>
         </div>
         <button v-if="it.out" type="button" class="btn-sub" @click="saveOne(i)">저장 ({{ formatBytes(it.out.size) }})</button>
       </li>
     </ul>
     <label class="check"><input v-model="keepOrientation" type="checkbox" /> 사진 회전 정보는 남기기 (끄면 일부 사진이 옆으로 누워 보일 수 있어요)</label>
-    <button class="btn" type="button" @click="clean">메타데이터 지우기</button>
+    <button class="btn" type="button" @click="clean">위치·촬영 정보 지우기</button>
     <div style="display: flex; gap: 8px; margin-top: 10px">
       <button v-if="done.length > 1" type="button" class="btn-sub" @click="saveZip">전체 ZIP 저장 ({{ done.length }}장)</button>
       <button type="button" class="btn-sub" @click="items = []; rejected = []">목록 비우기</button>

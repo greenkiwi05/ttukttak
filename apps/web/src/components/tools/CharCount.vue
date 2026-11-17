@@ -16,7 +16,7 @@ const stats = computed(() => [
   ['공백 포함', r.value.chars],
   ['공백 제외', r.value.charsNoSpace],
   ['바이트 (한글 2)', r.value.bytesKr],
-  ['바이트 (UTF-8)', r.value.bytesUtf8],
+  ['바이트 (한글 3)', r.value.bytesUtf8],
   ['단어', r.value.words],
   ['줄', r.value.lines],
   ['문단', r.value.paragraphs],
