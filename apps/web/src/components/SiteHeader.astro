@@ -1,8 +1,9 @@
 ---
-// 상단바: 로고 + 카테고리 메뉴. JS 없이 CSS만으로 동작한다 (홈 JS 0 유지).
+// 상단바: 로고 + 카테고리 메뉴 + 도구 검색. 메뉴는 CSS만으로 동작하고, 검색만 작은 스크립트(src/scripts/search.ts)를 쓴다.
 // 데스크톱: 카테고리에 마우스를 올리거나 Tab으로 포커스하면 도구 목록이 펼쳐진다.
 // 모바일: 카테고리가 가로로 스크롤되는 버튼 줄이 되고, 누르면 카테고리 페이지로 간다.
-import { CATEGORIES, toolsIn } from '../data/tools.js';
+import { CATEGORIES, toolsIn, liveTools } from '../data/tools.js';
+import { SITE } from '../data/site.js';
 
 interface Props {
   active?: string; // 현재 카테고리 key
@@ -14,6 +15,8 @@ const cats = Object.entries(CATEGORIES).map(([key, c]) => ({
   tools: toolsIn(key),
 }));
 const path = Astro.url.pathname;
+// 검색 색인 (공개 도구만, 페이지에 JSON으로 심는다)
+const index = liveTools().map((t) => ({ slug: t.slug, title: t.title, short: t.short, keywords: t.keywords ?? '', emoji: CATEGORIES[t.category].emoji }));
 ---
 <header class="site-header">
   <div class="header-inner">
@@ -43,8 +46,26 @@ const path = Astro.url.pathname;
         ))}
       </ul>
     </nav>
+    <button type="button" class="search-btn" data-open-search aria-label="도구 검색 (단축키 /)" title="도구 검색 ( / )">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+    </button>
   </div>
 </header>
+
+<dialog class="search-dlg" aria-label="도구 검색">
+  <form method="dialog" class="search-box" role="search">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+    <input type="search" name="q" placeholder="어떤 도구가 필요하세요? (예: PDF 합치기, 나이, 용량)" autocomplete="off" aria-label="도구 이름이나 하고 싶은 일" aria-controls="search-results" />
+    <button type="submit" value="close" class="search-close" aria-label="닫기"><span class="pc-only">Esc</span><span class="m-only">닫기</span></button>
+  </form>
+  <p class="search-hint">자주 찾는 도구</p>
+  <ul id="search-results" class="search-results" role="listbox"></ul>
+  <p class="search-empty" hidden>찾는 도구가 없어요. 필요한 도구를 <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>로 알려 주세요.</p>
+</dialog>
+<script type="application/json" id="tool-index" set:html={JSON.stringify(index)} />
+<script>
+  import '../scripts/search';
+</script>
 {active && (
   <script is:inline>
     // 모바일 가로 메뉴에서 현재 카테고리가 화면 밖에 있으면 보이도록 스크롤 (페이지 스크롤은 건드리지 않음)

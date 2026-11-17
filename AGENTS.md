@@ -32,7 +32,8 @@ apps/
     src/components/AdSlot.astro   광고 자리 (AdSense ID 없으면 렌더링 안 함)
     src/components/DateInput.vue     공용 날짜 입력 (키보드 19980510·1998.5.10 + 연·월 선택 달력). 날짜 입력은 type="date" 대신 이걸 쓴다
     src/components/DirectionTabs.astro  짝 도구(JPG→PDF / PDF→JPG 등) 오가기 탭. 검색용 페이지는 따로 두고 탭으로만 묶는다
-    src/components/SiteHeader.astro  상단바 (카테고리 메뉴, CSS 드롭다운 · 모바일 가로 스크롤)
+    src/components/SiteHeader.astro  상단바 (카테고리 메뉴, CSS 드롭다운 · 모바일 가로 스크롤 · 도구 검색 창)
+    src/scripts/search.ts       도구 검색 (단축키 / · Ctrl+K, 초성 검색). 로직은 src/lib/search.js
     src/pages/category/[key].astro  카테고리 페이지 (tools.js의 CATEGORIES에서 자동 생성)
     src/components/tools/*.vue    도구별 UI
     src/lib/*.js              도구별 순수 로직
@@ -50,7 +51,7 @@ docs/                   스펙·작업 목록·배포 가이드
 2. `apps/web/src/lib/{name}.js`에 로직 작성 + `apps/web/tests/{name}.test.js` 테스트 (경계값 포함)
 3. `apps/web/src/components/tools/{Name}.vue`에 UI 작성 (기존 CSS 클래스 `field`, `btn`, `result`, `big`, `sub`, `error` 재사용)
 4. `apps/web/src/pages/tools/{slug}.astro` 생성: `ToolLayout`으로 감싸고 `<Name client:load />`, `guide` 슬롯 설명글 3~5문단, `faq` 4~6개
-5. `apps/web/src/data/tools.js`에서 해당 도구 `status: 'live'`로 변경
+5. `apps/web/src/data/tools.js`에서 해당 도구 `status: 'live'`로 변경하고, `keywords`(사람들이 실제로 치는 검색어·별칭, 쉼표 구분)를 채운다 — 사이트 검색에 쓰이고 테스트가 검사한다
 6. `npm test && npm run check && npm run build` 통과 확인
 - 참고 구현: `apps/web/src/lib/age.js`, `apps/web/src/components/tools/KoreanAge.vue`, `apps/web/src/pages/tools/korean-age.astro`
 

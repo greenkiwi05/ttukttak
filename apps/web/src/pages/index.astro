@@ -9,6 +9,11 @@ const groups = Object.entries(CATEGORIES).map(([key, cat]) => ({ key, ...cat, to
   <section class="hero">
     <h1>필요한 계산, <span>뚝딱</span> 끝</h1>
     <p class="lead">설치·가입 없이 바로 쓰는 생활 도구. 파일은 서버로 올라가지 않아요.</p>
+    <button type="button" class="home-search" data-open-search>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+      어떤 도구가 필요하세요? (예: PDF 합치기, 나이, 용량)
+      <kbd>/</kbd>
+    </button>
   </section>
 
   {groups.map((g) => (
