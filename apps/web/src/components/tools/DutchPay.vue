@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // 더치페이(N빵) 계산기 UI. 정산 로직은 src/lib/dutchPay.js
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { settle, settleText, ROUND_UNITS } from '../../lib/dutchPay.js';
 import { parseList } from '../../lib/randomPick.js';
 
@@ -45,10 +45,30 @@ const ok = computed(() => (result.value && !('error' in result.value) ? result.v
 const error = computed(() => (result.value && 'error' in result.value ? result.value.error : ''));
 const won = (n: number) => n.toLocaleString('ko-KR') + '원';
 
+// 정산 문구. "총액 ÷ 인원"은 사람 이름 대신 1인당 금액으로 간단히.
+function shareText() {
+  const r = ok.value!;
+  if (mode.value === 'simple') {
+    const lines = ['[정산]', `총 ${won(r.total)} ÷ ${r.perPerson.length}명`, `1인당 ${won(r.perPerson[0]?.pay ?? 0)}`];
+    if (account.value.trim()) lines.push('', `입금: ${account.value.trim()}`);
+    return lines.join('\n');
+  }
+  return settleText(r, input.value.rounds, account.value);
+}
+// 휴대폰에서는 공유창(카카오톡·문자 등)을 띄우고, 지원하지 않으면 복사한다.
+const canShare = ref(false); // 서버 렌더링과 어긋나지 않게 화면에 붙은 뒤 확인
+onMounted(() => (canShare.value = 'share' in navigator));
+async function share() {
+  if (!ok.value) return;
+  try {
+    await navigator.share({ title: '더치페이 정산', text: shareText() });
+  } catch (e) {
+    if ((e as Error).name !== 'AbortError') await copy();
+  }
+}
 async function copy() {
   if (!ok.value) return;
-  const t = settleText(ok.value, input.value.rounds, account.value);
-  try { await navigator.clipboard.writeText(t); } catch { /* 복사 불가 환경 */ }
+  try { await navigator.clipboard.writeText(shareText()); } catch { /* 복사 불가 환경 */ }
   copied.value = true;
   setTimeout(() => (copied.value = false), 1500);
 }
@@ -116,10 +136,16 @@ async function copy() {
       </p>
     </div>
     <div class="field" style="margin-top: 12px"><label for="acc">입금 계좌 (선택, 저장 안 됨)</label><input id="acc" v-model="account" type="text" placeholder="예: OO은행 000-0000-0000 홍길동" /></div>
-    <button type="button" class="btn" @click="copy">{{ copied ? '복사됐어요' : '정산 문구 복사' }}</button>
+    <div class="share-row">
+      <button v-if="canShare" type="button" class="btn" @click="share">카톡으로 공유</button>
+      <button type="button" :class="canShare ? 'btn-sub' : 'btn'" @click="copy">{{ copied ? '복사됐어요' : '정산 문구 복사' }}</button>
+    </div>
   </template>
 </template>
 
 <style scoped>
 .round { border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin-top: 12px; }
+.share-row { display: flex; gap: 8px; align-items: stretch; }
+.share-row .btn { flex: 1; }
+.share-row .btn-sub { margin-top: 16px; white-space: nowrap; }
 </style>
