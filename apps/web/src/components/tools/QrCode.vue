@@ -30,7 +30,8 @@ function render() {
   error.value = '';
   svg.value = '';
   const b = built.value;
-  const hasInput = Object.values(f).some((v) => typeof v === 'string' && v.trim());
+  // 보안 방식(기본 WPA)은 사용자가 친 값이 아니므로 빼고 판단 — 처음 열었을 때 오류가 뜨지 않게
+  const hasInput = Object.entries(f).some(([k, v]) => k !== 'security' && typeof v === 'string' && v.trim());
   if ('error' in b) { if (hasInput) error.value = b.error; return; }
   try {
     const q = matrix();

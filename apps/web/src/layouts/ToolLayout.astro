@@ -67,10 +67,10 @@ const jsonLd = [
     <slot name="guide" />
   </article>
 
-  <section>
+  <section class="faq-box">
     <h2>자주 묻는 질문</h2>
     {faq.map((f) => (
-      <details>
+      <details class="faq">
         <summary>{f.q}</summary>
         <p>{f.a}</p>
       </details>
