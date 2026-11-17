@@ -123,3 +123,13 @@ test('로또: 6개·중복 없음·정렬·고정수·제외수', () => {
   assert.deepEqual(parseNums('3, 17 22, 3, 46, 0'), [3, 17, 22]);
   assert.deepEqual([1, 10, 11, 20, 21, 31, 41, 45].map(ballBand), [0, 0, 1, 1, 2, 3, 4, 4]);
 });
+
+// ── PDF 용량 줄이기
+import { COMPRESS_PRESETS, compareSize, compressedName, pagePixels } from '../src/lib/pdfCompress.js';
+test('PDF 용량 줄이기: 설정·비교·이름', () => {
+  assert.deepEqual(COMPRESS_PRESETS.map((p) => p.dpi), [150, 110, 80]);
+  assert.deepEqual(pagePixels(595.28, 841.89, 150), { w: 1240, h: 1754 });
+  assert.deepEqual(compareSize(1000, 400), { smaller: true, pct: 60 });
+  assert.equal(compareSize(1000, 1200).smaller, false);
+  assert.equal(compressedName('계약서.PDF'), '계약서_small.pdf');
+});

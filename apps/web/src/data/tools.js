@@ -28,10 +28,12 @@ export const TOOLS = [
   { slug: 'couple-anniversary', title: '커플 기념일 계산기', short: '사귄 날로 100일·1000일·주년 날짜 한눈에', keywords: '커플, 100일, 1000일, 기념일, 사귄날, 연애, 주년', category: 'date', status: 'live' },
   { slug: 'lunar-calendar', title: '음력 양력 변환', short: '음력 생일을 양력으로, 양력 날짜를 음력으로', keywords: '음력, 양력, 음력생일, 윤달, 설날, 추석, 간지, 달력', category: 'date', status: 'live' },
   { slug: 'work-hours', title: '근무시간 계산기', short: '출퇴근 시각으로 하루·주간 근무시간 합계', keywords: '근무시간, 알바, 아르바이트, 출퇴근, 시급, 주간근무, 시간계산', category: 'date', status: 'live' },
-  { slug: 'days-between', title: '날짜 사이 일수 계산', short: '두 날짜 사이의 일수·주·개월 계산', keywords: '일수 계산기, 며칠, 기간, 날짜 차이, 날짜 계산, 평일 수', category: 'date', status: 'live' },
+  { slug: 'time-calculator', title: '시간 계산기', short: '몇 시간 뒤 몇 시, 두 시각 사이, 시간 합계', keywords: '시간 계산, 시간 더하기, 시간 빼기, 몇시간 후, 시간 합계, 분 계산, 공부 시간', category: 'date', status: 'live' },
+  { slug: 'days-between', title: '일수 계산기 (날짜 사이 며칠)', short: '두 날짜 사이의 일수·주·개월 계산', keywords: '일수 계산기, 며칠, 기간, 날짜 차이, 날짜 계산, 평일 수', category: 'date', status: 'live' },
   // 생활 계산
+  { slug: 'calculator', title: '공학용 계산기', short: 'sin·log·제곱근까지, 식을 한 번에 계산', keywords: '계산기, 일반 계산기, 온라인 계산기, 공학 계산기, 삼각함수, 로그, 제곱근', category: 'calc', status: 'live' },
   { slug: 'pyeong', title: '평수 계산기 (평 ↔ ㎡)', short: '평과 제곱미터를 바로 변환', keywords: '평, 제곱미터, ㎡, 면적, 아파트, 평형, 84', category: 'calc', status: 'live' },
-  { slug: 'percent', title: '퍼센트·할인율 계산기', short: '할인가, 증감률, 비율 계산', keywords: '%, 퍼센트, 백분율, 할인, 할인율, 증감률, 비율', category: 'calc', status: 'live' },
+  { slug: 'percent', title: '퍼센트(%)·할인율 계산기', short: '할인가, 증감률, 비율 계산', keywords: '%, 퍼센트, 백분율, 할인, 할인율, 증감률, 비율', category: 'calc', status: 'live' },
   { slug: 'loan-repayment', title: '대출 원리금 상환 계산기', short: '원리금균등·원금균등 상환표', keywords: '대출, 이자, 원리금균등, 원금균등, 주택담보대출, 상환표, 월 상환액', category: 'calc', status: 'live' },
   { slug: 'dutch-pay', title: '더치페이 계산기', short: '1차·2차 참여자별 N빵 정산, 정산 문구 복사', keywords: 'N빵, 엔빵, 정산, 회식비, 나눠내기, 1차 2차, 총무', category: 'calc', status: 'live' },
   { slug: 'unit-convert', title: '단위 변환기', short: '인치·파운드·화씨·갤런 등 단위 바로 변환', keywords: '단위, 인치, cm, 파운드, kg, 화씨, 섭씨, 갤런, 온도, 길이, 무게', category: 'calc', status: 'live' },
@@ -44,10 +46,11 @@ export const TOOLS = [
   { slug: 'jpg-to-pdf', title: 'JPG PDF 변환', short: '사진 여러 장을 PDF 하나로, 서버 업로드 없이', keywords: '사진 pdf, 이미지 pdf, jpg pdf, 사진을 pdf로, 스캔', category: 'file', status: 'live' },
   { slug: 'image-convert', title: '이미지 변환·크기 조절', short: 'PNG·JPG·WEBP 변환, 픽셀·비율로 크기 조절', keywords: '이미지 크기, 사진 크기, 해상도, png, jpg, webp, 리사이즈, 픽셀', category: 'file', status: 'live' },
   { slug: 'video-compress', title: '동영상 용량 줄이기', short: '화질·목표 용량을 골라 영상 압축, 서버 업로드 없이', keywords: '동영상 용량, 영상 압축, 동영상 압축, mp4, 영상 용량, 비디오', category: 'file', status: 'live' },
+  { slug: 'pdf-compress', title: 'PDF 용량 줄이기', short: '스캔·사진 PDF를 작게, 서버 업로드 없이', keywords: 'pdf 압축, pdf 용량, pdf 파일 용량 줄이기, pdf 크기 줄이기, pdf 줄이기', category: 'file', status: 'live' },
   { slug: 'pdf-to-jpg', title: 'PDF JPG 변환', short: 'PDF 페이지를 이미지로, 서버 업로드 없이', keywords: 'pdf 이미지, pdf jpg, pdf png, pdf를 사진으로', category: 'file', status: 'live' },
   { slug: 'hwp-to-pdf', title: 'HWP PDF 변환', short: '한글 파일을 설치 없이 열고 PDF로 저장', keywords: '한글 파일, hwp, hwpx, 한글 pdf, 한글 뷰어, 한컴', category: 'file', status: 'live' },
   // 사진
-  { slug: 'id-photo', title: '증명사진 규격 맞추기', short: '이력서·여권·반명함 사이즈로 자르기', keywords: '증명사진, 여권사진, 반명함, 이력서 사진, 사진 규격, 운전면허 사진, 민증 사진', category: 'photo', status: 'live' },
+  { slug: 'id-photo', title: '증명사진·여권사진 규격 맞추기', short: '여권·주민등록증·운전면허·반명함 사이즈로 자르기', keywords: '증명사진, 여권사진, 반명함, 이력서 사진, 사진 규격, 운전면허 사진, 민증 사진', category: 'photo', status: 'live' },
   { slug: 'image-merge', title: '사진 합치기', short: '여러 장을 세로·가로로 한 장에 이어 붙이기', keywords: '사진 합치기, 이미지 합치기, 캡처 이어붙이기, 사진 붙이기', category: 'photo', status: 'live' },
   { slug: 'exif-remove', title: '사진 위치정보 지우기', short: '사진 속 GPS·촬영 정보(EXIF) 확인하고 삭제', keywords: '위치정보, gps, exif, 메타데이터, 개인정보, 사진 정보', category: 'photo', status: 'live' },
   // 글자·문구

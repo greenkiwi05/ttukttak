@@ -6,7 +6,8 @@ export const cmToPx = (cm, dpi = DPI) => Math.round((cm / 2.54) * dpi);
 
 export const PRESETS = [
   { id: 'half', label: '반명함 · 이력서', wCm: 3, hCm: 4 },
-  { id: 'passport', label: '여권 · 비자', wCm: 3.5, hCm: 4.5 },
+  { id: 'passport', label: '여권 · 주민등록증 · 운전면허', wCm: 3.5, hCm: 4.5 },
+  { id: 'us-visa', label: '미국 비자 (2×2인치)', wCm: 5.08, hCm: 5.08 },
   { id: 'card', label: '명함판', wCm: 5, hCm: 7 },
 ].map((p) => ({ ...p, w: cmToPx(p.wCm), h: cmToPx(p.hCm) }));
 

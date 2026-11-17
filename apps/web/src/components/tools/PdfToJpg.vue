@@ -5,6 +5,7 @@ import { filterFiles } from '../../lib/files.js';
 import { parsePageRanges } from '../../lib/pageRange.js';
 import { renderScale, pageImageName, DPI_PRESETS } from '../../lib/pdfToImage.js';
 import { downloadBlob, downloadZip } from '../../lib/download.js';
+import { loadPdfjs, pdfOpenError } from '../../lib/pdfjs.js';
 
 const file = ref<File | null>(null);
 const pageCount = ref(0);
@@ -18,13 +19,9 @@ const notice = ref('');
 const over = ref(false);
 const outputs = ref<{ name: string; blob: Blob; url: string }[]>([]);
 const doc = shallowRef<any>(null);
+let task: any = null; // pdf.js 6: 정리는 loadingTask.destroy()
 
-async function lib() {
-  const pdfjs: any = await import('pdfjs-dist');
-  const worker: any = await import('pdfjs-dist/build/pdf.worker.min.mjs?url');
-  pdfjs.GlobalWorkerOptions.workerSrc = worker.default;
-  return pdfjs;
-}
+const lib = loadPdfjs as () => Promise<any>;
 function clearOut() {
   outputs.value.forEach((o) => URL.revokeObjectURL(o.url));
   outputs.value = [];
@@ -40,13 +37,14 @@ async function setFile(list: FileList | null | undefined) {
   busy.value = true;
   try {
     const pdfjs = await lib();
-    await doc.value?.destroy?.();
-    doc.value = await pdfjs.getDocument({ data: new Uint8Array(await f.arrayBuffer()) }).promise;
+    await task?.destroy();
+    task = pdfjs.getDocument({ data: new Uint8Array(await f.arrayBuffer()) });
+    doc.value = await task.promise;
     file.value = f;
     pageCount.value = doc.value.numPages;
     range.value = pageCount.value > 1 ? `1-${pageCount.value}` : '1';
   } catch (e) {
-    error.value = /password/i.test(String((e as Error)?.name) + String((e as Error)?.message)) ? '암호가 걸린 PDF는 변환할 수 없어요.' : 'PDF를 읽지 못했어요.';
+    error.value = pdfOpenError(e);
   } finally {
     busy.value = false;
   }
@@ -85,7 +83,7 @@ async function convert() {
   }
 }
 const saveZip = () => downloadZip(outputs.value, (file.value?.name ?? 'pdf').replace(/\.pdf$/i, '') + '_images.zip');
-onBeforeUnmount(() => { clearOut(); doc.value?.destroy?.(); });
+onBeforeUnmount(() => { clearOut(); task?.destroy(); });
 </script>
 
 <template>

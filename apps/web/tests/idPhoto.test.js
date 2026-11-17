@@ -7,6 +7,7 @@ test('cm → 300dpi 픽셀', () => {
   assert.equal(cmToPx(4), 472);
   assert.equal(cmToPx(3.5), 413);
   assert.equal(cmToPx(4.5), 531);
+  assert.equal(PRESETS.find((p) => p.id === 'us-visa').w, 600); // 미국 비자 2×2인치 = 600px
   assert.deepEqual(PRESETS.find((p) => p.id === 'half'), { id: 'half', label: '반명함 · 이력서', wCm: 3, hCm: 4, w: 354, h: 472 });
 });
 
