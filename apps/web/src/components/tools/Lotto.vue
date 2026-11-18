@@ -3,6 +3,8 @@
 import { ref } from 'vue';
 import { makeSets, parseNums, ballBand } from '../../lib/lotto.js';
 import { cryptoRand } from '../../lib/ladder.js';
+import { lottoText } from '../../lib/shareText.js';
+import { shareOrCopy } from '../../lib/share.js';
 
 const COLORS = ['#fbc400', '#69c8f2', '#ff7272', '#aaaaaa', '#b0d840'];
 const count = ref(5);
@@ -20,9 +22,9 @@ function run() {
   sets.value = r.sets;
   spin.value++;
 }
-async function copy() {
-  const t = sets.value.map((s, i) => `${String.fromCharCode(65 + i)}: ${s.join(', ')}`).join('\n');
-  try { await navigator.clipboard.writeText(t); } catch { /* 복사 불가 환경 */ }
+// 휴대폰은 공유창(카카오톡 등), PC는 복사
+async function share() {
+  if ((await shareOrCopy({ title: '로또 번호', text: lottoText(sets.value) })) !== 'copied') return;
   copied.value = true;
   setTimeout(() => (copied.value = false), 1500);
 }
@@ -45,7 +47,7 @@ async function copy() {
       <b class="lotto-label">{{ String.fromCharCode(65 + i) }}</b>
       <span v-for="(n, j) in s" :key="n" class="ball" :style="{ background: COLORS[ballBand(n)], animationDelay: (i * 6 + j) * 40 + 'ms' }">{{ n }}</span>
     </div>
-    <button type="button" class="btn-sub" style="margin-top: 10px" @click="copy">{{ copied ? '복사됐어요' : '번호 복사' }}</button>
+    <button type="button" class="btn-sub" style="margin-top: 10px" @click="share">{{ copied ? '복사됐어요' : '번호 공유·복사' }}</button>
   </div>
   <p class="muted" style="margin: 10px 0 0">브라우저의 보안 난수로 뽑아요. 어떤 번호 조합이든 당첨 확률은 같아요.</p>
 </template>

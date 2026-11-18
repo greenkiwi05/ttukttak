@@ -62,3 +62,16 @@ test('도장 글자 준비', () => {
   assert.ok(stampChars('').error);
   assert.ok(stampChars('가나다라마').error);
 });
+
+// ── 결과 공유 문구
+import { ladderText, pickText, lottoText, footer } from '../src/lib/shareText.js';
+test('공유 문구: 결과 + 도구 주소', () => {
+  const l = ladderText(['민수', '지현'], ['당첨', '꽝'], [1, 0]);
+  assert.ok(l.startsWith('[사다리타기 결과]\n민수 → 꽝\n지현 → 당첨'));
+  assert.ok(l.endsWith('https://ttukttaktools.com/tools/ladder/'));
+  assert.ok(pickText({ winners: ['가', '나'] }).includes('[제비뽑기 당첨]\n가, 나'));
+  assert.ok(pickText({ teams: [['가', '나'], ['다']] }).includes('1팀: 가, 나\n2팀: 다'));
+  assert.ok(pickText({ order: ['가', '나'] }).includes('1. 가\n2. 나'));
+  assert.ok(lottoText([[1, 2, 3, 4, 5, 45]]).includes('A:  1  2  3  4  5 45'));
+  assert.equal(footer('X', 'y'), '\n\n— 뚝딱 X\nhttps://ttukttaktools.com/tools/y/');
+});

@@ -3,6 +3,8 @@
 import { ref, computed } from 'vue';
 import { parseList, pick, teams, shuffle, duplicates } from '../../lib/randomPick.js';
 import { cryptoRand } from '../../lib/ladder.js';
+import { pickText } from '../../lib/shareText.js';
+import { shareOrCopy } from '../../lib/share.js';
 
 const MODES = [['pick', '당첨자 뽑기'], ['teams', '팀 나누기'], ['order', '순서 정하기']] as const;
 const mode = ref<'pick' | 'teams' | 'order'>('pick');
@@ -11,6 +13,13 @@ const k = ref<number | ''>(1);
 const n = ref<number | ''>(2);
 const result = ref<{ winners?: string[]; teams?: string[][]; order?: string[]; error?: string } | null>(null);
 const rolling = ref(false);
+const copied = ref(false);
+async function share() {
+  if (!result.value || result.value.error) return;
+  if ((await shareOrCopy({ title: '제비뽑기 결과', text: pickText(result.value) })) !== 'copied') return;
+  copied.value = true;
+  setTimeout(() => (copied.value = false), 1500);
+}
 
 const list = computed(() => parseList(text.value));
 const dup = computed(() => duplicates(list.value));
@@ -56,6 +65,7 @@ function run() {
     <ol v-else-if="result.order" style="margin: 0; padding-left: 22px">
       <li v-for="x in result.order" :key="x" style="font-weight: 600">{{ x }}</li>
     </ol>
+    <button type="button" class="btn-sub" style="margin-top: 12px" @click="share">{{ copied ? '복사됐어요' : '결과 공유·복사' }}</button>
   </div>
   <p class="muted" style="margin: 10px 0 0">브라우저의 보안 난수로 섞어서 누구에게도 유리하지 않아요.</p>
 </template>

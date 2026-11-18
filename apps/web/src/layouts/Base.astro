@@ -10,8 +10,10 @@ interface Props {
   description: string;
   jsonLd?: object[];
   active?: string; // 상단바에서 강조할 카테고리
+  ogImage?: string; // 공유 미리보기 이미지 경로 (기본: /og/default.png)
 }
-const { title, description, jsonLd = [], active } = Astro.props;
+const { title, description, jsonLd = [], active, ogImage = '/og/default.png' } = Astro.props;
+const ogUrl = new URL(ogImage, Astro.site).href;
 const fullTitle = title === SITE.name ? `${SITE.name} | ${SITE.tagline}` : `${title} | ${SITE.name}`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 ---
@@ -29,6 +31,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:locale" content="ko_KR" />
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={title === SITE.name ? SITE.tagline : title} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogUrl} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     {SITE.naverSiteVerification && <meta name="naver-site-verification" content={SITE.naverSiteVerification} />}

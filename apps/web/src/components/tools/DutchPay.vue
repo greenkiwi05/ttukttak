@@ -3,6 +3,7 @@
 import { ref, computed, watch, onMounted } from 'vue';
 import { settle, settleText, ROUND_UNITS } from '../../lib/dutchPay.js';
 import { parseList } from '../../lib/randomPick.js';
+import { footer } from '../../lib/shareText.js';
 
 type Mode = 'simple' | 'rounds';
 const mode = ref<Mode>('simple');
@@ -51,9 +52,9 @@ function shareText() {
   if (mode.value === 'simple') {
     const lines = ['[정산]', `총 ${won(r.total)} ÷ ${r.perPerson.length}명`, `1인당 ${won(r.perPerson[0]?.pay ?? 0)}`];
     if (account.value.trim()) lines.push('', `입금: ${account.value.trim()}`);
-    return lines.join('\n');
+    return lines.join('\n') + footer('더치페이 계산기', 'dutch-pay');
   }
-  return settleText(r, input.value.rounds, account.value);
+  return settleText(r, input.value.rounds, account.value) + footer('더치페이 계산기', 'dutch-pay');
 }
 // 휴대폰에서는 공유창(카카오톡·문자 등)을 띄우고, 지원하지 않으면 복사한다.
 const canShare = ref(false); // 서버 렌더링과 어긋나지 않게 화면에 붙은 뒤 확인

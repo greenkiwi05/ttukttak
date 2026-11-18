@@ -2,6 +2,8 @@
 // 사다리타기 UI. 사다리 생성·추적은 src/lib/ladder.js, 그리기는 SVG. 난수는 crypto 기반.
 import { ref, computed, watch } from 'vue';
 import { makeLadder, trace, cryptoRand } from '../../lib/ladder.js';
+import { ladderText } from '../../lib/shareText.js';
+import { shareOrCopy } from '../../lib/share.js';
 
 const ROWS = 10;
 const COLORS = ['#e8590c', '#1c7ed6', '#2f9e44', '#ae3ec9', '#f08c00', '#0c8599', '#e03131', '#5c7cfa', '#66a80f', '#d6336c', '#495057', '#7048e8'];
@@ -39,6 +41,13 @@ function reveal(i: number) {
   shown.value.push(i);
   animating.value = i;
   setTimeout(() => (animating.value === i ? (animating.value = null) : 0), 1200);
+}
+const copied = ref(false);
+async function share() {
+  const text = ladderText(Array.from({ length: count.value }, (_, i) => label(i)), results.value, paths.value.map((p) => p.end));
+  if ((await shareOrCopy({ title: '사다리타기 결과', text })) !== 'copied') return;
+  copied.value = true;
+  setTimeout(() => (copied.value = false), 1500);
 }
 const revealAll = () => { for (let i = 0; i < count.value; i++) if (!shown.value.includes(i)) shown.value.push(i); };
 </script>
@@ -78,6 +87,7 @@ const revealAll = () => { for (let i = 0; i < count.value; i++) if (!shown.value
 
   <button class="btn" type="button" @click="start">{{ ladder ? '사다리 다시 만들기' : '사다리 만들기' }}</button>
   <button v-if="ladder && shown.length < count" type="button" class="btn-sub" style="width: 100%; margin-top: 8px" @click="revealAll">결과 한 번에 보기</button>
+  <button v-if="ladder && shown.length === count" type="button" class="btn-sub" style="width: 100%; margin-top: 8px" @click="share">{{ copied ? '복사됐어요' : '결과 공유·복사 (카톡 등)' }}</button>
   <p v-if="ladder" class="muted" style="margin: 8px 0 0">위쪽 이름을 누르면 한 명씩 사다리를 타요.</p>
 </template>
 
