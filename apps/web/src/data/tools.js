@@ -5,7 +5,7 @@ export const CATEGORIES = {
   file: { label: '파일 변환', emoji: '📁', desc: 'HEIC를 JPG로, 사진을 PDF로, 이미지 용량 줄이기와 PDF 합치기까지. 설치 없이 바로 쓰고, 파일은 서버로 올라가지 않고 내 브라우저 안에서만 처리돼요.' },
   photo: { label: '사진', emoji: '📷', desc: '증명사진을 반명함·여권 규격으로 자르고, 사진 속 위치정보(EXIF)를 확인해 지워요. 사진은 서버로 올라가지 않고 브라우저 안에서만 처리돼요.' },
   date: { label: '날짜', emoji: '📅', desc: '만 나이, D-day, 커플 기념일, 두 날짜 사이 기간, 음력 양력 변환까지. 날짜 계산을 설치 없이 바로 끝내요. 날짜는 숫자로 바로 입력할 수 있어요.' },
-  calc: { label: '생활 계산', emoji: '🧮', desc: '평수 변환, 퍼센트·할인율, 대출 상환, 적금 이자, 해외 결제 수수료처럼 생활에서 자주 하는 계산을 바로 해요. 금리·환율은 직접 넣어 정확하게 계산해요.' },
+  calc: { label: '생활 계산', emoji: '🧮', desc: '평수 변환, 퍼센트·할인율, 대출 상환, 적금 이자, 환율, 해외 결제 수수료처럼 자주 하는 생활 계산을 바로 해요. 환율은 오늘 고시 환율을 불러와요.' },
   text: { label: '글자·문구', emoji: '✍️', desc: '자기소개서 글자수 세기, 링크·와이파이 QR코드 만들기, 경조사·명절 인사 문구까지. 글과 관련된 일을 바로 끝내요. 입력한 글은 저장되지 않아요.' },
   fun: { label: '뽑기·게임', emoji: '🎲', desc: '온라인 사다리타기, 제비뽑기, 팀 나누기, 순서 정하기처럼 공정하게 정해야 할 때 바로 써요. 브라우저의 보안 난수로 누구에게도 유리하지 않게 섞어요.' },
 };
@@ -37,6 +37,7 @@ export const TOOLS = [
   { slug: 'loan-repayment', title: '대출 원리금 상환 계산기', short: '원리금균등·원금균등 상환표', keywords: '대출, 이자, 원리금균등, 원금균등, 주택담보대출, 상환표, 월 상환액', category: 'calc', status: 'live' },
   { slug: 'dutch-pay', title: '더치페이 계산기', short: '1차·2차 참여자별 N빵 정산, 정산 문구 복사', keywords: 'N빵, 엔빵, 정산, 회식비, 나눠내기, 1차 2차, 총무', category: 'calc', status: 'live' },
   { slug: 'unit-convert', title: '단위 변환기', short: '인치·파운드·화씨·갤런 등 단위 바로 변환', keywords: '단위, 인치, cm, 파운드, kg, 화씨, 섭씨, 갤런, 온도, 길이, 무게', category: 'calc', status: 'live' },
+  { slug: 'exchange-rate', title: '환율 계산기', short: '오늘 고시 환율로 외화↔원화 바로 계산', keywords: '환율, 오늘 환율, 달러 환율, 엔화 환율, 유로 환율, 엔화 계산기, 달러 계산기, 위안화, 매매기준율, 송금 환율, 환전', category: 'calc', status: 'live' },
   { slug: 'travel-payment', title: '해외 결제 수수료 계산기', short: '여행지 카드 결제, 실제 원화 청구액 계산', keywords: '해외결제, 카드 수수료, 환율, 여행, 발리, 루피아, 엔화, 달러, DCC', category: 'calc', status: 'live' },
   { slug: 'savings-interest', title: '적금·예금 이자 계산기', short: '단리·월복리, 세전·세후 이자', keywords: '적금, 예금, 이자, 세후, 단리, 복리, 만기', category: 'calc', status: 'live' },
   // 파일 변환

@@ -3,6 +3,7 @@
 // 환율·수수료율은 사용자가 입력한다. 입력한 환율은 이 브라우저에만 통화별로 기억한다(편의 기능).
 import { ref, computed, watch, onMounted } from 'vue';
 import { travelPay, toKrw, num, CURRENCIES } from '../../lib/travelPay.js';
+import { loadRates, eximCode, rateFor } from '../../lib/exchange.js';
 
 type C = keyof typeof CURRENCIES;
 const cur = ref<C>('IDR');
@@ -18,9 +19,29 @@ const KEY = (c: string) => `ttukttak:rate:${c}`;
 function loadRate() {
   try { rate.value = localStorage.getItem(KEY(cur.value)) ?? ''; } catch { rate.value = ''; }
 }
-onMounted(loadRate);
-watch(cur, () => { loadRate(); amount.value = ''; });
-watch(rate, (v) => { try { if (num(v) > 0) localStorage.setItem(KEY(cur.value), String(num(v))); } catch { /* 저장 불가 환경 */ } });
+// 오늘 고시 환율(한국수출입은행 매매기준율). 고시하지 않는 통화(VND·PHP·TWD)는 직접 입력.
+const official = ref<{ rate: number; date: string } | null | 'none' | 'fail'>(null);
+const fetching = ref(false);
+async function fetchOfficial(fill: boolean) {
+  fetching.value = true;
+  const d = await loadRates();
+  fetching.value = false;
+  if (!d) { official.value = 'fail'; return; }
+  const r = d.rates.find((x) => x.code === eximCode(cur.value));
+  official.value = r ? { rate: rateFor(r, info.value.unit), date: d.date } : 'none';
+  if (fill && typeof official.value === 'object' && official.value) rate.value = String(official.value.rate);
+}
+onMounted(() => { loadRate(); fetchOfficial(!rate.value); });
+watch(cur, () => { loadRate(); amount.value = ''; fetchOfficial(!rate.value); });
+const dateKo = (s: string) => { const [, m, d] = s.split('-').map(Number); return `${m}월 ${d}일`; };
+// 직접 넣은 환율만 기억한다 (고시 환율과 같으면 지워서 다음에 그날 환율을 새로 불러오게)
+watch(rate, (v) => {
+  try {
+    const o = official.value;
+    if (o && typeof o === 'object' && num(v) === o.rate) localStorage.removeItem(KEY(cur.value));
+    else if (num(v) > 0) localStorage.setItem(KEY(cur.value), String(num(v)));
+  } catch { /* 저장 불가 환경 */ }
+});
 
 const params = computed(() => ({
   amount: num(amount.value), rate: num(rate.value), unit: info.value.unit,
@@ -51,7 +72,13 @@ const loc = (n: number) => n.toLocaleString('ko-KR', { maximumFractionDigits: 2 
     <div class="field">
       <label for="rate">환율 (원 / {{ info.unit === 100 ? '100 ' : '1 ' }}{{ cur }})</label>
       <input id="rate" v-model="rate" type="text" inputmode="decimal" placeholder="오늘 환율을 입력" />
-      <small class="muted">은행·포털의 오늘 환율을 넣으세요. 이 기기에 기억돼요.</small>
+      <small v-if="official && typeof official === 'object'" class="muted">
+        <template v-if="num(rate) === official.rate">{{ dateKo(official.date) }} 수출입은행 매매기준율이에요.</template>
+        <template v-else>직접 넣은 환율이에요 · <a href="#" @click.prevent="rate = String(official.rate)">오늘 고시 환율({{ official.rate.toLocaleString('ko-KR') }}) 넣기</a></template>
+      </small>
+      <small v-else-if="official === 'none'" class="muted">이 통화는 고시 환율이 없어요. 은행·포털의 환율을 넣으세요. 이 기기에 기억돼요.</small>
+      <small v-else-if="official === 'fail'" class="muted">오늘 환율을 불러오지 못했어요. 은행·포털의 환율을 넣으세요. <a href="#" @click.prevent="fetchOfficial(true)">다시 시도</a></small>
+      <small v-else class="muted">{{ fetching ? '오늘 환율을 불러오는 중…' : '은행·포털의 오늘 환율을 넣으세요. 이 기기에 기억돼요.' }}</small>
     </div>
   </div>
 

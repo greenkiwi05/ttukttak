@@ -1,13 +1,22 @@
-// Cloudflare Workers 배포 설정 (정적 사이트 = Worker 정적 자산).
-// 빌드 결과 apps/web/dist를 그대로 올린다. 서버 코드 없음.
-// 비밀 값은 여기에 넣지 않는다 (필요하면 `wrangler secret put`).
+// Cloudflare Workers 배포 설정.
+// - 정적 사이트: 빌드 결과 apps/web/dist를 정적 자산으로 올린다.
+// - 백엔드: /api/* 요청만 Worker(apps/api/src/index.js)가 먼저 받는다. 나머지는 바로 정적 자산.
+// 비밀 값은 여기에 넣지 않는다 (대시보드 Variables and Secrets 또는 `wrangler secret put`).
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "ttukttak",
   "compatibility_date": "2026-11-01",
+  "main": "./apps/api/src/index.js",
   "assets": {
     "directory": "./apps/web/dist",
+    "binding": "ASSETS",
     "html_handling": "auto-trailing-slash",
-    "not_found_handling": "404-page"
-  }
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  },
+  // 환율 저장소. id 없이 두면 첫 배포 때 자동으로 만들어진다.
+  "kv_namespaces": [{ "binding": "RATES" }],
+  // 환율 갱신: 평일 한국시간 11:15, 13:00, 17:00 (수출입은행은 보통 오전 11시쯤 고시)
+  "triggers": { "crons": ["15 2 * * 1-5", "0 4 * * 1-5", "0 8 * * 1-5"] },
+  "observability": { "enabled": true }
 }
