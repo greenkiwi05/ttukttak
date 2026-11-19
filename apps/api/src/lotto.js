@@ -70,24 +70,29 @@ export async function saveRounds(db, rounds) {
  * 비어 있는 회차를 채운다 (처음엔 1회부터, 이후엔 매주 새 회차만).
  * @param {{ db: any, kv: any, fetch: any, now?: number, maxPages?: number }} p
  */
-export async function syncLotto({ db, kv, fetch, now = Date.now(), maxPages = 30 }) {
+// 처음 채울 때(1~최신 회차)는 여러 번에 나눠 받는다. 다 따라잡기 전에는 요약본을 만들지 않는다
+// (중간에 만들면 "300회"가 최신 회차처럼 보이므로).
+export async function syncLotto({ db, kv, fetch, now = Date.now(), maxPages = 40 }) {
   const expected = expectedRound(now);
   const row = await db.prepare('SELECT MAX(round) AS m FROM lotto').first();
   let max = row?.m ?? 0;
   if (max >= expected) return { saved: 0, max, expected };
   let saved = 0;
+  let caughtUp = false;
   for (let page = 0; page < maxPages && max < expected; page++) {
     // 1회는 "다음 회차" 조회로 안 나와서, 처음에만 "11회 이전"으로 1~10회를 받는다
     const r = max === 0 ? await fetchRounds({ fetch, dir: 'older', cursor: 11 }) : await fetchRounds({ fetch, dir: 'latest', cursor: max });
-    if ('error' in r) { if (saved) await rebuildBlob(db, kv); return { saved, max, expected, error: r.error }; }
+    if ('error' in r) return { saved, max, expected, error: r.error };
     const fresh = r.rounds.filter((x) => x.round > max);
-    if (!fresh.length) break; // 아직 결과가 안 올라옴
+    if (!fresh.length) { caughtUp = true; break; } // 더 받을 회차 없음 (최신 결과가 아직 안 올라옴)
     await saveRounds(db, fresh);
     saved += fresh.length;
     max = fresh[fresh.length - 1].round;
   }
-  if (saved) await rebuildBlob(db, kv);
-  return { saved, max, expected };
+  if (max >= expected) caughtUp = true;
+  // 다 따라잡았으면 요약본 갱신 (이전 실행에서 저장만 하고 못 만든 경우도 포함)
+  if (caughtUp && (saved || !(await kv.get(LOTTO_KV)))) await rebuildBlob(db, kv);
+  return { saved, max, expected, caughtUp };
 }
 
 /** 화면용 요약본: 전체 회차 번호 + 최신 회차 상세. KV에 넣어 두고 /api/lotto 가 그대로 돌려준다 */

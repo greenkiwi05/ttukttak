@@ -87,8 +87,10 @@ test('동기화: 한 번에 maxPages까지만, 결과가 아직 없으면 멈춤
   const r = await syncLotto({ db: f.db, kv: f.kv, fetch: fakeSite(calls), now: Date.parse('2003-05-24T13:00:00Z'), maxPages: 2 });
   assert.equal(r.max, 20);
   assert.equal(calls.length, 2);
+  assert.equal(f.kvMap.get('lotto:all'), undefined); // 아직 다 못 받았으면 요약본을 만들지 않음
   // 사이트엔 25회까지인데 26회가 나왔어야 할 시각 → 한 번 더 확인하고 멈춤
   const r2 = await syncLotto({ db: f.db, kv: f.kv, fetch: fakeSite(calls), now: Date.parse('2003-05-31T13:00:00Z') });
   assert.equal(r2.max, 25);
   assert.equal(r2.expected, 26);
+  assert.equal(JSON.parse(f.kvMap.get('lotto:all')).rounds.length, 25); // 따라잡으면 요약본 생성
 });
