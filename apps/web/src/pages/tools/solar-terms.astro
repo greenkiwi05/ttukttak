@@ -1,0 +1,35 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import DirectionTabs from '../../components/DirectionTabs.astro';
+import SolarTerms from '../../components/tools/SolarTerms.vue';
+
+const faq = [
+  { q: '24절기는 무엇인가요?', a: '해가 하늘에서 지나가는 길(황도)을 15도씩 24개로 나눠, 해가 각 지점에 오는 날에 이름을 붙인 거예요. 계절의 흐름을 알려주는 기준으로 농사와 생활에 써 왔어요.' },
+  { q: '절기는 음력인가요, 양력인가요?', a: '해의 움직임으로 정하기 때문에 양력에 가까워요. 그래서 해마다 양력 날짜가 거의 같고, 하루 정도만 앞뒤로 달라져요.' },
+  { q: '절기 날짜는 어디서 가져오나요?', a: '한국천문연구원이 공공데이터포털로 제공하는 특일 정보의 24절기 날짜와 절입 시각을 보여드려요.' },
+  { q: '절입 시각은 무엇인가요?', a: '해가 그 절기의 위치에 정확히 도착하는 순간이에요. 같은 절기라도 해마다 시각이 달라서 날짜가 하루씩 바뀌기도 해요.' },
+];
+---
+<ToolLayout
+  slug="solar-terms"
+  description="올해 24절기 날짜와 절입 시각을 계절별로 한눈에 봐요. 지금 절기와 다음 절기까지 남은 날, 입춘·하지·동지 등 절기마다의 뜻도 알려줘요."
+  lead="계절별 24절기 날짜와 뜻, 다음 절기까지 남은 날을 알려드려요."
+  faq={faq}
+>
+  <DirectionTabs items={[{ href: '/tools/holidays/', label: '공휴일 달력' }, { href: '/tools/solar-terms/', label: '24절기' }, { href: '/tools/business-days/', label: '영업일 계산기' }]} />
+  <SolarTerms client:load />
+
+  <Fragment slot="guide">
+    <h2>계절별 24절기</h2>
+    <ul>
+      <li><b>봄</b>: 입춘, 우수, 경칩, 춘분, 청명, 곡우</li>
+      <li><b>여름</b>: 입하, 소만, 망종, 하지, 소서, 대서</li>
+      <li><b>가을</b>: 입추, 처서, 백로, 추분, 한로, 상강</li>
+      <li><b>겨울</b>: 입동, 소설, 대설, 동지, 소한, 대한</li>
+    </ul>
+    <h2>자주 찾는 절기</h2>
+    <p><b>입춘</b>은 봄의 시작으로 입춘첩을 붙이는 풍습이 있어요. <b>하지</b>는 낮이 가장 길고, <b>동지</b>는 밤이 가장 길어서 팥죽을 먹는 풍습이 있어요. <b>춘분</b>과 <b>추분</b>에는 낮과 밤의 길이가 비슷해져요.</p>
+    <h2>공휴일도 함께 보세요</h2>
+    <p>절기는 공휴일이 아니에요. 쉬는 날은 <a href="/tools/holidays/">공휴일 달력</a>에서 확인하세요.</p>
+  </Fragment>
+</ToolLayout>

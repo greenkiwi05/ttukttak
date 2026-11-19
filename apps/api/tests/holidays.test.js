@@ -60,3 +60,35 @@ test('갱신: 내년이 아직 비어 있으면 저장 안 함, 키 오류면 �
   const bad = await refreshHolidays({ kv: { get: async () => null, put: async () => {} }, key: '', fetch, now });
   assert.ok(bad.error.includes('HOLIDAY_KEY'));
 });
+
+// ── 24절기
+import { termItem, parseSpcde, refreshTerms, KINDS } from '../src/holidays.js';
+test('24절기 항목: 절입 시각·황경', () => {
+  assert.deepEqual(termItem({ dateKind: '02', dateName: '입춘', isHoliday: 'N', kst: '0502 ', locdate: 20260204, seq: 1, sunLongitude: 315 }),
+    { date: '2026-02-04', name: '입춘', time: '05:02', longitude: 315 });
+  assert.deepEqual(termItem({ dateName: '춘분', locdate: '20260320', sunLongitude: 0 }), { date: '2026-03-20', name: '춘분', longitude: 0 });
+  assert.equal(termItem({ dateName: '', locdate: 20260320 }), null);
+  const xml = '<response><header><resultCode>00</resultCode></header><body><items><item><dateName>하지</dateName><isHoliday>N</isHoliday><kst>1824</kst><locdate>20260621</locdate><sunLongitude>90</sunLongitude></item></items></body></response>';
+  assert.deepEqual(parseSpcde(xml, termItem).items, [{ date: '2026-06-21', name: '하지', time: '18:24', longitude: 90 }]);
+});
+
+test('24절기 갱신: 한 번에 6해씩, 다 받으면 다시 안 부름', async () => {
+  const store = new Map();
+  const kv = { get: async (k) => (store.has(k) ? JSON.parse(store.get(k)) : null), put: async (k, v) => void store.set(k, v) };
+  const calls = [];
+  const fetch = async (url) => {
+    const u = new URL(url);
+    assert.ok(u.pathname.endsWith('get24DivisionsInfo'));
+    const y = Number(u.searchParams.get('solYear'));
+    calls.push(y);
+    return { ok: true, text: async () => wrap({ dateName: '입춘', isHoliday: 'N', locdate: y * 10000 + 204, kst: '0500', sunLongitude: 315 }) };
+  };
+  const now = Date.parse('2026-11-19T07:00:00Z');
+  const total = 2026 + KINDS.terms.ahead - FIRST_YEAR + 1;
+  let runs = 0;
+  while (runs < 10) { const r = await refreshTerms({ kv, key: 'XXXX', fetch, now: now + runs * 3600e3 }); runs++; if (!r.updated) break; }
+  assert.equal(calls.length, total);
+  assert.ok(runs <= Math.ceil(total / KINDS.terms.maxYears) + 1);
+  const saved = JSON.parse(store.get('solarterms:all'));
+  assert.equal(saved.years['2028'][0].name, '입춘');
+});

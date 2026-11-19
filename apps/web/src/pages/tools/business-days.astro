@@ -3,7 +3,6 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
 import DirectionTabs from '../../components/DirectionTabs.astro';
 import BusinessDays from '../../components/tools/BusinessDays.vue';
 
-const TABS = [{ href: '/tools/holidays/', label: '공휴일 달력' }, { href: '/tools/business-days/', label: '영업일 계산기' }];
 const faq = [
   { q: '영업일은 어떻게 세나요?', a: '토요일, 일요일과 공휴일(대체·임시공휴일 포함)을 뺀 평일만 세요. 회사 창립기념일처럼 따로 쉬는 날이 있으면 "추가로 쉬는 날"에 넣어서 함께 뺄 수 있어요.' },
   { q: '"3영업일 이내"는 언제까지인가요?', a: '보통 기준일 다음 영업일부터 세요. 예를 들어 금요일에 접수했다면 월·화·수가 1·2·3영업일이에요. 계산기의 "며칠 영업일 뒤 날짜"도 이 방식으로 셉니다. 계약서나 기관마다 세는 방식이 다를 수 있으니 중요한 기한은 안내문을 함께 확인하세요.' },
@@ -18,7 +17,7 @@ const faq = [
   lead="주말과 공휴일을 뺀 영업일을 바로 계산해 드려요."
   faq={faq}
 >
-  <DirectionTabs items={TABS} />
+  <DirectionTabs items={[{ href: '/tools/holidays/', label: '공휴일 달력' }, { href: '/tools/solar-terms/', label: '24절기' }, { href: '/tools/business-days/', label: '영업일 계산기' }]} />
   <BusinessDays client:load />
 
   <Fragment slot="guide">

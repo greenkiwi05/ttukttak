@@ -30,6 +30,7 @@ export const TOOLS = [
   { slug: 'work-hours', title: '근무시간 계산기', short: '출퇴근 시각으로 하루·주간 근무시간 합계', keywords: '근무시간, 알바, 아르바이트, 출퇴근, 시급, 주간근무, 시간계산', category: 'date', status: 'live' },
   { slug: 'time-calculator', title: '시간 계산기', short: '몇 시간 뒤 몇 시, 두 시각 사이, 시간 합계', keywords: '시간 계산, 시간 더하기, 시간 빼기, 몇시간 후, 시간 합계, 분 계산, 공부 시간', category: 'date', status: 'live' },
   { slug: 'holidays', title: '공휴일 달력 (빨간날·연휴)', short: '올해·내년 공휴일, 연휴, 연차 쓰기 좋은 날', keywords: '공휴일, 빨간날, 대체공휴일, 임시공휴일, 연휴, 2026 공휴일, 2027 공휴일, 명절, 설날, 추석, 연차, 달력', category: 'date', status: 'live' },
+  { slug: 'solar-terms', title: '24절기 달력', short: '올해 절기 날짜·절입 시각, 다음 절기 D-day', keywords: '24절기, 절기, 입춘, 하지, 동지, 춘분, 추분, 경칩, 입동, 절입시각, 오늘 절기', category: 'date', status: 'live' },
   { slug: 'business-days', title: '영업일 계산기', short: '주말·공휴일 빼고 영업일 수, N영업일 뒤 날짜', keywords: '영업일, 영업일 계산, 근무일, 평일 계산, 처리 기한, 영업일 기준, 공휴일 제외, 며칠 영업일', category: 'date', status: 'live' },
   { slug: 'days-between', title: '일수 계산기 (날짜 사이 며칠)', short: '두 날짜 사이의 일수·주·개월 계산', keywords: '일수 계산기, 며칠, 기간, 날짜 차이, 날짜 계산, 평일 수', category: 'date', status: 'live' },
   // 생활 계산
@@ -41,6 +42,7 @@ export const TOOLS = [
   { slug: 'unit-convert', title: '단위 변환기', short: '인치·파운드·화씨·갤런 등 단위 바로 변환', keywords: '단위, 인치, cm, 파운드, kg, 화씨, 섭씨, 갤런, 온도, 길이, 무게', category: 'calc', status: 'live' },
   { slug: 'exchange-rate', title: '환율 계산기', short: '오늘 고시 환율로 외화↔원화 바로 계산', keywords: '환율, 오늘 환율, 달러 환율, 엔화 환율, 유로 환율, 엔화 계산기, 달러 계산기, 위안화, 매매기준율, 송금 환율, 환전', category: 'calc', status: 'live' },
   { slug: 'exchange-rate-history', title: '과거 환율 조회', short: '날짜별 환율, 기간별 추이 그래프·월평균', keywords: '과거 환율, 날짜별 환율, 환율 조회, 환율 추이, 환율 그래프, 월평균 환율, 환율 차트, 기준환율 조회, 매매기준율 조회, 작년 환율', category: 'calc', status: 'live' },
+  { slug: 'fuel-cost', title: '주유비 계산기', short: '거리·연비로 주유비, 오늘 평균 기름값 자동', keywords: '주유비, 기름값, 유류비, 연비, 휘발유, 경유, LPG, 유가, 오늘 유가, 주유비 계산, 교통비, 여행 경비', category: 'calc', status: 'live' },
   { slug: 'travel-payment', title: '해외 결제 수수료 계산기', short: '여행지 카드 결제, 실제 원화 청구액 계산', keywords: '해외결제, 카드 수수료, 환율, 여행, 발리, 루피아, 엔화, 달러, DCC', category: 'calc', status: 'live' },
   { slug: 'savings-interest', title: '적금·예금 이자 계산기', short: '단리·월복리, 세전·세후 이자', keywords: '적금, 예금, 이자, 세후, 단리, 복리, 만기', category: 'calc', status: 'live' },
   // 파일 변환

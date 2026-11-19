@@ -46,6 +46,17 @@ export const SCHEDULE = [
     run: jobs.holidays,
   },
   {
+    id: 'solar-terms',
+    title: '24절기 (없는 해만 채우기, 바뀌지 않는 값)',
+    crons: ['5 * * * *'],
+    kst: '매시 5분',
+    source: '한국천문연구원 특일 정보 (공공데이터포털)',
+    key: 'HOLIDAY_KEY',
+    maxCalls: 6, // 한 번에 6해씩
+    usual: '다 채운 뒤 0회 (해가 바뀌면 1회)',
+    run: jobs.solarTerms,
+  },
+  {
     id: 'rates-backfill',
     title: '과거 환율 채우기 (2016-01-01까지 거꾸로)',
     crons: ['5 * * * *'],
@@ -66,6 +77,17 @@ export const SCHEDULE = [
     maxCalls: 40, // 처음 1회부터 채울 때
     usual: '0회, 토요일 추첨 뒤 1~2회',
     run: jobs.lotto,
+  },
+  {
+    id: 'fuel',
+    title: '오늘 평균 유가 (전국·시도별)',
+    crons: ['35 * * * *'],
+    kst: '매시 35분 (3시간 지났을 때만)',
+    source: '오피넷 (한국석유공사) 무료 API',
+    key: 'OPINET_KEY',
+    maxCalls: 3,
+    usual: '하루 약 24회 (3시간마다 3회)',
+    run: jobs.fuel,
   },
 ];
 

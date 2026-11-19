@@ -3,7 +3,8 @@
 import { fetchLatest, merge, kstDate } from './rates.js';
 import { ensureSchema, saveDay, backfillOnce } from './history.js';
 import { LOTTO_SCHEMA, syncLotto } from './lotto.js';
-import { refreshHolidays } from './holidays.js';
+import { refreshHolidays, refreshTerms } from './holidays.js';
+import { refreshFuel } from './fuel.js';
 
 /** KV 키 모음 (작업이 쓰고, API가 읽는다) */
 export const KV = {
@@ -11,10 +12,12 @@ export const KV = {
   ratesError: 'rates:error', // 10분 뒤 자동 삭제 → 실패가 반복돼도 방문자마다 외부 API를 부르지 않게
   lottoError: 'lotto:error',
   holidaysError: 'holidays:error',
+  termsError: 'solarterms:error',
+  fuelError: 'fuel:error',
 };
 
 // 오류 문구에 키가 섞여 나가지 않게 가린다
-export const mask = (s, key) => (key ? String(s).split(key).join('***') : String(s)).replace(/(authkey|serviceKey)=[^&\s]+/g, '$1=***');
+export const mask = (s, key) => (key ? String(s).split(key).join('***') : String(s)).replace(/(authkey|serviceKey|code)=[^&\s]+/g, '$1=***');
 export const fetcher = (u, i) => fetch(u, i);
 
 async function saveError(env, kvKey, reason, ttl) {
@@ -67,4 +70,16 @@ export async function lotto(env) {
   const r = await syncLotto({ db: env.DB, kv: env.RATES, fetch: fetcher });
   if (r.error) await saveError(env, KV.lottoError, r.error, 86400);
   else if (r.saved) console.log('로또', r.saved, '회차 저장, 마지막', r.max);
+}
+
+/** 24절기: 없는 해만 (바뀌지 않는 값이라 다 받으면 호출 0) */
+export async function solarTerms(env) {
+  const r = await refreshTerms({ kv: env.RATES, key: env.HOLIDAY_KEY, fetch: fetcher });
+  if (r.error) await saveError(env, KV.termsError, mask(r.error, env.HOLIDAY_KEY), 86400);
+}
+
+/** 유가: 3시간마다 전국·시도별 평균 */
+export async function fuel(env) {
+  const r = await refreshFuel({ kv: env.RATES, key: env.OPINET_KEY, fetch: fetcher });
+  if (r.error) await saveError(env, KV.fuelError, mask(r.error, env.OPINET_KEY), 86400);
 }

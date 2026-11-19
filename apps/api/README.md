@@ -11,6 +11,8 @@
 | `GET /api/rates/history?code=USD&from=&to=` | 한 통화의 기간별 매매기준율 `[[date, base], ...]` | D1 `rates` |
 | `GET /api/lotto` | 로또 전체 회차 번호 `[[회차, 날짜, n1..n6, 보너스], ...]` + 최신 회차 상세 | KV `lotto:all` (D1 `lotto`에서 만든 요약본) |
 | `GET /api/holidays` | 공휴일 `{ years: { '2026': [{ date, name }] }, fetchedAt }` (2016년~내년) | KV `holidays:all` |
+| `GET /api/solar-terms` | 24절기 `{ years: { '2026': [{ date, name, time, longitude }] } }` | KV `solarterms:all` |
+| `GET /api/fuel` | 전국·시도별 평균 유가 `{ date, national: [{ code, name, price, diff }], sido: { B027: [...] } }` | KV `fuel:latest` (오피넷) |
 | `GET /api/lotto/round?n=1250` | 한 회차 상세 (등수별 당첨자 수·당첨금, 판매액) | D1 `lotto` |
 
 - 갱신: 수출입은행은 영업일 11시 전후 하루 한 번 고시(일환율). 평일 KST 11:00~12:50 10분마다 + 17:00 cron → 오늘 값이 이미 있으면 건너뜀. KV가 비어 있으면 첫 요청 때 한 번 받아 온다.
@@ -28,6 +30,7 @@
 - 한 cron의 `maxCalls` 합은 50 이하 (Cloudflare 무료 플랜 실행당 외부 요청 한도).
 
 ## 비밀 값
+- `OPINET_KEY`: 오피넷 무료 API 인증키 (오피넷 홈페이지에서 신청). 없으면 주유비 계산기는 유가 직접 입력으로만 동작.
 - `HOLIDAY_KEY`: 공공데이터포털 "한국천문연구원_특일 정보" 일반 인증키(**Decoding** 키). 배포는 EXIM_KEY와 같은 곳(Variables and Secrets, Secret).
   - 공휴일 갱신: 매시 5분 cron에서 없는 해 + 하루 한 번 올해·내년만 호출. 내년은 발표 전이면 빈 목록 → 저장 안 하고 다음에 다시 확인.
 - `EXIM_KEY`: 한국수출입은행 Open API 인증키. **코드·커밋에 절대 넣지 않는다.**

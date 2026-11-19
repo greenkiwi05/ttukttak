@@ -3,7 +3,6 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
 import DirectionTabs from '../../components/DirectionTabs.astro';
 import Holidays from '../../components/tools/Holidays.vue';
 
-const TABS = [{ href: '/tools/holidays/', label: '공휴일 달력' }, { href: '/tools/business-days/', label: '영업일 계산기' }];
 const faq = [
   { q: '공휴일 정보는 어디서 가져오나요?', a: '한국천문연구원이 공공데이터포털로 제공하는 특일 정보를 매일 확인해서 보여드려요. 대체공휴일이나 임시공휴일이 새로 정해지면 그 정보에 반영되는 대로 이 달력에도 바뀌어요.' },
   { q: '내년 공휴일은 언제 볼 수 있나요?', a: '다음 해 공휴일은 보통 그해 하반기에 공개돼요. 공개되면 자동으로 반영돼서, 화살표로 다음 해를 넘겨 볼 수 있어요.' },
@@ -18,7 +17,7 @@ const faq = [
   lead="연도별 공휴일과 연휴, 연차 쓰기 좋은 날을 정리해 드려요."
   faq={faq}
 >
-  <DirectionTabs items={TABS} />
+  <DirectionTabs items={[{ href: '/tools/holidays/', label: '공휴일 달력' }, { href: '/tools/solar-terms/', label: '24절기' }, { href: '/tools/business-days/', label: '영업일 계산기' }]} />
   <Holidays client:load />
 
   <Fragment slot="guide">
