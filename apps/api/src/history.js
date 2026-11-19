@@ -11,7 +11,7 @@ export const BACKFILL_FLOOR = '1990-01-01';
 export const EMPTY_STOP = 90;
 /** 예전 이름 (조회 기본 시작일) */
 export const BACKFILL_START = BACKFILL_FLOOR;
-export const BACKFILL_PER_RUN = 25; // 매시간 × 25 = 하루 600회 (한도 1000회 안에서 오늘 환율 갱신 몫을 남긴다)
+export const BACKFILL_PER_RUN = 30; // 매시간 × 30 = 하루 720회 (한도 1000회 안에서 오늘 환율 갱신 몫을 남긴다)
 const CURSOR_KEY = 'backfill:cursor'; // 다음에 채울 날짜 (이 날짜부터 과거로)
 const EMPTY_KEY = 'backfill:empty'; // 연속으로 자료가 없던 날 수
 export const DONE_KEY = 'backfill:done'; // 다 채웠으면 '1'

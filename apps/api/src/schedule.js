@@ -63,8 +63,8 @@ export const SCHEDULE = [
     kst: '매시 5분',
     source: '한국수출입은행 현재환율 API',
     key: 'EXIM_KEY',
-    maxCalls: 25,
-    usual: '다 채운 뒤 0회 (채우는 동안 하루 최대 600회)',
+    maxCalls: 30,
+    usual: '다 채운 뒤 0회 (채우는 동안 하루 최대 720회)',
     run: jobs.ratesBackfill,
   },
   {
