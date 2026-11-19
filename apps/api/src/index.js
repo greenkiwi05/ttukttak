@@ -1,7 +1,7 @@
 // 뚝딱 Worker: /api/* 만 여기서 처리하고, 나머지 요청은 정적 사이트(apps/web/dist)로 넘긴다.
 // - 환율: 평일 정해진 시각(cron)마다 수출입은행 API를 불러 KV에 저장하고, /api/rates 는 저장된 값만 돌려준다.
 // - API 키는 코드에 없다. Cloudflare 비밀 환경변수 EXIM_KEY 로 넣는다 (로컬은 .dev.vars).
-import { fetchLatest, merge } from './rates.js';
+import { fetchLatest, merge, kstDate } from './rates.js';
 
 const KV_KEY = 'rates:latest';
 const ERR_KEY = 'rates:error'; // 최근 실패 이유 (10분 뒤 자동 삭제). 실패가 반복돼도 방문자마다 외부 API를 부르지 않게.
@@ -53,7 +53,13 @@ export default {
     return env.ASSETS.fetch(request);
   },
 
+  // 수출입은행은 영업일 11시 전후 하루 한 번 고시한다(일환율).
+  // 11:00~12:50 사이 10분마다 확인하다가, 오늘 값이 저장되면 그날은 더 부르지 않는다.
   async scheduled(_event, env, ctx) {
-    ctx.waitUntil(refresh(env));
+    ctx.waitUntil((async () => {
+      const saved = await env.RATES.get(KV_KEY, 'json');
+      if (saved?.date === kstDate()) return;
+      await refresh(env);
+    })());
   },
 };

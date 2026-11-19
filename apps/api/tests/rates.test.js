@@ -18,9 +18,11 @@ test('수출입은행 응답 정리', () => {
   assert.equal(r.rates[0].send, 1100);
   assert.equal(r.rates[0].receive, 1000);
   assert.deepEqual(parseExim([]), { empty: true });
+  assert.deepEqual(parseExim(null), { empty: true }); // 11시 전·비영업일
+  assert.deepEqual(parseExim([{ result: 1, cur_unit: null, deal_bas_r: null }]), { empty: true });
   assert.equal(parseExim([{ result: 3 }]).error, '인증키 오류');
   assert.equal(parseExim([{ result: 4 }]).error, '하루 호출 한도 초과');
-  assert.ok(parseExim(null).error);
+  assert.ok(parseExim({ x: 1 }).error);
 });
 
 test('주말이면 이전 고시일로 거슬러 올라감', async () => {
@@ -28,7 +30,7 @@ test('주말이면 이전 고시일로 거슬러 올라감', async () => {
   const fake = async (url) => {
     calls.push(url);
     const body = calls.length < 3 ? [] : [row('USD', '1,400')];
-    return { ok: true, json: async () => body };
+    return { ok: true, text: async () => JSON.stringify(body) };
   };
   const r = await fetchLatest({ key: 'XXXX', fetch: fake, now: Date.UTC(2026, 10, 15, 3) }); // 일요일 KST
   assert.equal(r.date, '2026-11-13');

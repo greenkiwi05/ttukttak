@@ -22,6 +22,8 @@ const EXIM_ERRORS = { 2: '데이터 코드 오류', 3: '인증키 오류', 4: '�
  * 주말·공휴일·고시 전(보통 오전 11시 전)에는 빈 배열이 온다.
  */
 export function parseExim(json) {
+  // 공식 안내: 비영업일·영업일 11시 이전에는 null 값 반환 (빈 배열·null·값이 null인 항목 모두 "아직 없음"으로 본다)
+  if (json === null || json === undefined || json === '') return { empty: true };
   if (!Array.isArray(json)) return { error: '응답 형식이 달라요' };
   if (json.length === 0) return { empty: true };
   const code = Number(json[0]?.result);
@@ -41,7 +43,7 @@ export function parseExim(json) {
       receive: toNum(r.ttb) || null,
     });
   }
-  return rates.length ? { rates } : { error: '환율 항목이 없어요' };
+  return rates.length ? { rates } : { empty: true };
 }
 
 /**
@@ -57,7 +59,8 @@ export async function fetchLatest({ key, fetch, now = Date.now() }) {
     try {
       const res = await fetch(url, { headers: { accept: 'application/json' } });
       if (!res.ok) return { error: `HTTP ${res.status}` };
-      body = await res.json();
+      const text = (await res.text()).trim();
+      body = text ? JSON.parse(text) : null;
     } catch (e) {
       return { error: '요청 실패: ' + (e instanceof Error ? e.message : String(e)) };
     }
