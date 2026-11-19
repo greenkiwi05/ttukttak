@@ -1,15 +1,44 @@
 ---
 import Base from '../layouts/Base.astro';
 import { SITE } from '../data/site.js';
-import { liveTools } from '../data/tools.js';
-const count = liveTools().length;
+import { liveTools, CATEGORIES } from '../data/tools.js';
+const tools = liveTools();
+const cats = Object.entries(CATEGORIES)
+  .map(([key, c]) => ({ key, ...c, n: tools.filter((t) => t.category === key).length }))
+  .filter((c) => c.n > 0);
 ---
-<Base title="소개" description={`${SITE.name}는 만 나이·D-day 같은 생활 계산부터 HEIC·PDF 변환까지, 설치·가입 없이 브라우저에서 바로 쓰는 무료 도구 모음이에요. 파일은 서버로 올라가지 않아요.`}>
+<Base title="소개" description={`${SITE.name}은 생활 계산부터 PDF·사진·동영상 변환까지, 설치·가입 없이 브라우저에서 바로 쓰는 무료 도구 모음이에요. 입력한 내용과 파일은 서버로 보내지 않아요.`}>
   <h1>{SITE.name} 소개</h1>
   <div class="prose">
-    <p>{SITE.name}는 일상에서 자주 필요한 계산과 파일 변환을 설치·회원가입 없이 바로 할 수 있게 만든 무료 도구 모음이에요. 지금 {count}개의 도구가 있어요.</p>
-    <p>모든 도구는 브라우저 안에서만 동작해요. 입력한 정보나 파일은 서버로 올라가지 않으니 안심하고 쓰세요.</p>
-    <p>필요한 도구가 있거나 계산이 이상한 곳을 발견하면 <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>로 알려 주세요.</p>
-    <p>계산 결과는 참고용이에요. 금융·법률처럼 중요한 결정에는 해당 기관의 안내를 함께 확인해 주세요.</p>
+    <p>{SITE.name}은 일상에서 자주 필요한 계산과 파일 변환을 <b>설치나 회원가입 없이</b> 바로 할 수 있게 만든 무료 도구 모음이에요. 지금 <b>{tools.length}개</b>의 도구가 있어요.</p>
+
+    <h2>어떤 도구가 있나요?</h2>
+    <ul>
+      {cats.map((c) => (
+        <li><span aria-hidden="true">{c.emoji}</span> <a href={`/category/${c.key}/`}>{c.label}</a> ({c.n}개): {tools.filter((t) => t.category === c.key).slice(0, 4).map((t) => t.title.replace(/\s*\(.*\)$/, '')).join(', ')} 등</li>
+      ))}
+    </ul>
+
+    <h2>내 정보는 내 기기에만</h2>
+    <ul>
+      <li>입력한 날짜·숫자·글과 선택한 파일은 <b>서버로 보내지 않아요.</b> 계산과 변환은 모두 브라우저 안에서 이루어져요.</li>
+      <li>사진·PDF·동영상도 업로드하지 않아서, 큰 파일도 기다리지 않고 바로 처리돼요.</li>
+      <li>자세한 내용은 <a href="/privacy/">개인정보처리방침</a>에 정리해 두었어요.</li>
+    </ul>
+
+    <h2>데이터 출처</h2>
+    <p>환율·공휴일처럼 매일 바뀌는 정보는 공개된 공식 데이터를 받아서 보여드려요. 화면에는 출처와 기준 날짜를 함께 표시해요.</p>
+    <ul>
+      <li><b>환율</b>: 한국수출입은행 고시 환율</li>
+      <li><b>공휴일·24절기</b>: 한국천문연구원 특일 정보 (공공데이터포털)</li>
+      <li><b>평균 유가</b>: 오피넷 (한국석유공사)</li>
+      <li><b>로또 당첨번호</b>: 동행복권 회차별 당첨 결과</li>
+    </ul>
+
+    <h2>계산 결과를 쓸 때</h2>
+    <p>계산 결과는 참고용이에요. 금융·세금·법률처럼 중요한 결정에는 해당 기관이나 전문가의 안내를 함께 확인해 주세요.</p>
+
+    <h2>문의</h2>
+    <p>필요한 도구가 있거나 계산이 이상한 곳을 발견하면 <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>로 알려 주세요. 보내 주신 의견은 도구를 고치고 새로 만드는 데 큰 도움이 돼요.</p>
   </div>
 </Base>

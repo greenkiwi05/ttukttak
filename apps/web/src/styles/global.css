@@ -17,6 +17,9 @@ body {
   margin: 0;
   font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   letter-spacing: -0.01em;
+  /* 한글은 단어 중간에서 줄이 바뀌지 않게 (긴 영문·주소는 넘치지 않게 끊음) */
+  word-break: keep-all;
+  overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   background: var(--bg);
@@ -200,8 +203,12 @@ input[type='date'], input[type='number'], input[type='text'], input[type='time']
 /* 설명글·FAQ: 도구 아래 흰 카드로 구분하고, 줄 간격을 넉넉하게 */
 .prose, .faq-box {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 6px 26px 22px; margin-top: 28px;
+  padding: 24px 28px; margin-top: 28px;
 }
+/* 상자 안 첫 요소는 위 여백 없이 (제목으로 시작하든 문단으로 시작하든 같은 간격) */
+.prose > :first-child, .faq-box > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h3 { margin: 20px 0 8px; font-size: 1.02rem; }
 .prose h2, .faq-box h2 { margin: 26px 0 10px; }
 .prose p, .prose li { color: var(--text-soft); line-height: 1.8; }
 .prose p { margin: 0 0 12px; }
@@ -222,7 +229,7 @@ summary { cursor: pointer; font-weight: 600; }
 .faq summary:hover { color: var(--accent); }
 .faq p { margin: -4px 2px 16px; color: var(--text-soft); line-height: 1.8; }
 @media (max-width: 520px) {
-  .prose, .faq-box { padding: 4px 18px 18px; }
+  .prose, .faq-box { padding: 18px 18px; }
   h1 { font-size: 1.55rem; }
 }
 
