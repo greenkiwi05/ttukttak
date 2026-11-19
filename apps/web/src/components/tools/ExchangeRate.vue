@@ -72,7 +72,7 @@ function pick(c: string) {
 <template>
   <p v-if="state === 'loading'" class="muted" style="margin: 0 0 12px">오늘 환율을 불러오는 중이에요…</p>
   <p v-else-if="state === 'ok' && data" class="muted" style="margin: 0 0 12px">
-    <b>{{ dateKo(data.date) }}</b> {{ data.source }} 고시 매매기준율이에요.
+    <b>{{ dateKo(data.date) }}</b> {{ data.source }} 고시 매매기준율이에요. 하루 한 번 정해지는 기준 환율이라 포털의 실시간 시세와 조금 달라요.
   </p>
   <p v-else class="notice" style="margin: 0 0 12px">지금은 환율을 불러오지 못했어요. 환율을 직접 넣으면 바로 계산돼요.</p>
 
