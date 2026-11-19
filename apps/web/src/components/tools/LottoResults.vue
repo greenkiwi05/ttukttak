@@ -117,9 +117,9 @@ const hitSet = computed(() => new Set(cur.value?.nums ?? []));
 </template>
 
 <style scoped>
-.round-nav { display: flex; gap: 8px; align-items: center; }
+.round-nav { display: flex; gap: 10px; align-items: stretch; }
 .round-nav select { flex: 1; min-width: 0; }
-.round-nav .btn-sub { margin-top: 0; padding: 10px 14px; }
+.round-nav .btn-sub { margin-top: 0; padding: 0 16px; display: inline-flex; align-items: center; justify-content: center; flex: none; }
 .draw { margin-top: 14px; }
 .balls { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 8px 0 4px; }
 .plus { color: var(--muted); font-weight: 700; padding: 0 2px; }
