@@ -7,7 +7,7 @@ import { LOTTO_KV, roundDetail } from './lotto.js';
 import { HOLIDAY_KV, TERMS_KV } from './holidays.js';
 import { FUEL_KV } from './fuel.js';
 import { KV, refreshRates, lottoFromVisit } from './jobs.js';
-import { jobsFor } from './schedule.js';
+import { jobsFor, SCHEDULE } from './schedule.js';
 
 // 저장된 값(문자열 JSON)이 있으면 그대로, 없으면 마지막 실패 이유와 함께 503
 async function stored(env, kvKey, errKey, emptyMsg, maxAge) {
@@ -15,6 +15,31 @@ async function stored(env, kvKey, errKey, emptyMsg, maxAge) {
   if (data) return new Response(data, { headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': `public, max-age=${maxAge}` } });
   const e = await env.RATES.get(errKey, 'json');
   return json({ error: emptyMsg, reason: e?.reason ?? null, at: e?.at ?? null }, 503);
+}
+
+// 운영 확인용: 작업별 마지막 실행·오류와 데이터 상태 (비밀 값 없음)
+async function status(env) {
+  const get = (k) => env.RATES.get(k, 'json').catch(() => null);
+  const jobs = await Promise.all(SCHEDULE.map(async (j) => ({ id: j.id, title: j.title, kst: j.kst, last: await get(`job:${j.id}`) })));
+  const [rates, holidays, terms, lotto, fuel, cursor, done, cov] = await Promise.all([
+    get(KV.rates), get(HOLIDAY_KV), get(TERMS_KV), get(LOTTO_KV), get(FUEL_KV),
+    env.RATES.get('backfill:cursor'), env.RATES.get(DONE_KEY), coverage(env.DB).catch(() => null),
+  ]);
+  const errors = {};
+  for (const [k, key] of Object.entries({ rates: KV.ratesError, holidays: KV.holidaysError, terms: KV.termsError, lotto: KV.lottoError, fuel: KV.fuelError })) errors[k] = (await get(key))?.reason ?? null;
+  return json({
+    now: new Date().toISOString(),
+    jobs,
+    data: {
+      ratesToday: rates?.date ?? null,
+      ratesHistory: { ...(cov ?? {}), cursor, complete: !!done },
+      holidaysYears: Object.keys(holidays?.years ?? {}),
+      solarTermsYears: Object.keys(terms?.years ?? {}),
+      lottoLatest: lotto?.latest?.round ?? null,
+      fuel: fuel?.date ?? null,
+    },
+    lastErrors: errors,
+  });
 }
 
 async function lottoRoundApi(url, env) {
@@ -85,6 +110,7 @@ export default {
       if (url.pathname === '/api/rates') return await latest(env);
       if (url.pathname === '/api/rates/day') return await cached(request, ctx, () => dayApi(url, env));
       if (url.pathname === '/api/rates/history') return await cached(request, ctx, () => historyApi(url, env));
+      if (url.pathname === '/api/status') return await status(env);
       if (url.pathname === '/api/lotto') {
         ctx.waitUntil(lottoFromVisit(env, request.cf?.colo).catch((e) => console.log('로또 방문 갱신 오류:', String(e))));
         return await stored(env, LOTTO_KV, KV.lottoError, '당첨번호를 아직 불러오지 못했어요', 600);
@@ -105,11 +131,16 @@ export default {
   async scheduled(event, env, ctx) {
     ctx.waitUntil((async () => {
       for (const job of jobsFor(event.cron)) {
+        const t0 = Date.now();
+        let error = null;
         try {
           await job.run(env);
         } catch (e) {
-          console.log(`작업 ${job.id} 오류:`, String(e));
+          error = String(e).slice(0, 300);
+          console.log(`작업 ${job.id} 오류:`, error);
         }
+        // 작업별 마지막 실행 기록 (/api/status 에서 본다). 키 값은 오류 문구에 들어가지 않는다 (각 작업이 가림)
+        await env.RATES.put(`job:${job.id}`, JSON.stringify({ at: new Date().toISOString(), ms: Date.now() - t0, error }), { expirationTtl: 7 * 86400 }).catch(() => {});
       }
     })());
   },
