@@ -1,5 +1,7 @@
 node_modules/
 dist/
+# pdf.js 보조 파일 (빌드 때 node_modules에서 복사)
+apps/web/public/pdfjs/
 .astro/
 .env
 .env.*

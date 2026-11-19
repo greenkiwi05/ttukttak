@@ -2,8 +2,8 @@
 // PDF → 한글(HWPX) 변환 UI. 글자 정리는 src/lib/pdfToHwpx.js, 그림 꺼내기는 src/lib/pdfImages.js,
 // HTML → HWPX는 hwp-convert(MIT), 압축은 fflate. 모두 이 페이지에서만 동적 import. 파일은 서버로 보내지 않는다.
 import { ref, computed, onBeforeUnmount } from 'vue';
-import { loadPdfjs, pdfOpenError } from '../../lib/pdfjs.js';
-import { groupLines, toBlocks, buildHtml, insertPageBreaks, cleanPreview, hwpxOutName } from '../../lib/pdfToHwpx.js';
+import { loadPdfjs, openPdf, pdfOpenError } from '../../lib/pdfjs.js';
+import { groupLines, orderColumns, toBlocks, buildHtml, insertPageBreaks, cleanPreview, hwpxOutName, selectImages } from '../../lib/pdfToHwpx.js';
 import { formatBytes } from '../../lib/compress.js';
 import { filterFiles } from '../../lib/files.js';
 
@@ -37,7 +37,7 @@ async function run() {
   try {
     step.value = 'PDF를 여는 중…';
     const pdfjs: any = await loadPdfjs();
-    task = pdfjs.getDocument({ data: new Uint8Array(await file.value.arrayBuffer()) });
+    task = openPdf(pdfjs, new Uint8Array(await file.value.arrayBuffer()));
     let doc;
     try { doc = await task.promise; } catch (e) { throw Object.assign(new Error(pdfOpenError(e)), { user: true }); }
     if (doc.numPages > MAX_PAGES) throw Object.assign(new Error(`${MAX_PAGES}쪽까지 변환할 수 있어요. (이 PDF는 ${doc.numPages}쪽)`), { user: true });
@@ -48,7 +48,7 @@ async function run() {
       step.value = `글자 읽는 중… (${i}/${doc.numPages}쪽)`;
       const page = await doc.getPage(i);
       const tc = await page.getTextContent();
-      pageLines.push({ page, lines: groupLines(tc.items) });
+      pageLines.push({ page, lines: orderColumns(groupLines(tc.items)) });
       progress.value = (i / doc.numPages) * 0.4;
     }
     const sizes = pageLines.flatMap((p) => p.lines.map((l: any) => l.size)).sort((a: number, b: number) => a - b);
@@ -64,7 +64,10 @@ async function run() {
       if (!lines.length) {
         scanned++;
         if (imgs) pi = [await imgs.pageSnapshot(page)];
-      } else if (imgs) pi = await imgs.pageImages(pdfjs, page);
+      } else if (imgs) {
+        const vp = page.getViewport({ scale: 1 });
+        pi = selectImages(await imgs.pageImages(pdfjs, page), vp.width, vp.height, true);
+      }
       paras += blocks.length; images += pi.length;
       pages.push({ blocks, images: pi });
       progress.value = 0.4 + ((i + 1) / pageLines.length) * 0.45;

@@ -6,7 +6,7 @@ import { filterFiles } from '../../lib/files.js';
 import { COMPRESS_PRESETS, compareSize, compressedName, pagePixels } from '../../lib/pdfCompress.js';
 import { renderScale } from '../../lib/pdfToImage.js';
 import { formatBytes } from '../../lib/compress.js';
-import { loadPdfjs, pdfOpenError } from '../../lib/pdfjs.js';
+import { loadPdfjs, openPdf, pdfOpenError } from '../../lib/pdfjs.js';
 
 const file = ref<File | null>(null);
 const pages = ref(0);
@@ -33,7 +33,7 @@ async function setFile(list: FileList | null | undefined) {
   try {
     const pdfjs: any = await loadPdfjs();
     // pdf.js 6: 정리는 문서가 아니라 loadingTask.destroy()로 한다
-    const task = pdfjs.getDocument({ data: new Uint8Array(await f.arrayBuffer()) });
+    const task = openPdf(pdfjs, new Uint8Array(await f.arrayBuffer()));
     const doc = await task.promise;
     pages.value = doc.numPages;
     await task.destroy();
@@ -54,7 +54,7 @@ async function run() {
   const p = COMPRESS_PRESETS.find((x) => x.id === preset.value)!;
   try {
     const [pdfjs, { PDFDocument }] = await Promise.all([loadPdfjs() as Promise<any>, import('pdf-lib')]);
-    const task = pdfjs.getDocument({ data: new Uint8Array(await file.value.arrayBuffer()) });
+    const task = openPdf(pdfjs, new Uint8Array(await file.value.arrayBuffer()));
     const src = await task.promise;
     const outDoc = await PDFDocument.create();
     for (let i = 1; i <= src.numPages; i++) {

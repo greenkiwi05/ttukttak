@@ -83,7 +83,36 @@ test('문단 나누기: 문단 간격이 줄 간격보다 많아도, 짧게 끝�
 import { fitWidth } from '../src/lib/pdfToHwpx.js';
 test('그림 크기: 본문 폭·쪽 높이 안으로', () => {
   assert.equal(fitWidth(300, 200), 300);
-  assert.equal(fitWidth(1200, 400), 600); // 넓으면 폭에 맞춤
-  assert.equal(fitWidth(595, 842), 495); // A4 한 쪽 전체 → 높이 700에 맞춤
-  assert.equal(fitWidth(0, 0), 600);
+  assert.equal(fitWidth(1200, 400), 480); // 넓으면 폭에 맞춤
+  assert.equal(fitWidth(595, 842), 297); // A4 한 쪽 전체 → 높이 420에 맞춤
+  assert.equal(fitWidth(0, 0), 480);
+});
+
+import { selectImages } from '../src/lib/pdfToHwpx.js';
+test('그림 고르기: 배경(쪽 절반 넘게 덮음)·중복 빼기, 글 없는 쪽은 배경도 유지', () => {
+  const A4 = [595, 842];
+  const imgs = [{ key: 'bg', wPt: 595, hPt: 842 }, { key: 'logo', wPt: 100, hPt: 40 }, { key: 'logo', wPt: 100, hPt: 40 }, { key: 'photo', wPt: 300, hPt: 200 }];
+  assert.deepEqual(selectImages(imgs, ...A4, true).map((i) => i.key), ['logo', 'photo']);
+  assert.deepEqual(selectImages(imgs, ...A4, false).map((i) => i.key), ['bg', 'logo', 'photo']);
+});
+
+test('HTML: 글이 있는 쪽은 첫 글을 맨 앞으로 (그림이 쪽의 첫 내용이 되지 않게)', () => {
+  const html = buildHtml([{ blocks: [{ type: 'p', text: '본문', y: 500 }], images: [{ y: 800, src: 'x', width: 10 }] }]);
+  assert.ok(html.startsWith('<p>본문</p>'));
+});
+
+import { orderColumns } from '../src/lib/pdfToHwpx.js';
+test('두 단: 같은 높이의 왼쪽·오른쪽 글을 떼고, 왼쪽 단 → 오른쪽 단 순서', () => {
+  const it2 = (str, x, y, w) => ({ str, transform: [10, 0, 0, 10, x, y], height: 10, width: w });
+  const items = [it2('공통 제목', 50, 800, 300)];
+  for (let i = 0; i < 4; i++) { items.push(it2(`왼쪽 ${i + 1}줄`, 50, 760 - i * 14, 200)); items.push(it2(`오른쪽 ${i + 1}줄`, 320, 760 - i * 14, 200)); }
+  items.push(it2('아래 전체 폭 문장', 50, 680, 470));
+  items.push(it2('중복', 60, 660, 30), it2('중복', 60.3, 660.2, 30)); // 겹쳐 찍은 글자
+  const lines = orderColumns(groupLines(items));
+  assert.deepEqual(lines.map((l) => l.text), ['공통 제목', '왼쪽 1줄', '왼쪽 2줄', '왼쪽 3줄', '왼쪽 4줄', '오른쪽 1줄', '오른쪽 2줄', '오른쪽 3줄', '오른쪽 4줄', '아래 전체 폭 문장', '중복']);
+  const blocks = toBlocks(lines);
+  assert.ok(blocks.some((b) => b.text === '왼쪽 1줄 왼쪽 2줄 왼쪽 3줄 왼쪽 4줄'));
+  assert.ok(blocks.some((b) => b.text === '오른쪽 1줄 오른쪽 2줄 오른쪽 3줄 오른쪽 4줄'));
+  const one = groupLines([it2('가', 50, 700, 300), it2('나', 50, 686, 300)]);
+  assert.deepEqual(orderColumns(one), one);
 });

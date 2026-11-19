@@ -67,7 +67,7 @@ export async function pageImages(pdfjs, page) {
       if (!img) continue;
       const src = toDataUrl(img);
       if (!src) continue;
-      out.push({ y: ctm[5] + Math.max(0, ctm[3]), src, width: fitWidth((wPt * 96) / 72, (hPt * 96) / 72) });
+      out.push({ y: ctm[5] + Math.max(0, ctm[3]), src, width: fitWidth((wPt * 96) / 72, (hPt * 96) / 72), wPt, hPt, key: typeof args[0] === 'string' ? args[0] : undefined });
     }
   }
   return out;

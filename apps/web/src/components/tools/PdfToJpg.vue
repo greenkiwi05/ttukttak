@@ -5,7 +5,7 @@ import { filterFiles } from '../../lib/files.js';
 import { parsePageRanges } from '../../lib/pageRange.js';
 import { renderScale, pageImageName, DPI_PRESETS } from '../../lib/pdfToImage.js';
 import { downloadBlob, downloadZip } from '../../lib/download.js';
-import { loadPdfjs, pdfOpenError } from '../../lib/pdfjs.js';
+import { loadPdfjs, openPdf, pdfOpenError } from '../../lib/pdfjs.js';
 
 const file = ref<File | null>(null);
 const pageCount = ref(0);
@@ -38,7 +38,7 @@ async function setFile(list: FileList | null | undefined) {
   try {
     const pdfjs = await lib();
     await task?.destroy();
-    task = pdfjs.getDocument({ data: new Uint8Array(await f.arrayBuffer()) });
+    task = openPdf(pdfjs, new Uint8Array(await f.arrayBuffer()));
     doc.value = await task.promise;
     file.value = f;
     pageCount.value = doc.value.numPages;
