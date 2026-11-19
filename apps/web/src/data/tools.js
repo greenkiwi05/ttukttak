@@ -58,6 +58,7 @@ export const TOOLS = [
   { slug: 'hwp-to-pdf', title: 'HWP PDF 변환', short: '한글 파일을 설치 없이 열고 PDF로 저장', keywords: '한글 파일, hwp, hwpx, 한글 pdf, 한글 뷰어, 한컴', category: 'file', status: 'live' },
   // 사진
   { slug: 'id-photo', title: '증명사진·여권사진 규격 맞추기', short: '여권·주민등록증·운전면허·반명함 사이즈로 자르기', keywords: '증명사진, 여권사진, 반명함, 이력서 사진, 사진 규격, 운전면허 사진, 민증 사진', category: 'photo', status: 'live' },
+  { slug: 'image-to-text', title: '사진 글자 추출 (이미지 텍스트 변환)', short: '사진·캡처 속 글자를 텍스트로, 서버 업로드 없이', keywords: '이미지 텍스트 추출, 사진 글자 추출, ocr, 글자 인식, 캡처 글자 복사, 텍스트 변환, 이미지 글자 복사', category: 'photo', status: 'live' },
   { slug: 'image-merge', title: '사진 합치기', short: '여러 장을 세로·가로로 한 장에 이어 붙이기', keywords: '사진 합치기, 이미지 합치기, 캡처 이어붙이기, 사진 붙이기', category: 'photo', status: 'live' },
   { slug: 'exif-remove', title: '사진 위치정보 지우기', short: '사진 속 GPS·촬영 정보(EXIF) 확인하고 삭제', keywords: '위치정보, gps, exif, 메타데이터, 개인정보, 사진 정보', category: 'photo', status: 'live' },
   // 글자·문구
