@@ -63,6 +63,7 @@ export async function ratesBackfill(env) {
 export async function holidays(env) {
   const h = await refreshHolidays({ kv: env.RATES, key: env.HOLIDAY_KEY, fetch: fetcher });
   if (h.error) await saveError(env, KV.holidaysError, mask(h.error, env.HOLIDAY_KEY), 86400);
+  else if (h.updated) await env.RATES.delete(KV.holidaysError);
 }
 
 /** 로또: 저장된 마지막 회차가 "지금쯤 나왔어야 할 회차"보다 작을 때만 동행복권 호출 */
@@ -70,7 +71,7 @@ export async function lotto(env, where = 'cron') {
   await env.DB.batch(LOTTO_SCHEMA.map((s) => env.DB.prepare(s)));
   const r = await syncLotto({ db: env.DB, kv: env.RATES, fetch: fetcher });
   if (r.error) await saveError(env, KV.lottoError, `${r.error} (${where})`, 86400);
-  else if (r.saved) console.log('로또', r.saved, '회차 저장, 마지막', r.max, where);
+  else if (r.saved) { console.log('로또', r.saved, '회차 저장, 마지막', r.max, where); await env.RATES.delete(KV.lottoError); }
   return r;
 }
 
@@ -90,10 +91,12 @@ export async function lottoFromVisit(env, colo) {
 export async function solarTerms(env) {
   const r = await refreshTerms({ kv: env.RATES, key: env.HOLIDAY_KEY, fetch: fetcher });
   if (r.error) await saveError(env, KV.termsError, mask(r.error, env.HOLIDAY_KEY), 86400);
+  else if (r.updated) await env.RATES.delete(KV.termsError);
 }
 
 /** 유가: 3시간마다 전국·시도별 평균 */
 export async function fuel(env) {
   const r = await refreshFuel({ kv: env.RATES, key: env.OPINET_KEY, fetch: fetcher });
   if (r.error) await saveError(env, KV.fuelError, mask(r.error, env.OPINET_KEY), 86400);
+  else if (r.updated) await env.RATES.delete(KV.fuelError); // 성공하면 지난 오류 기록은 지운다
 }
