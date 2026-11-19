@@ -105,7 +105,8 @@ const PART = { work: '업무 시간', free: '저녁·이른 아침', night: '잠
 .city.free { box-shadow: inset 4px 0 0 #f59f00; }
 .head { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
 .head b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.x { border: 0; background: none; font-size: 1.1rem; color: var(--muted); cursor: pointer; padding: 0 2px; }
+.x { border: 0; background: none; font-size: 1.2rem; color: var(--muted); cursor: pointer; width: 32px; height: 32px; margin: -6px -8px -6px 0; border-radius: 8px; flex: none; }
+.x:hover { background: var(--bg); color: var(--text); }
 .tag { color: var(--accent); font-weight: 700; }
 .time { font-size: 1.5rem; font-weight: 800; }
 .date { font-size: .9rem; }

@@ -74,7 +74,7 @@ watch(result, (r) => { if (r && removeWinner.value) setTimeout(dropWinner, 1200)
 <template>
   <div class="wheel-box">
     <div class="pointer" aria-hidden="true"></div>
-    <svg viewBox="0 0 200 200" class="wheel" role="img" :aria-label="`돌림판, 항목 ${n}개`"
+    <div class="disc"><svg viewBox="0 0 200 200" class="wheel" role="img" :aria-label="`돌림판, 항목 ${n}개`"
          :style="{ transform: `rotate(${rotation}deg)`, transitionDuration: (reduce ? 600 : DURATION) + 'ms' }">
       <g v-if="n">
         <path v-for="(it, i) in items" :key="i" :d="slicePath(i, n, 98)" :fill="colorFor(i, n)" stroke="#fff" stroke-width="1.2" />
@@ -83,7 +83,7 @@ watch(result, (r) => { if (r && removeWinner.value) setTimeout(dropWinner, 1200)
       </g>
       <circle v-else cx="100" cy="100" r="98" fill="#f1f3f5" />
       <circle cx="100" cy="100" r="98" fill="none" stroke="#fff" stroke-width="3" />
-    </svg>
+    </svg></div>
     <button type="button" class="hub" :disabled="spinning || n < 2" @click="spin">{{ spinning ? '…' : '돌리기' }}</button>
   </div>
 
@@ -115,7 +115,9 @@ watch(result, (r) => { if (r && removeWinner.value) setTimeout(dropWinner, 1200)
 
 <style scoped>
 .wheel-box { position: relative; width: min(100%, 380px); margin: 4px auto 0; aspect-ratio: 1; }
-.wheel { width: 100%; height: 100%; display: block; transition-property: transform; transition-timing-function: cubic-bezier(.12, .7, .1, 1); filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .12)); }
+/* 돌아가는 판은 둥근 틀 안에서만 보이게 — 기울어진 사각형 영역이 화면 밖으로 넘쳐 가로 스크롤이 생기지 않도록 */
+.disc { width: 100%; height: 100%; border-radius: 50%; overflow: hidden; box-shadow: 0 4px 14px rgba(0, 0, 0, .14); }
+.wheel { width: 100%; height: 100%; display: block; transition-property: transform; transition-timing-function: cubic-bezier(.12, .7, .1, 1); }
 .wheel text { fill: #1a1a18; font-weight: 700; pointer-events: none; }
 .pointer { position: absolute; top: -6px; left: 50%; transform: translateX(-50%); width: 0; height: 0; z-index: 2;
   border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 26px solid var(--text); filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .25)); }

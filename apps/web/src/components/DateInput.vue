@@ -122,7 +122,7 @@ const WD = ['일', '월', '화', '수', '목', '금', '토'];
 .date-input input { width: 100%; padding-right: 48px; }
 .date-input input[aria-invalid='true'] { border-color: #c92a2a; }
 .cal-btn {
-  position: absolute; top: 6px; right: 6px; width: 38px; height: 38px; border: 0; border-radius: 8px;
+  position: absolute; top: 50%; transform: translateY(-50%); right: 6px; width: 38px; height: 38px; border: 0; border-radius: 8px;
   background: transparent; color: var(--muted); cursor: pointer; display: grid; place-items: center;
   -webkit-tap-highlight-color: transparent;
 }

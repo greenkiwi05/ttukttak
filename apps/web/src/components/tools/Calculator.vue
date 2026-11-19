@@ -70,9 +70,10 @@ function useHistory(h: { expr: string }) { expr.value = h.expr; inputEl.value?.f
 .calc { max-width: 440px; margin: 0 auto; }
 .calc-screen { background: #1f1f1d; color: #fff; border-radius: 14px; padding: 12px 16px 14px; }
 .calc-mode { display: flex; gap: 4px; }
-.calc-mode button { border: 0; border-radius: 6px; padding: 3px 8px; font-size: .75rem; background: #3a3a37; color: #bbb; cursor: pointer; }
+.calc-mode button { border: 0; border-radius: 6px; padding: 0 12px; min-height: 32px; font-size: .8rem; background: #3a3a37; color: #bbb; cursor: pointer; }
 .calc-mode button.on { background: var(--accent); color: #fff; }
 .calc-input { width: 100%; background: transparent; border: 0; outline: 0; color: #fff; font: inherit; font-size: 1.9rem; text-align: right; padding: 8px 0 0; }
+.calc-input:focus { box-shadow: none; }
 .calc-input::placeholder { color: #777; }
 .calc-preview { text-align: right; color: #aaa; min-height: 1.4em; font-size: 1rem; }
 .calc-keys { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 10px; }
