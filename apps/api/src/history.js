@@ -1,13 +1,20 @@
 // 과거 환율 저장·조회 (Cloudflare D1 = SQLite).
 // - 매일 받은 고시 환율을 rates 테이블에 쌓는다.
-// - 처음에는 비어 있으므로, 매시간 cron이 BACKFILL_START까지 과거 날짜를 조금씩 거꾸로 채운다
+// - 처음에는 비어 있으므로, 매시간 cron이 과거 날짜를 조금씩 거꾸로 채운다
 //   (수출입은행 하루 1000회 제한 → 한 번에 BACKFILL_PER_RUN일씩).
+// - 시작일을 정해 두지 않고, 수출입은행 자료가 EMPTY_STOP일 연속 없으면 거기를 자료의 시작으로 보고 멈춘다
+//   (주말·연휴 공백은 길어야 열흘 남짓). 안전장치로 BACKFILL_FLOOR 이전으로는 가지 않는다.
 // SQL은 모두 바인딩(?)으로만 값을 넣는다.
 import { fetchDay } from './rates.js';
 
-export const BACKFILL_START = '2016-01-01';
+export const BACKFILL_FLOOR = '1990-01-01';
+export const EMPTY_STOP = 90;
+/** 예전 이름 (조회 기본 시작일) */
+export const BACKFILL_START = BACKFILL_FLOOR;
 export const BACKFILL_PER_RUN = 25; // 매시간 × 25 = 하루 600회 (한도 1000회 안에서 오늘 환율 갱신 몫을 남긴다)
 const CURSOR_KEY = 'backfill:cursor'; // 다음에 채울 날짜 (이 날짜부터 과거로)
+const EMPTY_KEY = 'backfill:empty'; // 연속으로 자료가 없던 날 수
+export const DONE_KEY = 'backfill:done'; // 다 채웠으면 '1'
 
 export const SCHEMA = [
   `CREATE TABLE IF NOT EXISTS rates (
@@ -27,7 +34,7 @@ export function addDays(date, n) {
 }
 
 /** 이번에 채울 날짜 목록 (cursor부터 과거로, start 이전은 안 함) */
-export function planBackfill(cursor, start = BACKFILL_START, n = BACKFILL_PER_RUN) {
+export function planBackfill(cursor, start = BACKFILL_FLOOR, n = BACKFILL_PER_RUN) {
   const out = [];
   for (let d = cursor; d >= start && out.length < n; d = addDays(d, -1)) out.push(d);
   return out;
@@ -48,21 +55,29 @@ export async function saveDay(db, date, rates) {
  * @returns {Promise<{ done: boolean, filled?: number, cursor?: string, error?: string }>}
  */
 export async function backfillOnce({ db, kv, key, fetch, today }) {
+  if (await kv.get(DONE_KEY)) return { done: true };
   const cursor = (await kv.get(CURSOR_KEY)) || today;
-  if (cursor < BACKFILL_START) return { done: true };
+  let empty = Number(await kv.get(EMPTY_KEY)) || 0;
   let filled = 0;
   let next = cursor;
+  const finish = async () => {
+    await kv.put(CURSOR_KEY, next);
+    await kv.put(EMPTY_KEY, String(empty));
+    const done = empty >= EMPTY_STOP || next < BACKFILL_FLOOR;
+    if (done) await kv.put(DONE_KEY, '1');
+    return done;
+  };
   for (const date of planBackfill(cursor)) {
     const r = await fetchDay({ key, fetch, date });
     if ('error' in r) {
-      await kv.put(CURSOR_KEY, next);
+      await finish();
       return { done: false, filled, cursor: next, error: r.error };
     }
-    if ('rates' in r) { await saveDay(db, date, r.rates); filled++; }
+    if ('rates' in r) { await saveDay(db, date, r.rates); filled++; empty = 0; } else empty++;
     next = addDays(date, -1);
+    if (empty >= EMPTY_STOP) break;
   }
-  await kv.put(CURSOR_KEY, next);
-  return { done: next < BACKFILL_START, filled, cursor: next };
+  return { done: await finish(), filled, cursor: next };
 }
 
 /** 저장된 기간 { min, max } */

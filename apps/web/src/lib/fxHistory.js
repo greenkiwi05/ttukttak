@@ -95,7 +95,9 @@ export function xTicks(from, to) {
     if (m > 12) { y++; m -= 12; }
     const d = `${y}-${String(m).padStart(2, '0')}-01`;
     if (d > to) break;
-    if (stepMonths < 12 || m === 1) out.push(d);
+    // 긴 기간은 연도 눈금도 2년·5년 간격으로 (글씨가 겹치지 않게)
+    const yearStep = days > 7000 ? 5 : days > 3500 ? 2 : 1;
+    if (stepMonths < 12 || (m === 1 && y % yearStep === 0)) out.push(d);
     m += stepMonths === 12 ? 1 : stepMonths;
   }
   return out;

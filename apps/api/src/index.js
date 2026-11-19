@@ -2,7 +2,7 @@
 // - API는 KV·D1에 저장된 값만 돌려준다. 외부 API를 부르는 정기 작업은 schedule.js(일정표) + jobs.js(내용).
 // - API 키는 코드에 없다. Cloudflare 비밀 환경변수(EXIM_KEY, HOLIDAY_KEY)로 넣는다 (로컬은 .dev.vars).
 import { kstDate } from './rates.js';
-import { coverage, history, day, isDate, isCode, BACKFILL_START } from './history.js';
+import { coverage, history, day, isDate, isCode, BACKFILL_START, DONE_KEY } from './history.js';
 import { LOTTO_KV, roundDetail } from './lotto.js';
 import { HOLIDAY_KV, TERMS_KV } from './holidays.js';
 import { FUEL_KV } from './fuel.js';
@@ -61,9 +61,9 @@ async function cached(request, ctx, make) {
 async function dayApi(url, env) {
   const date = url.searchParams.get('date') ?? '';
   if (!isDate(date)) return json({ error: '날짜는 YYYY-MM-DD 형식으로 보내 주세요' }, 400);
-  const [d, cov] = await Promise.all([day(env.DB, date), coverage(env.DB)]);
+  const [d, cov, done] = await Promise.all([day(env.DB, date), coverage(env.DB), env.RATES.get(DONE_KEY)]);
   const past = d.date && d.date < kstDate();
-  return json({ ...d, coverage: cov }, 200, past ? 86400 : 600);
+  return json({ ...d, coverage: { ...cov, complete: !!done } }, 200, past && done ? 86400 : 600);
 }
 
 async function historyApi(url, env) {
@@ -72,8 +72,8 @@ async function historyApi(url, env) {
   const from = url.searchParams.get('from') || BACKFILL_START;
   if (!isCode(code)) return json({ error: '통화 코드(예: USD)를 보내 주세요' }, 400);
   if (!isDate(from) || !isDate(to) || from > to) return json({ error: '기간을 YYYY-MM-DD 형식으로 보내 주세요' }, 400);
-  const [h, cov] = await Promise.all([history(env.DB, code, from, to), coverage(env.DB)]);
-  return json({ ...h, coverage: cov }, 200, 3600);
+  const [h, cov, done] = await Promise.all([history(env.DB, code, from, to), coverage(env.DB), env.RATES.get(DONE_KEY)]);
+  return json({ ...h, coverage: { ...cov, complete: !!done } }, 200, 3600);
 }
 
 export default {

@@ -7,13 +7,13 @@ import { PERIODS, fromDate, stats, monthly, geometry, nearest, dateKo, loadDay, 
 import { POPULAR, FLAGS, loadRates } from '../../lib/exchange.js';
 
 type Row = { code: string; unit: number; name: string; base: number; send: number | null; receive: number | null };
-type Cov = { min: string | null; max: string | null };
+type Cov = { min: string | null; max: string | null; complete?: boolean };
 
 const mode = ref<'trend' | 'day'>('trend');
 const today = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
 const coverage = ref<Cov | null>(null);
-const START = '2016-01-04'; // 수집 목표 (2016년 첫 영업일)
-const filling = computed(() => !!coverage.value?.min && coverage.value.min > START);
+// 수출입은행 자료가 있는 가장 오래된 날까지 채우는 중이면 안내 (서버가 complete로 알려 줌)
+const filling = computed(() => !!coverage.value?.min && coverage.value.complete === false);
 const flag = (c: string) => FLAGS[c as keyof typeof FLAGS] ?? '';
 const fmt = (n: number) => n.toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const monthKo = (m: string) => `${m.slice(0, 4)}년 ${Number(m.slice(5))}월`;
@@ -114,7 +114,7 @@ function showDay(d: string) {
   </div>
 
   <p v-if="filling" class="notice" style="margin: 0 0 12px">
-    지금은 {{ dateKo(coverage!.min!) }}부터 조회할 수 있어요. 2016년 자료까지 차례로 채우는 중이에요.
+    지금은 {{ dateKo(coverage!.min!) }}부터 조회할 수 있어요. 더 오래된 자료를 차례로 채우는 중이에요.
   </p>
 
   <!-- 기간별 추이 -->
@@ -188,7 +188,7 @@ function showDay(d: string) {
   <div v-show="mode === 'day'">
     <div class="field">
       <label for="fh-date">조회할 날짜</label>
-      <DateInput id="fh-date" v-model="date" :min="coverage?.min ?? '2016-01-01'" :max="today" placeholder="예: 2025.12.31" />
+      <DateInput id="fh-date" v-model="date" :min="coverage?.min ?? '1990-01-01'" :max="today" placeholder="예: 2025.12.31" />
       <small class="muted">주말·공휴일을 고르면 그 전 마지막 고시일 환율을 보여줘요.</small>
     </div>
     <p v-if="dayState === 'loading'" class="muted">불러오는 중…</p>

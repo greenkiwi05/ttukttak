@@ -58,7 +58,7 @@ export const SCHEDULE = [
   },
   {
     id: 'rates-backfill',
-    title: '과거 환율 채우기 (2016-01-01까지 거꾸로)',
+    title: '과거 환율 채우기 (자료가 있는 가장 오래된 날까지 거꾸로)',
     crons: ['5 * * * *'],
     kst: '매시 5분',
     source: '한국수출입은행 현재환율 API',

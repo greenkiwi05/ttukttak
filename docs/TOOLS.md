@@ -251,7 +251,7 @@
 - 로직: `src/lib/exchange.js`, 백엔드: `apps/api/src/rates.js` (각각 테스트)
 
 ### exchange-rate-history — 과거 환율 조회 (🧮 생활 계산) — 과거 환율·날짜별 환율·월평균 환율
-- 데이터: D1 `rates` 테이블 (매일 고시분 + 2016-01-01까지 매시간 과거 채우기). API `/api/rates/day`, `/api/rates/history`
+- 데이터: D1 `rates` 테이블 (매일 고시분 + 매시간 과거 채우기 — 수출입은행 자료가 90일 연속 없으면 시작점으로 보고 멈춤, 바닥 1990-01-01). API `/api/rates/day`, `/api/rates/history`
 - 화면: [기간별 추이] 통화·기간(1개월~전체) → SVG 선 그래프(십자선·툴팁), 최고·최저·평균·기간 변동, 월별 평균 표 / [날짜로 조회] DateInput → 그날(없으면 직전 고시일) 전체 통화표
 - 채우는 중이면 "지금은 OOO부터 조회할 수 있어요" 안내. 환율 계산기와 DirectionTabs로 묶음
 - 로직: `src/lib/fxHistory.js` (통계·월평균·눈금·좌표), 백엔드: `apps/api/src/history.js`
