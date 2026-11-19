@@ -1,0 +1,38 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import DirectionTabs from '../../components/DirectionTabs.astro';
+import PdfToHwp from '../../components/tools/PdfToHwp.vue';
+
+const faq = [
+  { q: 'PDF가 서버로 올라가나요?', a: '아니요. PDF를 읽고 한글 문서로 만드는 과정은 모두 내 브라우저 안에서 이루어져요. 공문서나 개인 문서도 걱정 없이 쓸 수 있어요.' },
+  { q: 'HWP가 아니라 HWPX로 저장되는 이유는요?', a: 'HWPX는 한글의 공개 표준 문서 형식이에요. 한글 프로그램에서 그대로 열리고, 열어서 "다른 이름으로 저장"을 누르면 HWP로도 저장할 수 있어요.' },
+  { q: '원본 PDF와 모양이 똑같이 나오나요?', a: '글자와 문단 순서를 중심으로 옮겨서, 표·여러 단·글상자처럼 복잡한 배치는 단순해질 수 있어요. 큰 글씨는 제목으로 바꿔 넣어요. 모양을 그대로 살려야 한다면 한글 프로그램의 PDF 불러오기 기능을 함께 써 보세요.' },
+  { q: '스캔한 PDF도 되나요?', a: '스캔한 PDF는 글자가 아니라 사진이라서 글자로는 옮겨지지 않아요. "그림도 넣기"를 켜면 쪽 전체를 그림으로 넣어 드려요. 글자로 바꾸려면 사진 글자 추출 도구를 써 보세요.' },
+  { q: '암호가 걸린 PDF는요?', a: '암호가 걸린 PDF는 열 수 없어요. PDF 보기 프로그램에서 암호를 푼 뒤 다시 시도해 주세요.' },
+];
+---
+<ToolLayout
+  slug="pdf-to-hwp"
+  description="PDF를 한글 문서(HWPX)로 바꿔 글자를 바로 고칠 수 있게 해요. 그림 포함 여부를 고를 수 있고, 파일은 서버에 올리지 않고 브라우저에서 변환해요."
+  lead="PDF를 한글에서 편집할 수 있는 문서로 바꿔 드려요. 서버 업로드 없이요."
+  faq={faq}
+>
+  <DirectionTabs items={[{ href: '/tools/hwp-to-pdf/', label: 'HWP → PDF' }, { href: '/tools/pdf-to-hwp/', label: 'PDF → HWP' }]} />
+  <PdfToHwp client:load />
+
+  <Fragment slot="guide">
+    <h2>이럴 때 써요</h2>
+    <ul>
+      <li><b>받은 PDF를 고쳐야 할 때</b>: 공고문·양식·보고서의 글자를 한글에서 바로 수정해요.</li>
+      <li><b>내용을 옮겨 적어야 할 때</b>: PDF의 글을 복사해 붙이면 줄이 깨지기 쉬운데, 문단 단위로 정리해서 넣어 드려요.</li>
+    </ul>
+    <h2>변환 방식</h2>
+    <ol>
+      <li>PDF에서 글자를 읽어 줄과 문단으로 묶어요. 다른 글보다 큰 글씨는 제목으로 넣어요.</li>
+      <li>"그림도 넣기"를 켜면 문서 안의 그림을 원래 위치 순서대로 넣어요.</li>
+      <li>PDF의 쪽이 바뀌는 곳에서 한글 문서도 쪽을 나눠요.</li>
+    </ol>
+    <h2>알아 두세요</h2>
+    <p>PDF는 글자를 종이의 어느 위치에 찍을지만 담고 있어서, 표나 여러 단으로 된 문서는 원본과 다르게 보일 수 있어요. 변환한 뒤 한글에서 열어 확인하고 필요한 부분을 다듬어 주세요. 한글 문서를 PDF로 바꾸려면 위의 HWP → PDF 탭을 쓰세요.</p>
+  </Fragment>
+</ToolLayout>

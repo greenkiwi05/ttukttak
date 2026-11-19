@@ -57,6 +57,7 @@ export const TOOLS = [
   { slug: 'video-compress', title: '동영상 용량 줄이기', short: '화질·목표 용량을 골라 영상 압축, 서버 업로드 없이', keywords: '동영상 용량, 영상 압축, 동영상 압축, mp4, 영상 용량, 비디오', category: 'file', status: 'live' },
   { slug: 'pdf-compress', title: 'PDF 용량 줄이기', short: '스캔·사진 PDF를 작게, 서버 업로드 없이', keywords: 'pdf 압축, pdf 용량, pdf 파일 용량 줄이기, pdf 크기 줄이기, pdf 줄이기', category: 'file', status: 'live' },
   { slug: 'pdf-to-jpg', title: 'PDF JPG 변환', short: 'PDF 페이지를 이미지로, 서버 업로드 없이', keywords: 'pdf 이미지, pdf jpg, pdf png, pdf를 사진으로', category: 'file', status: 'live' },
+  { slug: 'pdf-to-hwp', title: 'PDF HWP 변환', short: 'PDF를 한글 문서(HWPX)로, 글자 편집 가능', keywords: 'pdf 한글 변환, pdf hwp, pdf hwpx, pdf를 한글로, pdf 편집, 한글 파일 만들기, pdf 글자 수정', category: 'file', status: 'live' },
   { slug: 'hwp-to-pdf', title: 'HWP PDF 변환', short: '한글 파일을 설치 없이 열고 PDF로 저장', keywords: '한글 파일, hwp, hwpx, 한글 pdf, 한글 뷰어, 한컴', category: 'file', status: 'live' },
   // 사진
   { slug: 'id-photo', title: '증명사진·여권사진 규격 맞추기', short: '여권·주민등록증·운전면허·반명함 사이즈로 자르기', keywords: '증명사진, 여권사진, 반명함, 이력서 사진, 사진 규격, 운전면허 사진, 민증 사진', category: 'photo', status: 'live' },
