@@ -114,7 +114,7 @@ function showDay(d: string) {
   </div>
 
   <p v-if="filling" class="notice" style="margin: 0 0 12px">
-    지금은 {{ dateKo(coverage!.min!) }}부터 조회할 수 있어요. 2016년 자료까지 매시간 조금씩 채우고 있어요.
+    지금은 {{ dateKo(coverage!.min!) }}부터 조회할 수 있어요. 2016년 자료까지 차례로 채우는 중이에요.
   </p>
 
   <!-- 기간별 추이 -->
