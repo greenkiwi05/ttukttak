@@ -215,3 +215,65 @@ export function fitWidth(wPx, hPx, maxW = 480, maxH = 420) {
 }
 
 export const hwpxOutName = (name) => name.replace(/\.pdf$/i, '') + '.hwpx';
+
+/**
+ * 그림 가운데(70%)가 거의 한 가지 색인지 (0~1). 0.95 이상이면 버린다.
+ * PDF의 투명 장식(그림자 틀·배경 무늬)은 투명도 정보 없이 꺼내면 흰 상자·검은 상자가 된다.
+ * @param {ArrayLike<number>} lum  n×n 밝기 값
+ */
+export function centerFlatness(lum, n) {
+  const vals = [];
+  const a = Math.floor(n * 0.15), b = Math.ceil(n * 0.85);
+  for (let y = a; y < b; y++) for (let x = a; x < b; x++) vals.push(lum[y * n + x]);
+  if (!vals.length) return 1;
+  const med = [...vals].sort((p, q) => p - q)[vals.length >> 1];
+  return vals.filter((v) => Math.abs(v - med) <= 12).length / vals.length;
+}
+
+/** JPEG·PNG 바이트 → [가로, 세로] 픽셀 (모르면 null) */
+export function imageSize(bytes) {
+  const b = bytes;
+  if (b[0] === 0x89 && b[1] === 0x50) return [(b[16] << 24 | b[17] << 16 | b[18] << 8 | b[19]) >>> 0, (b[20] << 24 | b[21] << 16 | b[22] << 8 | b[23]) >>> 0];
+  if (b[0] === 0xff && b[1] === 0xd8) {
+    let i = 2;
+    while (i + 9 < b.length) {
+      if (b[i] !== 0xff) return null;
+      const m = b[i + 1], len = (b[i + 2] << 8) | b[i + 3];
+      if (m >= 0xc0 && m <= 0xcf && m !== 0xc4 && m !== 0xc8 && m !== 0xcc) return [(b[i + 7] << 8) | b[i + 8], (b[i + 5] << 8) | b[i + 6]];
+      i += 2 + len;
+    }
+  }
+  return null;
+}
+
+/**
+ * 그림의 "원본 크기"를 실제 그림 픽셀 크기로 바로잡는다.
+ * hwp-convert는 화면에 보일 크기를 원본 크기(imgDim)·자르기 범위(imgClip)에도 그대로 써서,
+ * 한글이 원본을 더 크게 보고 오른쪽·아래를 잘라 보여 준다. 한글 단위 = 픽셀 × 75 (96dpi 기준).
+ * @param {string} xml section0.xml
+ * @param {Record<string, [number, number]>} sizes binaryItemIDRef → [가로, 세로] 픽셀
+ */
+export function fixPicSizes(xml, sizes) {
+  let fixed = 0;
+  const out = xml.replace(/<hp:pic\b[\s\S]*?<\/hp:pic>/g, (pic) => {
+    const ref = (pic.match(/binaryItemIDRef="([^"]+)"/) || [])[1];
+    const sz = ref && sizes[ref];
+    if (!sz) return pic;
+    const w = sz[0] * 75, h = sz[1] * 75;
+    fixed++;
+    return pic
+      .replace(/<hp:imgClip left="\d+" right="\d+" top="\d+" bottom="\d+"\/>/, `<hp:imgClip left="0" right="${w}" top="0" bottom="${h}"/>`)
+      .replace(/<hp:imgDim dimwidth="\d+" dimheight="\d+"\/>/, `<hp:imgDim dimwidth="${w}" dimheight="${h}"/>`);
+  });
+  return { xml: out, fixed };
+}
+
+/** content.hpf 매니페스트에서 그림 id → 파일 경로 */
+export function binItems(hpf) {
+  const map = {};
+  for (const m of hpf.matchAll(/<opf:item\b[^>]*>/g)) {
+    const id = (m[0].match(/\bid="([^"]+)"/) || [])[1], href = (m[0].match(/\bhref="([^"]+)"/) || [])[1];
+    if (id && href && /^BinData\//.test(href)) map[id] = href;
+  }
+  return map;
+}

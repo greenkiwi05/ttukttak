@@ -3,7 +3,7 @@
 // HTML → HWPX는 hwp-convert(MIT), 압축은 fflate. 모두 이 페이지에서만 동적 import. 파일은 서버로 보내지 않는다.
 import { ref, computed, onBeforeUnmount } from 'vue';
 import { loadPdfjs, openPdf, pdfOpenError } from '../../lib/pdfjs.js';
-import { groupLines, orderColumns, toBlocks, buildHtml, insertPageBreaks, cleanPreview, hwpxOutName, selectImages } from '../../lib/pdfToHwpx.js';
+import { groupLines, orderColumns, toBlocks, buildHtml, insertPageBreaks, cleanPreview, hwpxOutName, selectImages, fixPicSizes, binItems, imageSize } from '../../lib/pdfToHwpx.js';
 import { formatBytes } from '../../lib/compress.js';
 import { filterFiles } from '../../lib/files.js';
 
@@ -80,7 +80,15 @@ async function run() {
     const title = file.value.name.replace(/\.pdf$/i, '');
     const raw: Uint8Array = await htmlToHwpx(buildHtml(pages), { title, creator: '뚝딱' });
     const files: Record<string, Uint8Array> = unzipSync(raw);
-    files['Contents/section0.xml'] = strToU8(insertPageBreaks(strFromU8(files['Contents/section0.xml'])).xml);
+    // 그림 원본 크기 바로잡기 (안 하면 한글에서 그림 오른쪽·아래가 잘려 보임) + 쪽 나눔
+    const picSizes: Record<string, [number, number]> = {};
+    for (const [id, href] of Object.entries(binItems(strFromU8(files['Contents/content.hpf'])))) {
+      const sz = files[href] ? imageSize(files[href]) : null;
+      if (sz) picSizes[id] = sz as [number, number];
+    }
+    let sec = strFromU8(files['Contents/section0.xml']);
+    sec = fixPicSizes(sec, picSizes).xml;
+    files['Contents/section0.xml'] = strToU8(insertPageBreaks(sec).xml);
     if (files['Preview/PrvText.txt']) files['Preview/PrvText.txt'] = strToU8(cleanPreview(strFromU8(files['Preview/PrvText.txt'])));
     // mimetype은 맨 앞, 압축하지 않고 (HWPX 규칙)
     const ordered: Record<string, any> = { mimetype: [files.mimetype, { level: 0 }] };

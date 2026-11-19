@@ -1,6 +1,6 @@
 // PDF 한 쪽에서 그림을 꺼내는 브라우저 전용 함수 (pdf.js, canvas 필요 — 테스트 대상 아님).
 // 그림을 그리는 명령(paintImageXObject)이 나올 때의 변환 행렬로 위치(y)와 크기를 계산한다.
-import { keepImage, fitWidth } from './pdfToHwpx.js';
+import { keepImage, fitWidth, centerFlatness } from './pdfToHwpx.js';
 
 const MAX_PX = 1600;
 
@@ -35,7 +35,20 @@ function toDataUrl(img) {
     tmp.getContext('2d').putImageData(new ImageData(rgba, w, h), 0, 0);
     ctx.drawImage(tmp, 0, 0, c.width, c.height);
   } else return null;
+  if (isFlat(c)) return null; // 투명 장식이 상자로 바뀐 것(흰 상자·검은 상자·그림자 틀)은 버린다
   return c.toDataURL('image/jpeg', 0.85);
+}
+
+function isFlat(c) {
+  const N = 96;
+  const s = document.createElement('canvas');
+  s.width = N; s.height = N;
+  const x = s.getContext('2d', { willReadFrequently: true });
+  x.drawImage(c, 0, 0, N, N);
+  const d = x.getImageData(0, 0, N, N).data;
+  const L = new Float32Array(N * N);
+  for (let i = 0; i < N * N; i++) L[i] = 0.299 * d[i * 4] + 0.587 * d[i * 4 + 1] + 0.114 * d[i * 4 + 2];
+  return centerFlatness(L, N) >= 0.95;
 }
 
 const getObj = (page, name) => new Promise((resolve) => {

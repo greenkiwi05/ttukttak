@@ -116,3 +116,27 @@ test('두 단: 같은 높이의 왼쪽·오른쪽 글을 떼고, 왼쪽 단 → 
   const one = groupLines([it2('가', 50, 700, 300), it2('나', 50, 686, 300)]);
   assert.deepEqual(orderColumns(one), one);
 });
+
+import { centerFlatness, imageSize, fixPicSizes, binItems } from '../src/lib/pdfToHwpx.js';
+test('투명 장식 거르기: 가운데가 한 색이면 1에 가까움', () => {
+  const n = 20;
+  const frame = Array.from({ length: n * n }, (_, i) => { const x = i % n, y = Math.floor(i / n); return x < 2 || y < 2 || x > 17 || y > 17 ? 0 : 255; });
+  assert.equal(centerFlatness(frame, n), 1);
+  const busy = Array.from({ length: n * n }, (_, i) => (i * 37) % 256);
+  assert.ok(centerFlatness(busy, n) < 0.5);
+});
+
+test('그림 크기 읽기·원본 크기 바로잡기', () => {
+  const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 1, 13, 0, 0, 1, 243]);
+  assert.deepEqual(imageSize(png), [269, 499]);
+  const jpg = new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 0, 4, 0, 0, 0xff, 0xc0, 0, 11, 8, 1, 243, 1, 13, 3, 0, 0, 0]);
+  assert.deepEqual(imageSize(jpg), [269, 499]);
+  assert.equal(imageSize(new Uint8Array([1, 2, 3])), null);
+  const pic = '<hp:pic id="1"><hp:orgSz width="16950" height="31443"/><hc:img binaryItemIDRef="image1" bright="0"/><hp:imgClip left="0" right="16950" top="0" bottom="31443"/><hp:imgDim dimwidth="16950" dimheight="31443"/></hp:pic>';
+  const r = fixPicSizes(`<hs:sec>${pic}</hs:sec>`, { image1: [269, 499] });
+  assert.equal(r.fixed, 1);
+  assert.ok(r.xml.includes('<hp:imgClip left="0" right="20175" top="0" bottom="37425"/>'));
+  assert.ok(r.xml.includes('<hp:imgDim dimwidth="20175" dimheight="37425"/>'));
+  assert.ok(r.xml.includes('<hp:orgSz width="16950" height="31443"/>')); // 보이는 크기는 그대로
+  assert.deepEqual(binItems('<opf:item id="image1" href="BinData/image1.jpg" media-type="image/jpeg" isEmbeded="1"/><opf:item id="header" href="Contents/header.xml"/>'), { image1: 'BinData/image1.jpg' });
+});
