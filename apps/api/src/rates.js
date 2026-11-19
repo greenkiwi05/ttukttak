@@ -54,21 +54,30 @@ export async function fetchLatest({ key, fetch, now = Date.now() }) {
   if (!key) return { error: 'API 키가 없어요 (EXIM_KEY)' };
   for (let d = 0; d <= 10; d++) {
     const date = kstDate(now, d);
-    const url = `${EXIM_URL}?authkey=${encodeURIComponent(key)}&searchdate=${date.replace(/-/g, '')}&data=AP01`;
-    let body;
-    try {
-      const res = await fetch(url, { headers: { accept: 'application/json' } });
-      if (!res.ok) return { error: `HTTP ${res.status}` };
-      const text = (await res.text()).trim();
-      body = text ? JSON.parse(text) : null;
-    } catch (e) {
-      return { error: '요청 실패: ' + (e instanceof Error ? e.message : String(e)) };
-    }
-    const r = parseExim(body);
+    const r = await fetchDay({ key, fetch, date });
     if ('error' in r) return r;
     if ('rates' in r) return { date, rates: r.rates };
   }
   return { error: '최근 10일 동안 고시된 환율이 없어요' };
+}
+
+/**
+ * 하루치 고시 환율. 고시가 없는 날(주말·공휴일)은 { empty: true }
+ * @param {{ key: string, fetch: (url: string, init?: any) => Promise<any>, date: string }} p  date: 'YYYY-MM-DD'
+ */
+export async function fetchDay({ key, fetch, date }) {
+  if (!key) return { error: 'API 키가 없어요 (EXIM_KEY)' };
+  const url = `${EXIM_URL}?authkey=${encodeURIComponent(key)}&searchdate=${date.replace(/-/g, '')}&data=AP01`;
+  let body;
+  try {
+    const res = await fetch(url, { headers: { accept: 'application/json' } });
+    if (!res.ok) return { error: `HTTP ${res.status}` };
+    const text = (await res.text()).trim();
+    body = text ? JSON.parse(text) : null;
+  } catch (e) {
+    return { error: '요청 실패: ' + (e instanceof Error ? e.message : String(e)) };
+  }
+  return parseExim(body);
 }
 
 /**

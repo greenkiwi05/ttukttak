@@ -1,5 +1,6 @@
 ---
 import ToolLayout from '../../layouts/ToolLayout.astro';
+import DirectionTabs from '../../components/DirectionTabs.astro';
 import ExchangeRate from '../../components/tools/ExchangeRate.vue';
 
 const faq = [
@@ -17,6 +18,7 @@ const faq = [
   lead="통화와 금액을 고르면 오늘 고시 환율로 바로 계산해 드려요."
   faq={faq}
 >
+  <DirectionTabs items={[{ href: '/tools/exchange-rate/', label: '오늘 환율 계산' }, { href: '/tools/exchange-rate-history/', label: '과거 환율 조회' }]} />
   <ExchangeRate client:load />
 
   <Fragment slot="guide">
