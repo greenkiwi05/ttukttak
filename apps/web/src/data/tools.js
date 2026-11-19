@@ -51,6 +51,7 @@ export const TOOLS = [
   { slug: 'pdf-merge-split', title: 'PDF 합치기·나누기', short: 'PDF 여러 개 합치기, 페이지 나누기', keywords: 'pdf 병합, pdf 합치기, pdf 나누기, pdf 분할, 페이지 추출, pdf 페이지 삭제', category: 'file', status: 'live' },
   { slug: 'jpg-to-pdf', title: 'JPG PDF 변환', short: '사진 여러 장을 PDF 하나로, 서버 업로드 없이', keywords: '사진 pdf, 이미지 pdf, jpg pdf, 사진을 pdf로, 스캔', category: 'file', status: 'live' },
   { slug: 'image-convert', title: '이미지 변환·크기 조절', short: 'PNG·JPG·WEBP 변환, 픽셀·비율로 크기 조절', keywords: '이미지 크기, 사진 크기, 해상도, png, jpg, webp, 리사이즈, 픽셀', category: 'file', status: 'live' },
+  { slug: 'video-to-mp3', title: '동영상 MP3 변환 (소리 추출)', short: '영상에서 소리만 MP3로, 구간 자르기, 서버 업로드 없이', keywords: 'mp4 mp3 변환, 동영상 mp3, 소리 추출, 오디오 추출, 영상 음원 추출, mp3 변환, 벨소리 만들기, m4a, wav', category: 'file', status: 'live' },
   { slug: 'video-compress', title: '동영상 용량 줄이기', short: '화질·목표 용량을 골라 영상 압축, 서버 업로드 없이', keywords: '동영상 용량, 영상 압축, 동영상 압축, mp4, 영상 용량, 비디오', category: 'file', status: 'live' },
   { slug: 'pdf-compress', title: 'PDF 용량 줄이기', short: '스캔·사진 PDF를 작게, 서버 업로드 없이', keywords: 'pdf 압축, pdf 용량, pdf 파일 용량 줄이기, pdf 크기 줄이기, pdf 줄이기', category: 'file', status: 'live' },
   { slug: 'pdf-to-jpg', title: 'PDF JPG 변환', short: 'PDF 페이지를 이미지로, 서버 업로드 없이', keywords: 'pdf 이미지, pdf jpg, pdf png, pdf를 사진으로', category: 'file', status: 'live' },
