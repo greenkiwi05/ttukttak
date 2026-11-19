@@ -15,7 +15,8 @@
     "test": "npm test --workspaces --if-present",
     "check": "npm run check -w apps/web",
     "prepare": "git config core.hooksPath .githooks",
-    "check:secrets": "node scripts/check-secrets.mjs"
+    "check:secrets": "node scripts/check-secrets.mjs",
+    "schedule": "npm run schedule -w apps/api"
   },
   "devDependencies": {
     "wrangler": "^4.156.0"

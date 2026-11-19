@@ -21,6 +21,12 @@
 - 로또: 매시 35분 cron. 저장된 마지막 회차 < 지금쯤 나왔어야 할 회차(1회 2002-12-07 + 매주 토 21시)일 때만 동행복권을 부른다 → 평소 호출 0, 토요일 밤에만 몇 번.
   출처 주소는 동행복권 홈페이지 내부 조회 주소(`/lt645/selectPstLt645InfoNew.do`)라 공식 API가 아니다. 바뀌거나 막히면 `src/lotto.js`만 고친다. 실패 이유는 `/api/lotto` 503 응답의 reason에 나온다.
 
+## 정기 작업 (일정표)
+- **`src/schedule.js`** 한 곳에 모든 정기 작업의 시각(cron, UTC)·출처·필요한 키·호출량을 적는다. 내용은 `src/jobs.js`.
+- `npm run schedule` 로 일정표를 표로 본다.
+- 새 작업을 넣을 때: `jobs.js`에 함수 → `schedule.js`에 한 줄 → `wrangler.jsonc` `triggers.crons`에 cron 추가 (테스트가 둘을 비교).
+- 한 cron의 `maxCalls` 합은 50 이하 (Cloudflare 무료 플랜 실행당 외부 요청 한도).
+
 ## 비밀 값
 - `HOLIDAY_KEY`: 공공데이터포털 "한국천문연구원_특일 정보" 일반 인증키(**Decoding** 키). 배포는 EXIM_KEY와 같은 곳(Variables and Secrets, Secret).
   - 공휴일 갱신: 매시 5분 cron에서 없는 해 + 하루 한 번 올해·내년만 호출. 내년은 발표 전이면 빈 목록 → 저장 안 하고 다음에 다시 확인.

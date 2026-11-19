@@ -41,7 +41,9 @@ apps/
     src/pages/tools/{slug}.astro  도구 페이지
     tests/*.test.js           로직 테스트 (node --test)
   api/                  백엔드 (Cloudflare Worker: /api/* 처리, 나머지는 정적 자산) — apps/api/README.md 참고
-    src/index.js              Worker 진입점 (fetch: /api/rates, scheduled: 환율 갱신 cron)
+    src/index.js              Worker 진입점 (fetch: /api/* 라우팅, scheduled: 일정표대로 작업 실행)
+    src/schedule.js           ★ 정기 작업 일정표 (cron·출처·키·호출량 한 곳에). `npm run schedule`
+    src/jobs.js               정기 작업 내용 (환율·과거 환율·공휴일·로또)
     src/rates.js              수출입은행 환율 받기·정리 (순수 함수)
     src/history.js            과거 환율 D1 저장·조회, 과거 날짜 채우기(backfill)
     src/lotto.js              로또 당첨번호 수집(동행복권)·D1 저장·KV 요약본
