@@ -25,3 +25,8 @@ export function lottoText(sets) {
   const lines = sets.map((s, i) => `${String.fromCharCode(65 + i)}: ${s.map((n) => String(n).padStart(2, ' ')).join(' ')}`);
   return ['[로또 번호]', ...lines].join('\n') + footer('로또 번호 생성기', 'lotto');
 }
+
+/** 돌림판: 결과 + 후보 목록 */
+export function wheelText(result, items) {
+  return [`[돌림판 결과] ${result}`, `후보: ${items.join(', ')}`].join('\n') + footer('돌림판', 'wheel');
+}

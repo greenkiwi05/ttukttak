@@ -71,6 +71,7 @@ export const TOOLS = [
   { slug: 'lotto-results', title: '로또 당첨번호 조회', short: '회차별 당첨번호·당첨금, 내 번호 등수 확인', keywords: '로또 당첨번호, 로또 번호 조회, 이번주 로또, 로또 당첨 확인, 로또 회차, 로또 당첨금, 로또 결과, 내 번호 확인', category: 'fun', status: 'live' },
   { slug: 'lotto-stats', title: '로또 번호 통계', short: '번호별 당첨 횟수, 많이·오래 안 나온 번호', keywords: '로또 통계, 로또 많이 나온 번호, 로또 번호 분석, 로또 미출현 번호, 로또 홀짝, 로또 번호 빈도', category: 'fun', status: 'live' },
   { slug: 'lotto', title: '로또 번호 생성기', short: '6/45 번호 무작위 뽑기, 고정수·제외수', keywords: '로또, 로또번호, 번호 생성, 자동번호, 6/45', category: 'fun', status: 'live' },
+  { slug: 'wheel', title: '돌림판 (룰렛 돌리기)', short: '항목 넣고 돌려서 공정하게 하나 고르기', keywords: '돌림판, 룰렛, 룰렛 돌리기, 점심 메뉴 추천, 메뉴 정하기, 벌칙, 랜덤 돌림판, 원판', category: 'fun', status: 'live' },
   { slug: 'random-pick', title: '제비뽑기·랜덤 뽑기', short: '당첨자 뽑기, 팀 나누기, 순서 정하기', keywords: '제비뽑기, 추첨, 랜덤, 팀 나누기, 순서 정하기, 당첨자', category: 'fun', status: 'live' },
 ];
 

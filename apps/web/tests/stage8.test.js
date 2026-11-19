@@ -75,3 +75,8 @@ test('공유 문구: 결과 + 도구 주소', () => {
   assert.ok(lottoText([[1, 2, 3, 4, 5, 45]]).includes('A:  1  2  3  4  5 45'));
   assert.equal(footer('X', 'y'), '\n\n— 뚝딱 X\nhttps://ttukttaktools.com/tools/y/');
 });
+
+import { wheelText } from '../src/lib/shareText.js';
+test('공유 문구: 돌림판', () => {
+  assert.equal(wheelText('짬뽕', ['짜장', '짬뽕']), '[돌림판 결과] 짬뽕\n후보: 짜장, 짬뽕\n\n— 뚝딱 돌림판\nhttps://ttukttaktools.com/tools/wheel/');
+});
