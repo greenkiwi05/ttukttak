@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { fuelCost, byAmount, normalizeFuel, num, loadFuel } from '../src/lib/fuel.js';
+import { fuelCost, byAmount, normalizeFuel, num, loadFuel, defaultEfficiency, FUELS } from '../src/lib/fuel.js';
 
 test('주유비: 편도·왕복·나눠 내기', () => {
   const r = fuelCost({ distance: 400, efficiency: 12.5, price: 1650 });
@@ -34,4 +34,12 @@ test('유가 응답 정리', () => {
 
 test('불러오기 실패하면 null', async () => {
   assert.equal(await loadFuel(async () => ({ ok: false })), null);
+});
+
+test('유종별 예시 연비', () => {
+  assert.equal(defaultEfficiency('B027'), 12);
+  assert.equal(defaultEfficiency('D047'), 14);
+  assert.equal(defaultEfficiency('K015'), 9);
+  assert.equal(defaultEfficiency('???'), 12);
+  for (const f of FUELS) assert.ok(f.eff > 0);
 });

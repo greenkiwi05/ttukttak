@@ -1,10 +1,12 @@
 // 주유비 계산 로직. 유가·연비는 사용자 입력이 기본이고, /api/fuel(오피넷 평균 판매가)이 있으면 유가를 채워 준다.
 
+// eff: 처음 보여 줄 예시 연비(km/L) — 흔한 승용차 기준의 대략적인 값. 사용자가 고치면 그 값을 쓴다
 export const FUELS = [
-  { code: 'B027', label: '휘발유' },
-  { code: 'D047', label: '경유' },
-  { code: 'K015', label: 'LPG' },
+  { code: 'B027', label: '휘발유', eff: 12 },
+  { code: 'D047', label: '경유', eff: 14 },
+  { code: 'K015', label: 'LPG', eff: 9 },
 ];
+export const defaultEfficiency = (code) => FUELS.find((f) => f.code === code)?.eff ?? 12;
 
 /**
  * @param {{ distance: number, efficiency: number, price: number, roundTrip?: boolean, people?: number }} p

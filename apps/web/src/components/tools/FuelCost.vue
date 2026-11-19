@@ -2,14 +2,15 @@
 // 주유비 계산기 UI. 로직은 src/lib/fuel.js. 유가는 /api/fuel(오피넷 평균 판매가)이 있으면 자동으로 채우고, 없으면 직접 입력.
 // 연비·유가는 이 기기에만 기억한다(편의). 입력값은 서버로 보내지 않는다.
 import { ref, computed, watch, onMounted } from 'vue';
-import { FUELS, fuelCost, byAmount, loadFuel, num } from '../../lib/fuel.js';
+import { FUELS, fuelCost, byAmount, loadFuel, num, defaultEfficiency } from '../../lib/fuel.js';
 
 type Sido = { code: string; name: string; price: number; diff: number | null };
 const mode = ref<'trip' | 'amount'>('trip');
 const fuel = ref('B027');
 const region = ref('00'); // 00 = 전국
 const distance = ref('');
-const efficiency = ref('');
+const efficiency = ref(String(defaultEfficiency('B027')));
+const effCustom = ref(false); // 사용자가 직접 넣은 연비인지 (아니면 유종별 예시 값)
 const priceText = ref('');
 const roundTrip = ref(false);
 const people = ref<number | ''>(1);
@@ -21,14 +22,16 @@ onMounted(async () => {
   try {
     const s = JSON.parse(localStorage.getItem(KEY) || '{}');
     if (s.fuel) fuel.value = s.fuel;
-    if (s.efficiency) efficiency.value = String(s.efficiency);
+    if (s.efficiency) { efficiency.value = String(s.efficiency); effCustom.value = true; }
+    else efficiency.value = String(defaultEfficiency(fuel.value));
     if (s.region) region.value = s.region;
   } catch { /* 저장 불가 */ }
   data.value = (await loadFuel()) as typeof data.value;
   fillPrice();
 });
 watch([fuel, efficiency, region], () => {
-  try { localStorage.setItem(KEY, JSON.stringify({ fuel: fuel.value, efficiency: num(efficiency.value) || undefined, region: region.value })); } catch { /* 저장 불가 */ }
+  // 예시 값은 저장하지 않고, 직접 넣은 연비만 기억한다
+  try { localStorage.setItem(KEY, JSON.stringify({ fuel: fuel.value, efficiency: effCustom.value ? num(efficiency.value) || undefined : undefined, region: region.value })); } catch { /* 저장 불가 */ }
 });
 
 const sidoList = computed<Sido[]>(() => data.value?.sido?.[fuel.value] ?? []);
@@ -40,6 +43,10 @@ const official = computed(() => {
 });
 function fillPrice() { if (official.value) priceText.value = String(official.value.price); }
 watch([fuel, region], fillPrice);
+// 유종을 바꾸면, 직접 넣은 연비가 아닐 때만 그 유종의 예시 연비로 바꾼다
+watch(fuel, (f) => { if (!effCustom.value) efficiency.value = String(defaultEfficiency(f)); });
+function onEff() { effCustom.value = true; }
+function resetEff() { effCustom.value = false; efficiency.value = String(defaultEfficiency(fuel.value)); }
 
 const price = computed(() => num(priceText.value));
 const custom = computed(() => !!official.value && price.value !== official.value.price);
@@ -88,7 +95,12 @@ const dateKo = (d: string) => `${Number(d.slice(5, 7))}월 ${Number(d.slice(8))}
   <template v-if="mode === 'trip'">
     <div class="row" style="margin-top: 14px">
       <div class="field"><label for="fc-dist">거리 (km)</label><input id="fc-dist" v-model="distance" type="text" inputmode="decimal" placeholder="예: 400 (서울~부산 약 400km)" /></div>
-      <div class="field"><label for="fc-eff">연비 (km/L)</label><input id="fc-eff" v-model="efficiency" type="text" inputmode="decimal" placeholder="예: 12.5" /></div>
+      <div class="field">
+        <label for="fc-eff">연비 (km/L)</label>
+        <input id="fc-eff" v-model="efficiency" type="text" inputmode="decimal" placeholder="예: 12.5" @input="onEff" />
+        <small v-if="!effCustom" class="muted">{{ label }} 승용차 예시 값이에요. 내 차 연비(계기판 평균 연비)로 바꿔 넣으세요.</small>
+        <small v-else class="muted">내 차 연비로 계산 중 · <a href="#" @click.prevent="resetEff">예시 값으로 되돌리기</a></small>
+      </div>
     </div>
     <div class="row" style="margin-top: 10px; align-items: end">
       <label class="check"><input v-model="roundTrip" type="checkbox" /> 왕복으로 계산</label>
@@ -111,7 +123,7 @@ const dateKo = (d: string) => `${Number(d.slice(5, 7))}월 ${Number(d.slice(8))}
         <input id="fc-amt" v-model="amount" type="text" inputmode="numeric" />
         <div class="chips"><button v-for="a in [30000, 50000, 70000, 100000]" :key="a" type="button" class="chip" :class="{ on: num(amount) === a }" @click="amount = String(a)">{{ a / 10000 }}만원</button></div>
       </div>
-      <div class="field"><label for="fc-eff2">연비 (km/L, 선택)</label><input id="fc-eff2" v-model="efficiency" type="text" inputmode="decimal" placeholder="예: 12.5" /></div>
+      <div class="field"><label for="fc-eff2">연비 (km/L, 선택)</label><input id="fc-eff2" v-model="efficiency" type="text" inputmode="decimal" placeholder="예: 12.5" @input="onEff" /></div>
     </div>
     <p v-if="err(amt)" class="error" role="alert">{{ err(amt) }}</p>
     <div v-else-if="aOk" class="result" aria-live="polite">
