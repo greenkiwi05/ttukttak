@@ -1,0 +1,71 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../data/site.js';
+
+const email = SITE.contactEmail;
+// "메일 앱으로 쓰기"를 누르면 제목과 적어 주면 좋은 항목이 미리 채워진다
+const body = ['어떤 도구에서:', '어떤 문제·제안:', '', '사용한 기기·브라우저 (예: 아이폰 사파리, 윈도우 크롬):', '(화면 캡처를 붙여 주시면 더 빨리 확인할 수 있어요)'].join('\n');
+const mailto = `mailto:${email}?subject=${encodeURIComponent(`[${SITE.name}] 문의`)}&body=${encodeURIComponent(body)}`;
+---
+<Base title="문의하기" description={`${SITE.name}에 새 도구 제안, 계산 오류 제보, 광고·제휴 문의를 보내는 방법이에요. 메일 주소를 복사해서 평소 쓰시는 메일로 보내 주세요.`}>
+  <h1>문의하기</h1>
+  <div class="prose">
+    <p>필요한 도구가 있거나, 계산이 이상하거나, 화면이 깨지는 곳을 발견하면 아래 메일로 알려 주세요. 보내 주신 의견은 도구를 고치고 새로 만드는 데 큰 도움이 돼요.</p>
+
+    <div class="contact-box">
+      <span class="label">문의 메일</span>
+      <b class="addr" id="contact-email">{email}</b>
+      <div class="contact-actions">
+        <button type="button" class="btn" id="copy-email" data-email={email}>메일 주소 복사</button>
+        <a class="btn-sub" href={mailto}>메일 앱으로 쓰기</a>
+      </div>
+      <small class="muted" id="copy-done" hidden>복사됐어요. 쓰시는 메일(네이버·지메일 등)의 받는 사람 칸에 붙여 넣으세요.</small>
+    </div>
+
+    <h2>이렇게 적어 주시면 빨리 확인할 수 있어요</h2>
+    <ul>
+      <li><b>어떤 도구</b>에서 생긴 일인지 (예: 한글 이름 영어 변환)</li>
+      <li><b>무엇을 넣었고</b> 어떤 결과가 나왔는지, 원래 기대한 결과는 무엇인지</li>
+      <li><b>기기와 브라우저</b> (예: 아이폰 사파리, 갤럭시 삼성 인터넷, 윈도우 크롬)</li>
+      <li>가능하면 <b>화면 캡처</b></li>
+    </ul>
+
+    <h2>이런 내용을 보내 주세요</h2>
+    <ul>
+      <li>새로 있었으면 하는 도구</li>
+      <li>계산 결과가 이상하거나 오래된 정보</li>
+      <li>화면이 깨지거나 버튼이 동작하지 않는 문제</li>
+      <li>광고·제휴 문의</li>
+    </ul>
+
+    <h2>알아 두세요</h2>
+    <p>{SITE.name}은 개인이 운영하는 사이트라 답장이 며칠 걸릴 수 있어요. 문의 메일에 적어 주신 이메일 주소와 내용은 답변에만 쓰고, 다른 곳에 쓰거나 공개하지 않아요. 파일 변환에 쓴 사진이나 문서는 메일에 첨부하지 않으셔도 돼요. 문제가 되는 화면 캡처만으로 충분해요.</p>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var btn = document.getElementById('copy-email');
+      var done = document.getElementById('copy-done');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var email = btn.getAttribute('data-email');
+        var ok = function () { btn.textContent = '복사됐어요'; done.hidden = false; setTimeout(function () { btn.textContent = '메일 주소 복사'; }, 2000); };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(email).then(ok, fallback); else fallback();
+        function fallback() {
+          var r = document.createRange(); r.selectNodeContents(document.getElementById('contact-email'));
+          var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+          try { document.execCommand('copy'); ok(); } catch (e) { done.hidden = false; done.textContent = '주소를 길게 눌러 복사해 주세요.'; }
+        }
+      });
+    })();
+  </script>
+</Base>
+
+<style>
+  .contact-box { border: 1px solid var(--line); background: var(--bg); border-radius: 12px; padding: 16px 18px; margin: 4px 0 8px; display: flex; flex-direction: column; gap: 6px; }
+  .contact-box .label { color: var(--muted); font-size: .9rem; }
+  .contact-box .addr { font-size: 1.25rem; user-select: all; }
+  .contact-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: stretch; }
+  .contact-actions .btn { width: auto; margin-top: 6px; padding-left: 20px; padding-right: 20px; }
+  .contact-actions .btn-sub { margin-top: 6px; display: inline-flex; align-items: center; text-decoration: none; color: inherit; }
+</style>

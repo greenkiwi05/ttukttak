@@ -3,7 +3,6 @@
 // 데스크톱: 카테고리에 마우스를 올리거나 Tab으로 포커스하면 도구 목록이 펼쳐진다.
 // 모바일: 카테고리가 가로로 스크롤되는 버튼 줄이 되고, 누르면 카테고리 페이지로 간다.
 import { CATEGORIES, toolsIn, liveTools } from '../data/tools.js';
-import { SITE } from '../data/site.js';
 
 interface Props {
   active?: string; // 현재 카테고리 key
@@ -60,7 +59,7 @@ const index = liveTools().map((t) => ({ slug: t.slug, title: t.title, short: t.s
   </form>
   <p class="search-hint">자주 찾는 도구</p>
   <ul id="search-results" class="search-results" role="listbox"></ul>
-  <p class="search-empty" hidden>찾는 도구가 없어요. 필요한 도구를 <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>로 알려 주세요.</p>
+  <p class="search-empty" hidden>찾는 도구가 없어요. 필요한 도구를 <a href="/contact/">문의하기</a>로 알려 주세요.</p>
 </dialog>
 <script type="application/json" id="tool-index" set:html={JSON.stringify(index)} />
 <script>
