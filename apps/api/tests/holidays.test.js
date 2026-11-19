@@ -17,6 +17,13 @@ test('응답 정리: 배열·객체 하나·빈 값·XML 오류', () => {
   const xml = '<OpenAPI_ServiceResponse><cmmMsgHeader><returnAuthMsg>SERVICE_KEY_IS_NOT_REGISTERED_ERROR</returnAuthMsg></cmmMsgHeader></OpenAPI_ServiceResponse>';
   assert.equal(parseHolidays(xml).error, 'SERVICE_KEY_IS_NOT_REGISTERED_ERROR');
   assert.ok(parseHolidays(JSON.stringify({ response: { header: { resultCode: '30', resultMsg: 'ERR' } } })).error.startsWith('30'));
+  // 정상 XML 응답 (공식 기본 포맷)
+  const okXml = '<?xml version="1.0" encoding="UTF-8"?><response><header><resultCode>00</resultCode><resultMsg>NORMAL SERVICE.</resultMsg></header><body><items>'
+    + '<item><dateKind>01</dateKind><dateName>삼일절</dateName><isHoliday>Y</isHoliday><locdate>20260301</locdate><seq>1</seq></item>'
+    + '<item><dateKind>01</dateName><dateName>대체공휴일</dateName><isHoliday>Y</isHoliday><locdate>20260302</locdate><seq>1</seq></item>'
+    + '</items><numOfRows>100</numOfRows><pageNo>1</pageNo><totalCount>2</totalCount></body></response>';
+  assert.deepEqual(parseHolidays(okXml).items, [{ date: '2026-03-01', name: '삼일절' }, { date: '2026-03-02', name: '대체공휴일' }]);
+  assert.deepEqual(parseHolidays('<response><header><resultCode>00</resultCode></header><body><items></items></body></response>').items, []);
 });
 
 test('받을 연도: 처음엔 전부, 그 뒤엔 하루 한 번 올해·내년', () => {

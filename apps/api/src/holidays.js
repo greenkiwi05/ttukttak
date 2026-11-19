@@ -17,8 +17,7 @@ export function parseHolidays(text) {
   try {
     body = JSON.parse(text);
   } catch {
-    const msg = String(text).match(/<returnAuthMsg>([^<]+)<\/returnAuthMsg>|<resultMsg>([^<]+)<\/resultMsg>/);
-    return { error: msg ? (msg[1] || msg[2]) : '응답이 JSON이 아니에요' };
+    return parseXml(String(text));
   }
   const header = body?.response?.header;
   if (!header) return { error: '응답 형식이 달라요' };
@@ -34,6 +33,20 @@ export function parseHolidays(text) {
   }
   items.sort((a, b) => a.date.localeCompare(b.date) || a.name.localeCompare(b.name));
   return { items: items.filter((x, i) => !i || x.date !== items[i - 1].date || x.name !== items[i - 1].name) };
+}
+
+// 공식 데이터 포맷이 XML이라 _type=json이 무시될 때를 대비해 XML도 읽는다
+function parseXml(xml) {
+  const tag = (s, t) => (s.match(new RegExp(`<${t}>([^<]*)</${t}>`)) || [])[1];
+  const auth = tag(xml, 'returnAuthMsg');
+  if (auth) return { error: auth };
+  const code = tag(xml, 'resultCode');
+  if (code === undefined) return { error: '응답 형식이 달라요' };
+  if (code !== '00') return { error: `${code} ${tag(xml, 'resultMsg') ?? ''}`.trim() };
+  const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map((m) => ({
+    dateName: tag(m[1], 'dateName'), isHoliday: tag(m[1], 'isHoliday'), locdate: tag(m[1], 'locdate'),
+  }));
+  return parseHolidays(JSON.stringify({ response: { header: { resultCode: '00' }, body: { items: items.length ? { item: items } : '' } } }));
 }
 
 /** 한 해 공휴일 받기 */
