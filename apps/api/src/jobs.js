@@ -2,7 +2,7 @@
 // 모든 작업은 "필요할 때만 외부 API를 부른다" — 이미 최신이면 KV·D1만 보고 끝낸다.
 import { fetchLatest, merge, kstDate } from './rates.js';
 import { ensureSchema, saveDay, backfillOnce } from './history.js';
-import { LOTTO_SCHEMA, syncLotto } from './lotto.js';
+import { LOTTO_SCHEMA, LOTTO_KV, syncLotto, expectedRound } from './lotto.js';
 import { refreshHolidays, refreshTerms } from './holidays.js';
 import { refreshFuel } from './fuel.js';
 
@@ -11,6 +11,7 @@ export const KV = {
   rates: 'rates:latest',
   ratesError: 'rates:error', // 10분 뒤 자동 삭제 → 실패가 반복돼도 방문자마다 외부 API를 부르지 않게
   lottoError: 'lotto:error',
+  lottoLock: 'lotto:lock',
   holidaysError: 'holidays:error',
   termsError: 'solarterms:error',
   fuelError: 'fuel:error',
@@ -65,11 +66,24 @@ export async function holidays(env) {
 }
 
 /** 로또: 저장된 마지막 회차가 "지금쯤 나왔어야 할 회차"보다 작을 때만 동행복권 호출 */
-export async function lotto(env) {
+export async function lotto(env, where = 'cron') {
   await env.DB.batch(LOTTO_SCHEMA.map((s) => env.DB.prepare(s)));
   const r = await syncLotto({ db: env.DB, kv: env.RATES, fetch: fetcher });
-  if (r.error) await saveError(env, KV.lottoError, r.error, 86400);
-  else if (r.saved) console.log('로또', r.saved, '회차 저장, 마지막', r.max);
+  if (r.error) await saveError(env, KV.lottoError, `${r.error} (${where})`, 86400);
+  else if (r.saved) console.log('로또', r.saved, '회차 저장, 마지막', r.max, where);
+  return r;
+}
+
+/**
+ * 방문으로 로또 갱신 시도. 동행복권은 해외 접속을 막는 것으로 보여(cron은 해외 데이터센터에서 돌면 522),
+ * 한국 방문자 요청이 처리되는 국내 데이터센터에서 한 번 더 시도한다. 5분에 한 번만.
+ */
+export async function lottoFromVisit(env, colo) {
+  if (await env.RATES.get(KV.lottoLock)) return;
+  await env.RATES.put(KV.lottoLock, '1', { expirationTtl: 300 });
+  const blob = await env.RATES.get(LOTTO_KV, 'json');
+  if (blob?.latest?.round >= expectedRound()) return; // 이미 최신
+  await lotto(env, `방문 ${colo ?? '?'}`);
 }
 
 /** 24절기: 없는 해만 (바뀌지 않는 값이라 다 받으면 호출 0) */

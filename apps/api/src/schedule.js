@@ -76,7 +76,7 @@ export const SCHEDULE = [
     key: '',
     maxCalls: 40, // 처음 1회부터 채울 때
     usual: '0회, 토요일 추첨 뒤 1~2회',
-    run: jobs.lotto,
+    run: (env) => jobs.lotto(env, 'cron'),
   },
   {
     id: 'fuel',

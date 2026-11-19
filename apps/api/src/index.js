@@ -6,7 +6,7 @@ import { coverage, history, day, isDate, isCode, BACKFILL_START } from './histor
 import { LOTTO_KV, roundDetail } from './lotto.js';
 import { HOLIDAY_KV, TERMS_KV } from './holidays.js';
 import { FUEL_KV } from './fuel.js';
-import { KV, refreshRates } from './jobs.js';
+import { KV, refreshRates, lottoFromVisit } from './jobs.js';
 import { jobsFor } from './schedule.js';
 
 // 저장된 값(문자열 JSON)이 있으면 그대로, 없으면 마지막 실패 이유와 함께 503
@@ -85,7 +85,10 @@ export default {
       if (url.pathname === '/api/rates') return await latest(env);
       if (url.pathname === '/api/rates/day') return await cached(request, ctx, () => dayApi(url, env));
       if (url.pathname === '/api/rates/history') return await cached(request, ctx, () => historyApi(url, env));
-      if (url.pathname === '/api/lotto') return await stored(env, LOTTO_KV, KV.lottoError, '당첨번호를 아직 불러오지 못했어요', 600);
+      if (url.pathname === '/api/lotto') {
+        ctx.waitUntil(lottoFromVisit(env, request.cf?.colo).catch((e) => console.log('로또 방문 갱신 오류:', String(e))));
+        return await stored(env, LOTTO_KV, KV.lottoError, '당첨번호를 아직 불러오지 못했어요', 600);
+      }
       if (url.pathname === '/api/holidays') return await stored(env, HOLIDAY_KV, KV.holidaysError, '공휴일을 아직 불러오지 못했어요', 3600);
       if (url.pathname === '/api/solar-terms') return await stored(env, TERMS_KV, KV.termsError, '24절기를 아직 불러오지 못했어요', 86400);
       if (url.pathname === '/api/fuel') return await stored(env, FUEL_KV, KV.fuelError, '유가를 아직 불러오지 못했어요', 1800);
