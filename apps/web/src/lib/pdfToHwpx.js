@@ -145,10 +145,17 @@ const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
  * 쪽별 문단·그림 → HTML (쪽 사이에는 쪽 나눔 표시 문단)
  * @param {{ blocks: { type: string, level?: number, text: string, y: number }[], images?: { y: number, src: string, width: number }[] }[]} pages
  */
-export function buildHtml(pages) {
+export function buildHtml(pages, { mode = 'text' } = {}) {
   const out = [];
   pages.forEach((pg, i) => {
     if (i > 0) out.push(`<p>${PAGE_MARK}</p>`);
+    if (mode === 'page') {
+      // 쪽 모양 그대로: "N쪽" → 쪽 그림 → (선택) 그 쪽의 글
+      out.push(`<p>${i + 1}쪽</p>`);
+      for (const im of pg.images ?? []) out.push(`<p><img src="${im.src}" width="${Math.round(im.width)}" alt=""></p>`);
+      for (const b of pg.blocks) out.push(b.type === 'h' ? `<h${b.level}>${esc(b.text)}</h${b.level}>` : `<p>${esc(b.text)}</p>`);
+      return;
+    }
     const items = [...pg.blocks.map((b) => ({ y: b.y, b })), ...(pg.images ?? []).map((im) => ({ y: im.y, im }))].sort((p, q) => q.y - p.y);
     // 쪽의 첫 내용이 그림이면 쪽 나눔 뒤 빈 쪽이 생길 수 있어서, 글이 있는 쪽은 첫 글 뒤로 그림을 옮긴다
     const firstText = items.findIndex((x) => x.b);
@@ -215,6 +222,20 @@ export function fitWidth(wPx, hPx, maxW = 480, maxH = 420) {
 }
 
 export const hwpxOutName = (name) => name.replace(/\.pdf$/i, '') + '.hwpx';
+
+/**
+ * "쪽 모양 그대로" 설정: 여백 10mm, 쪽 방향은 PDF 첫 쪽을 따름. 그림 최대 크기(px, 96dpi)는 본문 영역에서 "N쪽" 한 줄을 뺀 만큼
+ * @param {number} w PDF 쪽 너비(pt)  @param {number} h 높이(pt)
+ */
+export function pageModeSetup(w, h) {
+  const landscape = w > h;
+  const mm = 3.78; // 1mm ≈ 3.78px
+  const bodyW = ((landscape ? 297 : 210) - 20) * mm, bodyH = ((landscape ? 210 : 297) - 20) * mm;
+  return {
+    page: { size: 'A4', orientation: landscape ? 'landscape' : 'portrait', margins: { left: 10, right: 10, top: 10, bottom: 10, header: 0, footer: 0 } },
+    maxW: Math.floor(bodyW - 8), maxH: Math.floor(bodyH - 50),
+  };
+}
 
 /**
  * 그림 가운데(70%)가 거의 한 가지 색인지 (0~1). 0.95 이상이면 버린다.

@@ -140,3 +140,17 @@ test('그림 크기 읽기·원본 크기 바로잡기', () => {
   assert.ok(r.xml.includes('<hp:orgSz width="16950" height="31443"/>')); // 보이는 크기는 그대로
   assert.deepEqual(binItems('<opf:item id="image1" href="BinData/image1.jpg" media-type="image/jpeg" isEmbeded="1"/><opf:item id="header" href="Contents/header.xml"/>'), { image1: 'BinData/image1.jpg' });
 });
+
+import { pageModeSetup } from '../src/lib/pdfToHwpx.js';
+test('쪽 모양 그대로: "N쪽" → 쪽 그림 → (선택) 글, 여백·방향', () => {
+  const html = buildHtml([
+    { blocks: [{ type: 'p', text: '첫 쪽 글', y: 500 }], images: [{ y: 842, src: 'A', width: 700 }] },
+    { blocks: [], images: [{ y: 842, src: 'B', width: 700 }] },
+  ], { mode: 'page' });
+  assert.equal(html, `<p>1쪽</p>\n<p><img src="A" width="700" alt=""></p>\n<p>첫 쪽 글</p>\n<p>${PAGE_MARK}</p>\n<p>2쪽</p>\n<p><img src="B" width="700" alt=""></p>`);
+  const v = pageModeSetup(595, 842);
+  assert.equal(v.page.orientation, 'portrait');
+  assert.equal(v.page.margins.top, 10);
+  assert.ok(v.maxW > 650 && v.maxW < 720 && v.maxH > 950 && v.maxH < 1050);
+  assert.equal(pageModeSetup(842, 595).page.orientation, 'landscape');
+});

@@ -287,4 +287,7 @@
 - 쪽 나눔은 표시 문단을 지우지 않고 그 문단에 pageBreak="1" (지우면 뒤 문단 linesegarray가 어긋남). 그림은 본문 폭 600px·쪽 높이 700px 안으로
 - 검증: 크롬으로 만든 PDF(제목·문단·목록·표·그림 3쪽, 스캔 2쪽)를 변환해 rhwp(MIT, 렌더러)로 쪽 수·그림 위치, kordoc으로 내용 확인. 한글 프로그램 실제 열기는 운영자 확인 필요
 - 한계(페이지에 명시): 표·여러 단·글상자 배치는 단순해짐. HWP(바이너리)는 rhwp WASM 27MB라 브라우저에서 안 씀 → HWPX로 저장, 한글에서 HWP로 다시 저장
+- "쪽 모양 그대로" 모드: 쪽마다 pdf.js로 그린 그림(배율 2, 40쪽 넘으면 1.5) + 위 "N쪽", 여백 10mm·방향은 첫 쪽 기준(hwp-convert page 옵션), 선택 시 그림 아래 그 쪽 글
+- 그림 원본 크기(imgDim·imgClip)는 실제 픽셀×75로 바로잡음(안 하면 한글에서 잘림), 가운데 95% 이상 한 색인 그림(투명 장식)은 버림
+- pdf.js는 반드시 `openPdf()`로 연다 (cMap·기본 글꼴·wasm — `scripts/copy-pdfjs-assets.mjs`가 public/pdfjs/<버전>/로 복사). 없으면 한국어 CID 글꼴 글자가 사라짐
 - 로직: `src/lib/pdfToHwpx.js`(순수), `src/lib/pdfImages.js`(브라우저 전용), HWP → PDF와 DirectionTabs

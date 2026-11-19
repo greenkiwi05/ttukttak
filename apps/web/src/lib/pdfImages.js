@@ -86,9 +86,13 @@ export async function pageImages(pdfjs, page) {
   return out;
 }
 
-/** 글자가 없는 쪽(스캔)은 쪽 전체를 그림으로 */
-export async function pageSnapshot(page) {
-  const vp = page.getViewport({ scale: 1.5 });
+/**
+ * 쪽 전체를 그림으로 (글자가 없는 스캔 쪽, "쪽 모양 그대로" 변환)
+ * @param {any} page
+ * @param {{ scale?: number, maxW?: number, maxH?: number }} [opts]  maxW·maxH: 넣을 그림 최대 크기(px)
+ */
+export async function pageSnapshot(page, { scale = 1.5, maxW, maxH } = {}) {
+  const vp = page.getViewport({ scale });
   const c = document.createElement('canvas');
   c.width = Math.round(vp.width); c.height = Math.round(vp.height);
   const ctx = c.getContext('2d');
@@ -96,5 +100,6 @@ export async function pageSnapshot(page) {
   ctx.fillRect(0, 0, c.width, c.height);
   await page.render({ canvasContext: ctx, viewport: vp, canvas: c }).promise;
   const base = page.getViewport({ scale: 1 });
-  return { y: base.height, src: c.toDataURL('image/jpeg', 0.85), width: fitWidth(base.width, base.height) };
+  const width = maxW ? fitWidth((base.width * 96) / 72, (base.height * 96) / 72, maxW, maxH) : fitWidth(base.width, base.height);
+  return { y: base.height, src: c.toDataURL('image/jpeg', 0.85), width };
 }
