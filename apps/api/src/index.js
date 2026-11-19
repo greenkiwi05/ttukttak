@@ -6,6 +6,16 @@
 import { fetchLatest, merge, kstDate } from './rates.js';
 import { ensureSchema, saveDay, backfillOnce, coverage, history, day, isDate, isCode, BACKFILL_START } from './history.js';
 import { LOTTO_SCHEMA, LOTTO_KV, syncLotto, roundDetail } from './lotto.js';
+import { HOLIDAY_KV, refreshHolidays } from './holidays.js';
+
+const HOLIDAY_ERR = 'holidays:error';
+
+async function holidaysApi(env) {
+  const data = await env.RATES.get(HOLIDAY_KV);
+  if (data) return new Response(data, { headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'public, max-age=3600' } });
+  const e = await env.RATES.get(HOLIDAY_ERR, 'json');
+  return json({ error: '공휴일을 아직 불러오지 못했어요', reason: e?.reason ?? null, at: e?.at ?? null }, 503);
+}
 
 const LOTTO_CRON = '35 * * * *'; // wrangler.jsonc의 로또 cron과 같아야 한다
 const LOTTO_ERR = 'lotto:error';
@@ -30,7 +40,7 @@ const ERR_KEY = 'rates:error'; // 최근 실패 이유 (10분 뒤 자동 삭제)
 const BACKFILL_CRON = '5 * * * *'; // wrangler.jsonc의 과거 채우기 cron과 같아야 한다
 
 // 오류 문구에 키가 섞여 나가지 않게 가린다
-const mask = (s, key) => (key ? String(s).split(key).join('***') : String(s)).replace(/authkey=[^&\s]+/g, 'authkey=***');
+const mask = (s, key) => (key ? String(s).split(key).join('***') : String(s)).replace(/(authkey|serviceKey)=[^&\s]+/g, '$1=***');
 const fetcher = (u, i) => fetch(u, i);
 
 async function refresh(env) {
@@ -114,6 +124,7 @@ export default {
       if (url.pathname === '/api/rates/day') return await cached(request, ctx, () => dayApi(url, env));
       if (url.pathname === '/api/rates/history') return await cached(request, ctx, () => historyApi(url, env));
       if (url.pathname === '/api/lotto') return await lottoApi(env);
+      if (url.pathname === '/api/holidays') return await holidaysApi(env);
       if (url.pathname === '/api/lotto/round') return await cached(request, ctx, () => lottoRoundApi(url, env));
     } catch (e) {
       console.log('API 오류:', String(e));
@@ -136,6 +147,13 @@ export default {
         return;
       }
       if (event.cron === BACKFILL_CRON) {
+        // 매시간: 공휴일 (없는 해 + 하루 한 번 올해·내년, 필요할 때만 호출)
+        const h = await refreshHolidays({ kv: env.RATES, key: env.HOLIDAY_KEY, fetch: fetcher });
+        if (h.error) {
+          const reason = mask(h.error, env.HOLIDAY_KEY);
+          console.log('공휴일 갱신 실패:', reason);
+          await env.RATES.put(HOLIDAY_ERR, JSON.stringify({ reason, at: new Date().toISOString() }), { expirationTtl: 86400 });
+        }
         // 매시간: 과거 환율 채우기 (BACKFILL_START까지 끝나면 아무것도 안 함)
         await ensureSchema(env.DB);
         const r = await backfillOnce({ db: env.DB, kv: env.RATES, key: env.EXIM_KEY, fetch: fetcher, today: kstDate() });

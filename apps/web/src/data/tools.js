@@ -29,6 +29,8 @@ export const TOOLS = [
   { slug: 'lunar-calendar', title: '음력 양력 변환', short: '음력 생일을 양력으로, 양력 날짜를 음력으로', keywords: '음력, 양력, 음력생일, 윤달, 설날, 추석, 간지, 달력', category: 'date', status: 'live' },
   { slug: 'work-hours', title: '근무시간 계산기', short: '출퇴근 시각으로 하루·주간 근무시간 합계', keywords: '근무시간, 알바, 아르바이트, 출퇴근, 시급, 주간근무, 시간계산', category: 'date', status: 'live' },
   { slug: 'time-calculator', title: '시간 계산기', short: '몇 시간 뒤 몇 시, 두 시각 사이, 시간 합계', keywords: '시간 계산, 시간 더하기, 시간 빼기, 몇시간 후, 시간 합계, 분 계산, 공부 시간', category: 'date', status: 'live' },
+  { slug: 'holidays', title: '공휴일 달력 (빨간날·연휴)', short: '올해·내년 공휴일, 연휴, 연차 쓰기 좋은 날', keywords: '공휴일, 빨간날, 대체공휴일, 임시공휴일, 연휴, 2026 공휴일, 2027 공휴일, 명절, 설날, 추석, 연차, 달력', category: 'date', status: 'live' },
+  { slug: 'business-days', title: '영업일 계산기', short: '주말·공휴일 빼고 영업일 수, N영업일 뒤 날짜', keywords: '영업일, 영업일 계산, 근무일, 평일 계산, 처리 기한, 영업일 기준, 공휴일 제외, 며칠 영업일', category: 'date', status: 'live' },
   { slug: 'days-between', title: '일수 계산기 (날짜 사이 며칠)', short: '두 날짜 사이의 일수·주·개월 계산', keywords: '일수 계산기, 며칠, 기간, 날짜 차이, 날짜 계산, 평일 수', category: 'date', status: 'live' },
   // 생활 계산
   { slug: 'calculator', title: '공학용 계산기', short: 'sin·log·제곱근까지, 식을 한 번에 계산', keywords: '계산기, 일반 계산기, 온라인 계산기, 공학 계산기, 삼각함수, 로그, 제곱근', category: 'calc', status: 'live' },

@@ -10,6 +10,7 @@
 | `GET /api/rates/day?date=YYYY-MM-DD` | 그날(없으면 직전 고시일) 전체 통화 환율 + 저장 기간 | D1 `DB`의 `rates` 테이블 |
 | `GET /api/rates/history?code=USD&from=&to=` | 한 통화의 기간별 매매기준율 `[[date, base], ...]` | D1 `rates` |
 | `GET /api/lotto` | 로또 전체 회차 번호 `[[회차, 날짜, n1..n6, 보너스], ...]` + 최신 회차 상세 | KV `lotto:all` (D1 `lotto`에서 만든 요약본) |
+| `GET /api/holidays` | 공휴일 `{ years: { '2026': [{ date, name }] }, fetchedAt }` (2016년~내년) | KV `holidays:all` |
 | `GET /api/lotto/round?n=1250` | 한 회차 상세 (등수별 당첨자 수·당첨금, 판매액) | D1 `lotto` |
 
 - 갱신: 수출입은행은 영업일 11시 전후 하루 한 번 고시(일환율). 평일 KST 11:00~12:50 10분마다 + 17:00 cron → 오늘 값이 이미 있으면 건너뜀. KV가 비어 있으면 첫 요청 때 한 번 받아 온다.
@@ -21,6 +22,8 @@
   출처 주소는 동행복권 홈페이지 내부 조회 주소(`/lt645/selectPstLt645InfoNew.do`)라 공식 API가 아니다. 바뀌거나 막히면 `src/lotto.js`만 고친다. 실패 이유는 `/api/lotto` 503 응답의 reason에 나온다.
 
 ## 비밀 값
+- `HOLIDAY_KEY`: 공공데이터포털 "한국천문연구원_특일 정보" 일반 인증키(**Decoding** 키). 배포는 EXIM_KEY와 같은 곳(Variables and Secrets, Secret).
+  - 공휴일 갱신: 매시 5분 cron에서 없는 해 + 하루 한 번 올해·내년만 호출. 내년은 발표 전이면 빈 목록 → 저장 안 하고 다음에 다시 확인.
 - `EXIM_KEY`: 한국수출입은행 Open API 인증키. **코드·커밋에 절대 넣지 않는다.**
   - 배포: Cloudflare 대시보드 → Workers → ttukttak → Settings → Variables and Secrets → `EXIM_KEY` (Secret)
   - 로컬: 루트에 `.dev.vars` 파일 (gitignore됨)에 `EXIM_KEY=...`
