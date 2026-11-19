@@ -1,6 +1,8 @@
 ---
 import ToolLayout from '../../layouts/ToolLayout.astro';
 import Lotto from '../../components/tools/Lotto.vue';
+import DirectionTabs from '../../components/DirectionTabs.astro';
+import { LOTTO_TABS } from '../../data/lottoTabs.js';
 
 const faq = [
   { q: '이 번호로 하면 당첨 확률이 높아지나요?', a: '아니요. 로또는 모든 번호 조합의 당첨 확률이 같아요. 이 도구는 번호를 고르기 어려울 때 공정하게 무작위로 뽑아 주는 용도예요.' },
@@ -16,6 +18,7 @@ const faq = [
   lead="게임 수를 고르고 '번호 뽑기'를 누르세요."
   faq={faq}
 >
+  <DirectionTabs items={LOTTO_TABS} />
   <Lotto client:load />
 
   <Fragment slot="guide">

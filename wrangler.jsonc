@@ -21,6 +21,7 @@
   // 환율 갱신 (UTC 기준, 요일은 이름으로 — Cloudflare는 1=일요일). 수출입은행은 영업일 11시 전후 하루 한 번 고시.
   // 한국시간 평일 11:00~12:50 10분마다 + 17:00 확인. 오늘 값을 이미 받았으면 외부 API를 부르지 않는다.
   // 매시 5분: 과거 환율 채우기 (src/index.js의 BACKFILL_CRON과 같아야 함, 다 채우면 아무것도 안 함)
-  "triggers": { "crons": ["*/10 2-3 * * MON-FRI", "0 8 * * MON-FRI", "5 * * * *"] },
+  // 매시 35분: 로또 당첨번호 (src/index.js의 LOTTO_CRON과 같아야 함, 최신이면 외부 호출 없음)
+  "triggers": { "crons": ["*/10 2-3 * * MON-FRI", "0 8 * * MON-FRI", "5 * * * *", "35 * * * *"] },
   "observability": { "enabled": true }
 }

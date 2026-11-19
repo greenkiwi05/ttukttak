@@ -9,12 +9,16 @@
 | `GET /api/rates` | 최근 고시일 환율 (매매기준율·송금 환율, 전일 값) | 한국수출입은행 현재환율 API, KV `RATES`의 `rates:latest` |
 | `GET /api/rates/day?date=YYYY-MM-DD` | 그날(없으면 직전 고시일) 전체 통화 환율 + 저장 기간 | D1 `DB`의 `rates` 테이블 |
 | `GET /api/rates/history?code=USD&from=&to=` | 한 통화의 기간별 매매기준율 `[[date, base], ...]` | D1 `rates` |
+| `GET /api/lotto` | 로또 전체 회차 번호 `[[회차, 날짜, n1..n6, 보너스], ...]` + 최신 회차 상세 | KV `lotto:all` (D1 `lotto`에서 만든 요약본) |
+| `GET /api/lotto/round?n=1250` | 한 회차 상세 (등수별 당첨자 수·당첨금, 판매액) | D1 `lotto` |
 
 - 갱신: 수출입은행은 영업일 11시 전후 하루 한 번 고시(일환율). 평일 KST 11:00~12:50 10분마다 + 17:00 cron → 오늘 값이 이미 있으면 건너뜀. KV가 비어 있으면 첫 요청 때 한 번 받아 온다.
 - 실패해도 KV의 마지막 값을 계속 보여준다 (날짜 표시).
 - 과거 환율: 받은 값을 D1 `rates(date, code, unit, name, base, send, receive)`에 쌓는다. 테이블은 Worker가 `CREATE TABLE IF NOT EXISTS`로 직접 만든다.
 - 과거 채우기: 매시 5분 cron이 KV `backfill:cursor` 날짜부터 거꾸로 25일씩 받아 `2016-01-01`까지 채운다 (하루 최대 600회, 다 채우면 호출 없음). 한도 초과·오류면 멈췄다가 다음 시간에 이어서.
 - D1 조회 응답은 Cloudflare 캐시(Cache API)에 담아 같은 요청은 DB를 다시 읽지 않는다.
+- 로또: 매시 35분 cron. 저장된 마지막 회차 < 지금쯤 나왔어야 할 회차(1회 2002-12-07 + 매주 토 21시)일 때만 동행복권을 부른다 → 평소 호출 0, 토요일 밤에만 몇 번.
+  출처 주소는 동행복권 홈페이지 내부 조회 주소(`/lt645/selectPstLt645InfoNew.do`)라 공식 API가 아니다. 바뀌거나 막히면 `src/lotto.js`만 고친다. 실패 이유는 `/api/lotto` 503 응답의 reason에 나온다.
 
 ## 비밀 값
 - `EXIM_KEY`: 한국수출입은행 Open API 인증키. **코드·커밋에 절대 넣지 않는다.**

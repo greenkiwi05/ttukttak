@@ -5,6 +5,25 @@
 // - API 키는 코드에 없다. Cloudflare 비밀 환경변수 EXIM_KEY 로 넣는다 (로컬은 .dev.vars).
 import { fetchLatest, merge, kstDate } from './rates.js';
 import { ensureSchema, saveDay, backfillOnce, coverage, history, day, isDate, isCode, BACKFILL_START } from './history.js';
+import { LOTTO_SCHEMA, LOTTO_KV, syncLotto, roundDetail } from './lotto.js';
+
+const LOTTO_CRON = '35 * * * *'; // wrangler.jsonc의 로또 cron과 같아야 한다
+const LOTTO_ERR = 'lotto:error';
+
+async function lottoApi(env) {
+  const blob = await env.RATES.get(LOTTO_KV);
+  if (blob) return new Response(blob, { headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'public, max-age=600' } });
+  const e = await env.RATES.get(LOTTO_ERR, 'json');
+  return json({ error: '당첨번호를 아직 불러오지 못했어요', reason: e?.reason ?? null, at: e?.at ?? null }, 503);
+}
+
+async function lottoRoundApi(url, env) {
+  const n = Number(url.searchParams.get('n'));
+  if (!Number.isInteger(n) || n < 1 || n > 100000) return json({ error: '회차(n)를 숫자로 보내 주세요' }, 400);
+  const r = await roundDetail(env.DB, n);
+  if (!r) return json({ error: '없는 회차예요' }, 404);
+  return json(r, 200, 86400);
+}
 
 const KV_KEY = 'rates:latest';
 const ERR_KEY = 'rates:error'; // 최근 실패 이유 (10분 뒤 자동 삭제). 실패가 반복돼도 방문자마다 외부 API를 부르지 않게.
@@ -94,6 +113,8 @@ export default {
       if (url.pathname === '/api/rates') return await latest(env);
       if (url.pathname === '/api/rates/day') return await cached(request, ctx, () => dayApi(url, env));
       if (url.pathname === '/api/rates/history') return await cached(request, ctx, () => historyApi(url, env));
+      if (url.pathname === '/api/lotto') return await lottoApi(env);
+      if (url.pathname === '/api/lotto/round') return await cached(request, ctx, () => lottoRoundApi(url, env));
     } catch (e) {
       console.log('API 오류:', String(e));
       // 과거 환율 테이블이 아직 없을 때(첫 cron 전)도 여기로 온다
@@ -104,6 +125,16 @@ export default {
 
   async scheduled(event, env, ctx) {
     ctx.waitUntil((async () => {
+      if (event.cron === LOTTO_CRON) {
+        // 매시 35분: 로또 당첨번호 (처음엔 1회부터 채우고, 이후엔 토요일 추첨 뒤 새 회차만)
+        await env.DB.batch(LOTTO_SCHEMA.map((s) => env.DB.prepare(s)));
+        const r = await syncLotto({ db: env.DB, kv: env.RATES, fetch: fetcher });
+        if (r.error) {
+          console.log('로또 동기화 실패:', r.error);
+          await env.RATES.put(LOTTO_ERR, JSON.stringify({ reason: r.error, at: new Date().toISOString() }), { expirationTtl: 86400 });
+        } else if (r.saved) console.log('로또', r.saved, '회차 저장, 마지막', r.max);
+        return;
+      }
       if (event.cron === BACKFILL_CRON) {
         // 매시간: 과거 환율 채우기 (BACKFILL_START까지 끝나면 아무것도 안 함)
         await ensureSchema(env.DB);

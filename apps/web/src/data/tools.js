@@ -64,6 +64,8 @@ export const TOOLS = [
   { slug: 'signature-maker', title: '사인 만들기', short: '손글씨 사인 이미지, 한글·영문, 투명 PNG', keywords: '사인, 서명, 싸인, 전자서명, 이메일 서명, 손글씨', category: 'text', status: 'live' },
   // 뽑기·게임
   { slug: 'ladder', title: '사다리타기', short: '참가자와 결과를 넣고 공정하게 사다리 타기', keywords: '사다리, 사다리게임, 내기, 당첨, 뽑기', category: 'fun', status: 'live' },
+  { slug: 'lotto-results', title: '로또 당첨번호 조회', short: '회차별 당첨번호·당첨금, 내 번호 등수 확인', keywords: '로또 당첨번호, 로또 번호 조회, 이번주 로또, 로또 당첨 확인, 로또 회차, 로또 당첨금, 로또 결과, 내 번호 확인', category: 'fun', status: 'live' },
+  { slug: 'lotto-stats', title: '로또 번호 통계', short: '번호별 당첨 횟수, 많이·오래 안 나온 번호', keywords: '로또 통계, 로또 많이 나온 번호, 로또 번호 분석, 로또 미출현 번호, 로또 홀짝, 로또 번호 빈도', category: 'fun', status: 'live' },
   { slug: 'lotto', title: '로또 번호 생성기', short: '6/45 번호 무작위 뽑기, 고정수·제외수', keywords: '로또, 로또번호, 번호 생성, 자동번호, 6/45', category: 'fun', status: 'live' },
   { slug: 'random-pick', title: '제비뽑기·랜덤 뽑기', short: '당첨자 뽑기, 팀 나누기, 순서 정하기', keywords: '제비뽑기, 추첨, 랜덤, 팀 나누기, 순서 정하기, 당첨자', category: 'fun', status: 'live' },
 ];

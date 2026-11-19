@@ -44,6 +44,7 @@ apps/
     src/index.js              Worker 진입점 (fetch: /api/rates, scheduled: 환율 갱신 cron)
     src/rates.js              수출입은행 환율 받기·정리 (순수 함수)
     src/history.js            과거 환율 D1 저장·조회, 과거 날짜 채우기(backfill)
+    src/lotto.js              로또 당첨번호 수집(동행복권)·D1 저장·KV 요약본
     tests/*.test.js           백엔드 로직 테스트
 scripts/check-secrets.mjs   커밋 전 비밀정보 검사 (pre-commit 훅)
 docs/                   스펙·작업 목록·배포 가이드
