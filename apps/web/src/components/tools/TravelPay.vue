@@ -83,9 +83,9 @@ const loc = (n: number) => n.toLocaleString('ko-KR', { maximumFractionDigits: 2 
   </div>
 
   <div class="field" style="margin-top: 14px">
-    <label for="tax">세금·봉사료 (%) <small class="muted">메뉴판에 '++'가 있으면 따로 붙어요</small></label>
+    <label for="tax">세금·봉사료·팁 (%) <small class="muted">가격표에 포함되지 않고 따로 붙는 금액</small></label>
     <input id="tax" v-model.number="tax" type="number" min="0" step="0.5" inputmode="decimal" />
-    <div class="chips"><button v-for="t in [0, 10, 15, 21]" :key="t" type="button" class="chip" :class="{ on: tax === t }" @click="tax = t">{{ t }}%</button></div>
+    <div class="chips"><button v-for="t in [0, 10, 15, 18, 20, 21]" :key="t" type="button" class="chip" :class="{ on: tax === t }" @click="tax = t">{{ t }}%</button></div>
   </div>
 
   <details style="margin-top: 14px; border: 0; padding: 0" open>

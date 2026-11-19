@@ -44,7 +44,7 @@ export const TOOLS = [
   { slug: 'exchange-rate', title: '환율 계산기', short: '오늘 고시 환율로 외화↔원화 바로 계산', keywords: '환율, 오늘 환율, 달러 환율, 엔화 환율, 유로 환율, 엔화 계산기, 달러 계산기, 위안화, 매매기준율, 송금 환율, 환전', category: 'calc', status: 'live' },
   { slug: 'exchange-rate-history', title: '과거 환율 조회', short: '날짜별 환율, 기간별 추이 그래프·월평균', keywords: '과거 환율, 날짜별 환율, 환율 조회, 환율 추이, 환율 그래프, 월평균 환율, 환율 차트, 기준환율 조회, 매매기준율 조회, 작년 환율', category: 'calc', status: 'live' },
   { slug: 'fuel-cost', title: '주유비 계산기', short: '거리·연비로 주유비, 오늘 평균 기름값 자동', keywords: '주유비, 기름값, 유류비, 연비, 휘발유, 경유, LPG, 유가, 오늘 유가, 주유비 계산, 교통비, 여행 경비', category: 'calc', status: 'live' },
-  { slug: 'travel-payment', title: '해외 결제 수수료 계산기', short: '여행지 카드 결제, 실제 원화 청구액 계산', keywords: '해외결제, 카드 수수료, 환율, 여행, 발리, 루피아, 엔화, 달러, DCC, 트래블카드, 트래블월렛, 트래블로그', category: 'calc', status: 'live' },
+  { slug: 'travel-payment', title: '해외 결제 수수료 계산기', short: '여행지 카드 결제, 실제 원화 청구액 계산', keywords: '해외결제, 카드 수수료, 환율, 여행, 발리, 루피아, 일본 여행, 엔화, 미국 팁, 달러, 태국, 베트남, 유럽, DCC, 트래블카드, 트래블월렛, 트래블로그', category: 'calc', status: 'live' },
   { slug: 'savings-interest', title: '적금·예금 이자 계산기', short: '단리·월복리, 세전·세후 이자', keywords: '적금, 예금, 이자, 세후, 단리, 복리, 만기', category: 'calc', status: 'live' },
   // 파일 변환
   { slug: 'heic-to-jpg', title: 'HEIC JPG 변환', short: '아이폰 사진(HEIC)을 JPG로, 서버 업로드 없이', keywords: '아이폰 사진, heic, jpg, 사진 변환, 이미지 변환', category: 'file', status: 'live' },
