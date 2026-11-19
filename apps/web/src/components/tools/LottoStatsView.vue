@@ -112,15 +112,15 @@ const barPath = (b: { x: number; y: number; w: number; h: number }) => {
     </div>
 
     <div class="cards">
-      <div class="card">
+      <div class="stat-card">
         <h4>많이 나온 번호</h4>
         <div class="row-balls"><span v-for="n in most" :key="n" class="nb"><LottoBall :n="n" size="sm" /><small>{{ freq[n] }}회</small></span></div>
       </div>
-      <div class="card">
+      <div class="stat-card">
         <h4>적게 나온 번호</h4>
         <div class="row-balls"><span v-for="n in least" :key="n" class="nb"><LottoBall :n="n" size="sm" /><small>{{ freq[n] }}회</small></span></div>
       </div>
-      <div class="card">
+      <div class="stat-card">
         <h4>오래 안 나온 번호 <small class="muted">(전체 기준)</small></h4>
         <div class="row-balls"><span v-for="n in longest" :key="n" class="nb"><LottoBall :n="n" size="sm" /><small>{{ gap[n] }}회째</small></span></div>
       </div>
@@ -181,8 +181,8 @@ const barPath = (b: { x: number; y: number; w: number; h: number }) => {
 }
 .tip small { opacity: .85; }
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 14px; }
-.card { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--bg); }
-.card h4 { margin: 0 0 8px; font-size: .95rem; }
+.stat-card { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--bg); }
+.stat-card h4 { margin: 0 0 8px; font-size: .95rem; }
 .row-balls { display: flex; flex-wrap: wrap; gap: 6px; }
 .nb { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; }
 .nb small { color: var(--muted); font-size: .72rem; }

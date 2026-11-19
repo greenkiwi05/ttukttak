@@ -144,7 +144,7 @@ h2 { font-size: 1.22rem; margin: 36px 0 12px; letter-spacing: -0.02em; }
 
 label { display: block; font-weight: 600; margin-bottom: 6px; }
 input, select, button { font: inherit; }
-input[type='date'], input[type='number'], input[type='text'], select {
+input[type='date'], input[type='number'], input[type='text'], input[type='time'], select {
   width: 100%;
   padding: 12px 14px;
   border: 1px solid var(--line);

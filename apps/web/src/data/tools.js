@@ -32,6 +32,7 @@ export const TOOLS = [
   { slug: 'holidays', title: '공휴일 달력 (빨간날·연휴)', short: '올해·내년 공휴일, 연휴, 연차 쓰기 좋은 날', keywords: '공휴일, 빨간날, 대체공휴일, 임시공휴일, 연휴, 2026 공휴일, 2027 공휴일, 명절, 설날, 추석, 연차, 달력', category: 'date', status: 'live' },
   { slug: 'solar-terms', title: '24절기 달력', short: '올해 절기 날짜·절입 시각, 다음 절기 D-day', keywords: '24절기, 절기, 입춘, 하지, 동지, 춘분, 추분, 경칩, 입동, 절입시각, 오늘 절기', category: 'date', status: 'live' },
   { slug: 'business-days', title: '영업일 계산기', short: '주말·공휴일 빼고 영업일 수, N영업일 뒤 날짜', keywords: '영업일, 영업일 계산, 근무일, 평일 계산, 처리 기한, 영업일 기준, 공휴일 제외, 며칠 영업일', category: 'date', status: 'live' },
+  { slug: 'world-time', title: '세계 시간·시차 계산기', short: '세계 도시 지금 시간, 서울과의 시차, 서머타임 반영', keywords: '세계 시간, 시차, 시차 계산, 미국 시간, 뉴욕 시간, 런던 시간, 현지 시간, 서머타임, 시간대 변환, 해외 시간', category: 'date', status: 'live' },
   { slug: 'days-between', title: '일수 계산기 (날짜 사이 며칠)', short: '두 날짜 사이의 일수·주·개월 계산', keywords: '일수 계산기, 며칠, 기간, 날짜 차이, 날짜 계산, 평일 수', category: 'date', status: 'live' },
   // 생활 계산
   { slug: 'calculator', title: '공학용 계산기', short: 'sin·log·제곱근까지, 식을 한 번에 계산', keywords: '계산기, 일반 계산기, 온라인 계산기, 공학 계산기, 삼각함수, 로그, 제곱근', category: 'calc', status: 'live' },
