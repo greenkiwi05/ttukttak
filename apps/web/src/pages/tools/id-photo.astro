@@ -1,6 +1,8 @@
 ---
 import ToolLayout from '../../layouts/ToolLayout.astro';
 import IdPhoto from '../../components/tools/IdPhoto.vue';
+import DirectionTabs from '../../components/DirectionTabs.astro';
+import { PHOTO_TABS } from '../../data/photoTabs.js';
 
 const faq = [
   { q: '반명함 사진 크기는 얼마인가요?', a: '반명함은 보통 3×4cm예요. 300dpi 기준으로 354×472픽셀이고, 이력서에 넣는 사진도 이 크기를 많이 써요.' },
@@ -17,6 +19,7 @@ const faq = [
   lead="규격을 고르고 사진을 올린 뒤, 끌어서 위치만 맞추면 돼요."
   faq={faq}
 >
+  <DirectionTabs items={PHOTO_TABS} />
   <IdPhoto client:load />
 
   <Fragment slot="guide">

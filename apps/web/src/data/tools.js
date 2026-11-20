@@ -60,11 +60,14 @@ export const TOOLS = [
   { slug: 'pdf-to-hwp', title: 'PDF HWP 변환', short: 'PDF를 한글 문서(HWPX)로, 글자 편집 가능', keywords: 'pdf 한글 변환, pdf hwp, pdf hwpx, pdf를 한글로, pdf 편집, 한글 파일 만들기, pdf 글자 수정', category: 'file', status: 'live' },
   { slug: 'hwp-to-pdf', title: 'HWP PDF 변환', short: '한글 파일을 설치 없이 열고 PDF로 저장', keywords: '한글 파일, hwp, hwpx, 한글 pdf, 한글 뷰어, 한컴', category: 'file', status: 'live' },
   // 사진
+  { slug: 'driver-license-photo', title: '운전면허증 사진 규격 맞추기', short: '운전면허 갱신·재발급 사진 3.5×4.5cm로 자르기', keywords: '운전면허 사진, 운전면허증 사진 규격, 운전면허 갱신 사진, 면허증 사진, 적성검사 사진, 운전면허 사진 크기, 3.5x4.5', category: 'photo', status: 'live' },
+  { slug: 'us-visa-photo', title: '미국 비자 사진 규격 (2×2인치)', short: 'DS-160 비자 사진 600×600px 정사각형으로', keywords: '미국 비자 사진, 미국비자사진규격, ds-160 사진, 2x2 사진, 비자 사진 크기, 미국 여권 사진, esta 사진', category: 'photo', status: 'live' },
   { slug: 'id-photo', title: '증명사진·여권사진 규격 맞추기', short: '여권·주민등록증·운전면허·반명함 사이즈로 자르기', keywords: '증명사진, 여권사진, 반명함, 이력서 사진, 사진 규격, 운전면허 사진, 민증 사진', category: 'photo', status: 'live' },
   { slug: 'image-to-text', title: '사진 글자 추출 (이미지 텍스트 변환)', short: '사진·캡처 속 글자를 텍스트로, 서버 업로드 없이', keywords: '이미지 텍스트 추출, 사진 글자 추출, ocr, 글자 인식, 캡처 글자 복사, 텍스트 변환, 이미지 글자 복사', category: 'photo', status: 'live' },
   { slug: 'image-merge', title: '사진 합치기', short: '여러 장을 세로·가로로 한 장에 이어 붙이기', keywords: '사진 합치기, 이미지 합치기, 캡처 이어붙이기, 사진 붙이기', category: 'photo', status: 'live' },
   { slug: 'exif-remove', title: '사진 위치정보 지우기', short: '사진 속 GPS·촬영 정보(EXIF) 확인하고 삭제', keywords: '위치정보, gps, exif, 메타데이터, 개인정보, 사진 정보', category: 'photo', status: 'live' },
   // 글자·문구
+  { slug: 'my-ip', title: '내 IP 확인', short: '지금 접속한 공인 IP 주소·통신사 바로 보기', keywords: '내 ip, 아이피 확인, 내 아이피, ip 주소 확인, 공인 ip, 내 ip 주소, what is my ip, ipv6', category: 'calc', status: 'live' },
   { slug: 'char-count', title: '글자수 세기', short: '공백 포함·제외 글자수, 바이트, 원고지 매수', keywords: '글자수, 자소서, 자기소개서, 바이트, 공백 제외, 원고지', category: 'text', status: 'live' },
   { slug: 'qr-code', title: 'QR코드 만들기', short: '링크·와이파이·연락처 QR코드 무료 생성', keywords: 'qr, 큐알코드, 와이파이, 링크, qr 생성', category: 'text', status: 'live' },
   { slug: 'greeting-message', title: '경조사 문구 생성기', short: '축하·조의·감사·명절 인사 문구를 상황에 맞게', keywords: '축하 문구, 조의, 결혼, 명절 인사, 감사 인사, 경조사', category: 'text', status: 'live' },

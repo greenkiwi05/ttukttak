@@ -6,6 +6,7 @@ import { coverage, history, day, isDate, isCode, BACKFILL_START, DONE_KEY } from
 import { LOTTO_KV, roundDetail } from './lotto.js';
 import { HOLIDAY_KV, TERMS_KV } from './holidays.js';
 import { FUEL_KV } from './fuel.js';
+import { ipInfo } from './ip.js';
 import { KV, refreshRates, lottoFromVisit } from './jobs.js';
 import { jobsFor, SCHEDULE } from './schedule.js';
 
@@ -107,6 +108,7 @@ export default {
     if (!url.pathname.startsWith('/api/')) return env.ASSETS.fetch(request);
     if (request.method !== 'GET') return json({ error: 'GET만 돼요' }, 405);
     try {
+      if (url.pathname === '/api/ip') return json(ipInfo(request.headers, request.cf)); // 저장 안 함, no-store
       if (url.pathname === '/api/rates') return await latest(env);
       if (url.pathname === '/api/rates/day') return await cached(request, ctx, () => dayApi(url, env));
       if (url.pathname === '/api/rates/history') return await cached(request, ctx, () => historyApi(url, env));

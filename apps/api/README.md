@@ -13,6 +13,7 @@
 | `GET /api/holidays` | 공휴일 `{ years: { '2026': [{ date, name }] }, fetchedAt }` (2016년~내년) | KV `holidays:all` |
 | `GET /api/solar-terms` | 24절기 `{ years: { '2026': [{ date, name, time, longitude }] } }` | KV `solarterms:all` |
 | `GET /api/fuel` | 전국·시도별 평균 유가 `{ date, national: [{ code, name, price, diff }], sido: { B027: [...] } }` | KV `fuel:latest` (오피넷) |
+| `GET /api/ip` | 접속한 사람의 IP·국가·지역·통신사 `{ ip, country, region, city, isp, asn }` (저장 안 함, `no-store`) | 요청 헤더·`request.cf` |
 | `GET /api/lotto/round?n=1250` | 한 회차 상세 (등수별 당첨자 수·당첨금, 판매액) | D1 `lotto` |
 
 - 갱신: 수출입은행은 영업일 11시 전후 하루 한 번 고시(일환율). 평일 KST 11:00~12:50 10분마다 + 17:00 cron → 오늘 값이 이미 있으면 건너뜀. KV가 비어 있으면 첫 요청 때 한 번 받아 온다.

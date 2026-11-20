@@ -6,7 +6,9 @@ import { downloadBlob } from '../../lib/download.js';
 
 const VIEW_W = 240; // 미리보기 너비(px)
 
-const presetId = ref(PRESETS[0].id);
+// preset: 처음 선택할 규격 (운전면허·미국 비자 전용 페이지에서 지정)
+const props = defineProps<{ preset?: string }>();
+const presetId = ref(PRESETS.some((p) => p.id === props.preset) ? props.preset! : PRESETS[0].id);
 const customW = ref(3);
 const customH = ref(4);
 const zoom = ref(1);
