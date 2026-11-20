@@ -1,6 +1,8 @@
 ---
 import ToolLayout from '../../layouts/ToolLayout.astro';
 import CharCount from '../../components/tools/CharCount.vue';
+import DirectionTabs from '../../components/DirectionTabs.astro';
+import { TEXT_COUNT_TABS } from '../../data/textTabs.js';
 
 const faq = [
   { q: '공백 포함과 공백 제외는 뭐가 다른가요?', a: '공백 포함은 띄어쓰기와 줄바꿈까지 모두 센 글자 수예요. 공백 제외는 띄어쓰기·탭·줄바꿈을 뺀 글자 수예요. 자기소개서는 보통 공백 포함 기준이 많지만, 지원하는 곳의 안내를 꼭 확인하세요.' },
@@ -17,6 +19,7 @@ const faq = [
   lead="글을 붙여 넣으면 글자수가 바로 나와요."
   faq={faq}
 >
+  <DirectionTabs items={TEXT_COUNT_TABS} />
   <CharCount client:load />
 
   <Fragment slot="guide">
