@@ -68,6 +68,7 @@ export const TOOLS = [
   { slug: 'image-merge', title: '사진 합치기', short: '여러 장을 세로·가로로 한 장에 이어 붙이기', keywords: '사진 합치기, 이미지 합치기, 캡처 이어붙이기, 사진 붙이기', category: 'photo', status: 'live' },
   { slug: 'exif-remove', title: '사진 위치정보(EXIF) 지우기', short: '사진 속 GPS·촬영 정보(EXIF) 확인하고 삭제', keywords: '위치정보, gps, exif, 메타데이터, 개인정보, 사진 정보', category: 'photo', status: 'live' },
   // 글자·문구
+  { slug: 'gpa-calculator', title: '학점 계산기 (평점 계산)', short: '4.5·4.3 만점 평점 평균, 전공·누적 학점', keywords: '학점 계산기, 학점계산기, 평점 계산기, 평점 평균, gpa 계산, 전공 학점, 누적 학점, 학점 변환, 학점 환산, 4.5 4.3 변환, 목표 학점, 대학 성적', category: 'calc', status: 'live' },
   { slug: 'my-ip', title: '내 IP 확인', short: '지금 접속한 공인 IP 주소·통신사 바로 보기', keywords: '내 ip, 아이피 확인, 내 아이피, ip 주소 확인, 공인 ip, 내 ip 주소, what is my ip, ipv6', category: 'calc', status: 'live' },
   { slug: 'char-count', title: '글자수 세기 (글자수 계산기)', short: '공백 포함·제외 글자수, 바이트, 원고지 매수', keywords: '글자수, 자소서, 자기소개서, 바이트, 공백 제외, 원고지, 글자수 계산기, 글자수 계산, 글자수 확인', category: 'text', status: 'live' },
   { slug: 'qr-code', title: 'QR코드 만들기 (무료 생성)', short: '링크·와이파이·연락처 QR코드 무료 생성', keywords: 'qr, 큐알코드, 와이파이, 링크, qr 생성', category: 'text', status: 'live' },
