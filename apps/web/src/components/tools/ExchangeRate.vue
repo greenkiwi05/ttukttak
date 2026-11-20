@@ -3,7 +3,10 @@
 // 환율은 /api/rates(한국수출입은행 고시 매매기준율, Worker가 하루 몇 번 받아 둠)에서 불러온다.
 // 못 불러오면 직접 입력해서 계산한다. 사용자가 입력한 금액은 어디로도 보내지 않는다.
 import { ref, computed, watch, onMounted } from 'vue';
-import { loadRates, convert, change, quickAmounts, num, FLAGS } from '../../lib/exchange.js';
+import { loadRates, convert, change, quickAmounts, quickTable, num, FLAGS } from '../../lib/exchange.js';
+
+// currency: 통화별 페이지(달러·엔화 환율 계산기 등)에서 고정해서 여는 통화. 이때는 마지막에 고른 통화(기기 저장)보다 우선하고 빠른 환산표를 보여 준다
+const props = defineProps<{ currency?: string }>();
 
 type Rate = { code: string; unit: number; name: string; base: number; send: number | null; receive: number | null };
 type Data = { date: string; source: string; rates: Rate[]; prev: null | { date: string; base: Record<string, number> } };
@@ -16,9 +19,10 @@ const FALLBACK: Rate[] = [
 
 const data = ref<Data | null>(null);
 const state = ref<'loading' | 'ok' | 'fail'>('loading');
-const code = ref('USD');
+const code = ref(props.currency ?? 'USD');
 const dir = ref<'toKrw' | 'fromKrw'>('toKrw');
-const amount = ref('100');
+// 통화별 페이지는 그 통화에서 자주 계산하는 금액으로 시작 (엔화 1만 엔, 바트 1,000바트 등)
+const amount = ref(props.currency ? String(quickAmounts(props.currency)[2]) : '100');
 const rateText = ref('');
 
 const list = computed(() => data.value?.rates ?? FALLBACK);
@@ -30,11 +34,11 @@ function useOfficial() {
 }
 watch(code, () => {
   useOfficial();
-  try { localStorage.setItem('ttukttak:fx', code.value); } catch { /* 저장 불가 환경 */ }
+  if (!props.currency) { try { localStorage.setItem('ttukttak:fx', code.value); } catch { /* 저장 불가 환경 */ } }
 });
 
 onMounted(async () => {
-  try { const c = localStorage.getItem('ttukttak:fx'); if (c) code.value = c; } catch { /* 저장 불가 환경 */ }
+  if (!props.currency) { try { const c = localStorage.getItem('ttukttak:fx'); if (c) code.value = c; } catch { /* 저장 불가 환경 */ } }
   const d = (await loadRates()) as Data | null;
   data.value = d;
   state.value = d ? 'ok' : 'fail';
@@ -55,6 +59,7 @@ const remit = computed(() => {
   return { send: Math.round((a * c.send) / c.unit), receive: Math.round((a * c.receive) / c.unit) };
 });
 
+const table = computed(() => (props.currency && code.value === props.currency && cur.value.base > 0 ? quickTable(cur.value.code, cur.value.base, cur.value.unit) : null));
 const won = (n: number) => n.toLocaleString('ko-KR') + '원';
 const fx = (n: number) => n.toLocaleString('ko-KR', { maximumFractionDigits: 2 });
 const rateStr = (n: number) => n.toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -113,6 +118,20 @@ function pick(c: string) {
     <button type="button" class="btn-sub" style="margin-top: 10px" @click="swap">⇅ 방향 바꾸기</button>
   </div>
 
+  <template v-if="table && table.toKrw.length">
+    <h3 style="margin: 24px 0 6px; font-size: 1rem">{{ cur.name }} 빠른 환산표 <small class="muted">(오늘 매매기준율)</small></h3>
+    <div class="quick-grid">
+      <table class="table">
+        <thead><tr><th>{{ cur.code }}</th><th>원화</th></tr></thead>
+        <tbody><tr v-for="[a, w] in table.toKrw" :key="a"><td>{{ fx(a) }} {{ cur.code }}</td><td>{{ won(w) }}</td></tr></tbody>
+      </table>
+      <table class="table">
+        <thead><tr><th>원화</th><th>{{ cur.code }}</th></tr></thead>
+        <tbody><tr v-for="[w, a] in table.fromKrw" :key="w"><td>{{ won(w) }}</td><td>{{ fx(a) }} {{ cur.code }}</td></tr></tbody>
+      </table>
+    </div>
+  </template>
+
   <template v-if="data">
     <h3 style="margin: 24px 0 6px; font-size: 1rem">오늘 환율 한눈에 보기 <small class="muted">(통화를 누르면 계산기에 넣어요)</small></h3>
     <div class="table-wrap">
@@ -150,4 +169,7 @@ function pick(c: string) {
 .fx-pick { background: none; border: 0; padding: 0; color: inherit; font: inherit; cursor: pointer; text-align: left; }
 .up { color: #e03131; }
 .down { color: #1c7ed6; }
+.quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.quick-grid .table { font-size: .9rem; }
+@media (max-width: 520px) { .quick-grid { grid-template-columns: 1fr; } }
 </style>

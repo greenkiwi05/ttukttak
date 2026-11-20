@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { SITE } from '../data/site.js';
 import { liveTools, CATEGORIES } from '../data/tools.js';
-const tools = liveTools();
+const tools = liveTools().filter((t) => !t.parent); // 통화별 환율처럼 같은 도구의 변형 페이지는 개수에서 뺀다
 const cats = Object.entries(CATEGORIES)
   .map(([key, c]) => ({ key, ...c, n: tools.filter((t) => t.category === key).length }))
   .filter((c) => c.n > 0);

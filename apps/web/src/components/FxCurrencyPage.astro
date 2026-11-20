@@ -1,0 +1,43 @@
+---
+// 통화별 환율 계산기 페이지 공통 틀 (달러·엔화·유로 등). 계산기는 ExchangeRate.vue에 통화만 고정해서 쓴다.
+// 설명(guide)과 FAQ는 페이지마다 따로 쓰고, 환율 출처·개인정보 FAQ 두 개는 여기서 붙인다.
+import ToolLayout from '../layouts/ToolLayout.astro';
+import ExchangeRate from './tools/ExchangeRate.vue';
+import { FX_PAGES } from '../data/fxPages.js';
+
+interface Props {
+  slug: string;
+  code: string;
+  description: string;
+  lead: string;
+  faq: { q: string; a: string }[];
+}
+const { slug, code, description, lead, faq } = Astro.props;
+const common = [
+  { q: '이 환율은 언제 기준인가요?', a: '한국수출입은행이 은행 영업일마다 고시하는 매매기준율이에요. 계산기 위에 고시 날짜가 나오고, 주말·공휴일에는 직전 영업일 환율이 보여요. 포털의 실시간 시세와는 몇 원 차이가 날 수 있어요.' },
+  { q: '입력한 금액은 서버로 전송되나요?', a: '아니요. 페이지가 받는 것은 그날 고시된 환율표뿐이고, 계산은 모두 브라우저 안에서 해요.' },
+];
+---
+<ToolLayout slug={slug} description={description} lead={lead} faq={[...faq, ...common]}>
+  <nav class="fx-nav" aria-label="다른 통화 환율 계산기">
+    {FX_PAGES.map((p) => (
+      <a href={`/tools/${p.slug}/`} class:list={['chip', { on: p.slug === slug }]} aria-current={p.slug === slug ? 'page' : undefined}>{p.label}</a>
+    ))}
+    <a href="/tools/exchange-rate/" class="chip">전체 통화</a>
+  </nav>
+  <ExchangeRate client:load currency={code} />
+
+  <Fragment slot="guide">
+    <slot name="guide" />
+    <h2>더 알아보기</h2>
+    <ul>
+      <li><a href="/tools/exchange-rate-history/">과거 환율 조회</a>: 날짜별 환율과 기간별 추이 그래프</li>
+      <li><a href="/tools/travel-payment/">해외 결제 수수료 계산기</a>: 카드로 결제하면 실제로 청구될 원화 금액</li>
+    </ul>
+  </Fragment>
+</ToolLayout>
+
+<style>
+  .fx-nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .fx-nav a { text-decoration: none; }
+</style>

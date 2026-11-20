@@ -18,6 +18,7 @@ export const CATEGORIES = {
  * @property {string} [keywords] 검색용 별칭 (사람들이 실제로 치는 말, 쉼표 구분)
  * @property {keyof typeof CATEGORIES} category
  * @property {'live'|'planned'} status
+ * @property {string} [parent] 같은 도구의 검색용 변형 페이지(통화별 환율 등)면 원래 도구 slug. 홈·카테고리·메뉴·추천 카드에서는 빼고, 사이트 검색·사이트맵에는 넣는다
  */
 
 /** @type {Tool[]} */
@@ -68,6 +69,12 @@ export const TOOLS = [
   { slug: 'image-merge', title: '사진 합치기', short: '여러 장을 세로·가로로 한 장에 이어 붙이기', keywords: '사진 합치기, 이미지 합치기, 캡처 이어붙이기, 사진 붙이기', category: 'photo', status: 'live' },
   { slug: 'exif-remove', title: '사진 위치정보(EXIF) 지우기', short: '사진 속 GPS·촬영 정보(EXIF) 확인하고 삭제', keywords: '위치정보, gps, exif, 메타데이터, 개인정보, 사진 정보', category: 'photo', status: 'live' },
   // 글자·문구
+  { slug: 'dollar-exchange-rate', title: '달러 환율 계산기', short: '오늘 달러 환율로 USD ↔ 원화 계산', keywords: '달러 환율, 달러환율계산기, 달러 환율 계산, 미국 환율, 원달러 환율, usd 환율, 1달러 원화, 달러 원화', category: 'calc', status: 'live', parent: 'exchange-rate' },
+  { slug: 'yen-exchange-rate', title: '엔화 환율 계산기 (100엔)', short: '오늘 엔화 환율로 JPY ↔ 원화 계산', keywords: '엔화 환율, 일본 환율, 일본환율계산기, 엔화 계산, 100엔, 1만엔, jpy, 엔 원화, 엔환율', category: 'calc', status: 'live', parent: 'exchange-rate' },
+  { slug: 'euro-exchange-rate', title: '유로 환율 계산기', short: '오늘 유로 환율로 EUR ↔ 원화 계산', keywords: '유로 환율, 유로 계산, eur 환율, 유럽 환율, 1유로 원화', category: 'calc', status: 'live', parent: 'exchange-rate' },
+  { slug: 'yuan-exchange-rate', title: '위안화 환율 계산기', short: '오늘 위안화 환율로 CNH ↔ 원화 계산', keywords: '위안화 환율, 중국 환율, 인민폐 환율, 위안 환율, cny, cnh, 1위안 원화', category: 'calc', status: 'live', parent: 'exchange-rate' },
+  { slug: 'baht-exchange-rate', title: '태국 바트 환율 계산기', short: '오늘 바트 환율로 THB ↔ 원화 계산', keywords: '태국 환율, 바트 환율, 태국 바트, thb, 태국 돈, 1바트 원화', category: 'calc', status: 'live', parent: 'exchange-rate' },
+  { slug: 'aud-exchange-rate', title: '호주 달러 환율 계산기', short: '오늘 호주 달러 환율로 AUD ↔ 원화 계산', keywords: '호주 환율, 호주 달러, 호주달러 환율, aud, 워홀 환율, 호주 송금', category: 'calc', status: 'live', parent: 'exchange-rate' },
   { slug: 'gpa-calculator', title: '학점 계산기 (평점 계산)', short: '4.5·4.3 만점 평점 평균, 전공·누적 학점', keywords: '학점 계산기, 학점계산기, 평점 계산기, 평점 평균, gpa 계산, 전공 학점, 누적 학점, 학점 변환, 학점 환산, 4.5 4.3 변환, 목표 학점, 대학 성적', category: 'calc', status: 'live' },
   { slug: 'my-ip', title: '내 IP 확인', short: '지금 접속한 공인 IP 주소·통신사 바로 보기', keywords: '내 ip, 아이피 확인, 내 아이피, ip 주소 확인, 공인 ip, 내 ip 주소, what is my ip, ipv6', category: 'calc', status: 'live' },
   { slug: 'char-count', title: '글자수 세기 (글자수 계산기)', short: '공백 포함·제외 글자수, 바이트, 원고지 매수', keywords: '글자수, 자소서, 자기소개서, 바이트, 공백 제외, 원고지, 글자수 계산기, 글자수 계산, 글자수 확인', category: 'text', status: 'live' },
@@ -88,13 +95,13 @@ export const TOOLS = [
 
 export const liveTools = () => TOOLS.filter((t) => t.status === 'live');
 /** 카테고리별 공개 도구. planned(준비 중)는 홈·카테고리·메뉴 어디에도 보이지 않는다 */
-export const toolsIn = (cat) => TOOLS.filter((t) => t.category === cat && t.status === 'live');
+export const toolsIn = (cat) => TOOLS.filter((t) => t.category === cat && t.status === 'live' && !t.parent);
 export const getTool = (slug) => TOOLS.find((t) => t.slug === slug);
 
 /** 같은 카테고리 우선, 그다음 다른 live 도구 */
 export function relatedTools(slug, limit = 4) {
   const me = getTool(slug);
-  const others = liveTools().filter((t) => t.slug !== slug);
+  const others = liveTools().filter((t) => t.slug !== slug && !t.parent);
   const same = others.filter((t) => t.category === me?.category);
   const rest = others.filter((t) => t.category !== me?.category);
   return [...same, ...rest].slice(0, limit);

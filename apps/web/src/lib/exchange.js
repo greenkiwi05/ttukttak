@@ -13,6 +13,27 @@ export const FLAGS = {
 const QUICK = { JPY: [1000, 5000, 10000, 50000], IDR: [10000, 50000, 100000, 1000000], THB: [100, 500, 1000, 5000] };
 export const quickAmounts = (code) => QUICK[code] || [1, 10, 100, 1000];
 
+/** 통화별 빠른 환산표에 넣을 금액: 외화 → 원화, 원화 → 외화 */
+const TABLE = {
+  JPY: [100, 500, 1000, 3000, 5000, 10000, 50000, 100000],
+  THB: [10, 50, 100, 500, 1000, 2000, 5000, 10000],
+  CNH: [1, 10, 50, 100, 500, 1000, 5000, 10000],
+};
+const KRW_TABLE = [10000, 50000, 100000, 300000, 500000, 1000000];
+/**
+ * 빠른 환산표. rate는 unit(1 또는 100)당 원화
+ * @returns {{ toKrw: [number, number][], fromKrw: [number, number][] }}
+ */
+export function quickTable(code, rate, unit) {
+  if (!(rate > 0) || !(unit > 0)) return { toKrw: [], fromKrw: [] };
+  const per = rate / unit;
+  const fx = TABLE[code] || [1, 5, 10, 50, 100, 500, 1000, 5000];
+  return {
+    toKrw: fx.map((a) => [a, Math.round(a * per)]),
+    fromKrw: KRW_TABLE.map((w) => [w, Math.round((w / per) * 100) / 100]),
+  };
+}
+
 /**
  * /api/rates 응답 검사 + 정렬. 이상하면 null.
  * @param {any} data

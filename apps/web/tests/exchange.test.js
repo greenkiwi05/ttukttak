@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { normalize, convert, change, rateFor, eximCode, num, quickAmounts, loadRates } from '../src/lib/exchange.js';
+import { normalize, convert, change, rateFor, eximCode, num, quickAmounts, loadRates, quickTable } from '../src/lib/exchange.js';
 
 const data = {
   date: '2026-11-18', source: '한국수출입은행',
@@ -52,4 +52,15 @@ test('불러오기: 실패하면 null, 다음에 다시 시도', async () => {
   assert.equal(await loadRates(async () => ({ ok: false })), null);
   const d = await loadRates(async () => ({ ok: true, json: async () => data }));
   assert.equal(d.date, '2026-11-18');
+});
+
+test('빠른 환산표', () => {
+  const j = quickTable('JPY', 833.73, 100);
+  assert.deepEqual(j.toKrw[0], [100, 834]);
+  assert.deepEqual(j.toKrw.at(-1), [100000, 833730]);
+  assert.deepEqual(j.fromKrw[0], [10000, 1199.43]); // 10000 / 8.3373
+  const u = quickTable('USD', 1330.8, 1);
+  assert.deepEqual(u.toKrw[0], [1, 1331]);
+  assert.deepEqual(u.fromKrw[2], [100000, 75.14]);
+  assert.deepEqual(quickTable('USD', 0, 1), { toKrw: [], fromKrw: [] });
 });
