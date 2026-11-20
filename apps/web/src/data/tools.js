@@ -35,6 +35,7 @@ export const TOOLS = [
   { slug: 'business-days', title: '영업일 계산기', short: '주말·공휴일 빼고 영업일 수, N영업일 뒤 날짜', keywords: '영업일, 영업일 계산, 근무일, 평일 계산, 처리 기한, 영업일 기준, 공휴일 제외, 며칠 영업일', category: 'date', status: 'live' },
   { slug: 'world-time', title: '세계 시간·시차 계산기', short: '세계 도시 지금 시간, 서울과의 시차, 서머타임 반영', keywords: '세계 시간, 시차, 시차 계산, 미국 시간, 뉴욕 시간, 런던 시간, 현지 시간, 서머타임, 시간대 변환, 해외 시간', category: 'date', status: 'live' },
   { slug: 'days-between', title: '일수 계산기 (날짜 사이 며칠)', short: '두 날짜 사이의 일수·주·개월 계산', keywords: '일수 계산기, 며칠, 기간, 날짜 차이, 날짜 계산, 평일 수', category: 'date', status: 'live' },
+  { slug: 'graduation-year', title: '졸업년도 계산기', short: '출생연도로 초·중·고·대학 입학·졸업 연도', keywords: '졸업년도 계산기, 졸업년도계산기, 졸업 연도, 입학 연도, 초등학교 졸업년도, 중학교 졸업년도, 고등학교 졸업년도, 학번 계산, 빠른년생, 이력서 학력, 몇 학년', category: 'date', status: 'live' },
   { slug: 'discharge-date', title: '전역일 계산기', short: '입대일로 전역일·복무율·남은 날 계산', keywords: '전역일 계산기, 전역일계산기, 전역일, 군대 전역일, 소집해제일, 복무율, 군대 디데이, 입대일, 전역 d-day, 군대 남은 날, 사회복무요원 소집해제', category: 'date', status: 'live' },
   // 생활 계산
   { slug: 'calculator', title: '공학용 계산기', short: 'sin·log·제곱근까지, 식을 한 번에 계산', keywords: '계산기, 일반 계산기, 온라인 계산기, 공학 계산기, 삼각함수, 로그, 제곱근', category: 'calc', status: 'live' },
