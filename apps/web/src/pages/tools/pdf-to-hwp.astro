@@ -1,6 +1,7 @@
 ---
 import ToolLayout from '../../layouts/ToolLayout.astro';
 import DirectionTabs from '../../components/DirectionTabs.astro';
+import { HWP_TABS } from '../../data/hwpTabs.js';
 import PdfToHwp from '../../components/tools/PdfToHwp.vue';
 
 const faq = [
@@ -17,7 +18,7 @@ const faq = [
   lead="PDF를 한글에서 편집할 수 있는 문서로 바꿔 드려요. 서버 업로드 없이요."
   faq={faq}
 >
-  <DirectionTabs items={[{ href: '/tools/hwp-to-pdf/', label: 'HWP → PDF' }, { href: '/tools/pdf-to-hwp/', label: 'PDF → HWP' }]} />
+  <DirectionTabs items={HWP_TABS} />
   <PdfToHwp client:load />
 
   <Fragment slot="guide">

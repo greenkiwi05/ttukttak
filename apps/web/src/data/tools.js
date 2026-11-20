@@ -58,6 +58,7 @@ export const TOOLS = [
   { slug: 'pdf-compress', title: 'PDF 용량 줄이기', short: '스캔·사진 PDF를 작게, 서버 업로드 없이', keywords: 'pdf 압축, pdf 용량, pdf 파일 용량 줄이기, pdf 크기 줄이기, pdf 줄이기', category: 'file', status: 'live' },
   { slug: 'pdf-to-jpg', title: 'PDF JPG 변환', short: 'PDF 페이지를 이미지로, 서버 업로드 없이', keywords: 'pdf 이미지, pdf jpg, pdf png, pdf를 사진으로', category: 'file', status: 'live' },
   { slug: 'pdf-to-hwp', title: 'PDF 한글 변환 (HWP)', short: 'PDF를 한글 문서(HWPX)로, 글자 편집 가능', keywords: 'pdf 한글 변환, pdf hwp, pdf hwpx, pdf를 한글로, pdf 편집, 한글 파일 만들기, pdf 글자 수정, pdf파일 한글변환, pdf 한글로 변환', category: 'file', status: 'live' },
+  { slug: 'hwp-viewer', title: '한글 뷰어 (HWP 파일 열기)', short: '한글 프로그램 없이 HWP·HWPX 바로 보기', keywords: '한글 뷰어, hwp 뷰어, 한컴 뷰어, 한글파일 뷰어, hwpx 뷰어, hwp 열기, 한글 파일 열기, 한글 파일 안 열림, 휴대폰 hwp, 맥 hwp', category: 'file', status: 'live' },
   { slug: 'hwp-to-pdf', title: '한글(HWP) PDF 변환', short: '한글 파일을 설치 없이 열고 PDF로 저장', keywords: '한글 파일, hwp, hwpx, 한글 pdf, 한글 뷰어, 한컴, 한글 pdf 변환, 한글파일 pdf 변환, hwp pdf 변환', category: 'file', status: 'live' },
   // 사진
   { slug: 'driver-license-photo', title: '운전면허증 사진 규격 (3.5×4.5cm)', short: '운전면허 갱신·재발급 사진 3.5×4.5cm로 자르기', keywords: '운전면허 사진, 운전면허증 사진 규격, 운전면허 갱신 사진, 면허증 사진, 적성검사 사진, 운전면허 사진 크기, 3.5x4.5', category: 'photo', status: 'live' },
