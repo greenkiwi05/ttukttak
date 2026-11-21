@@ -87,6 +87,7 @@ export const TOOLS = [
   { slug: 'stamp-maker', title: '도장 만들기 (온라인 도장)', short: '이름으로 원형·사각 도장 이미지, 투명 PNG', keywords: '도장, 온라인 도장, 무료 도장 만들기, 전자 도장, 인감, 직인', category: 'text', status: 'live' },
   { slug: 'signature-maker', title: '사인 만들기 (서명 이미지)', short: '손글씨 사인 이미지, 한글·영문, 투명 PNG', keywords: '사인, 서명, 싸인, 전자서명, 이메일 서명, 손글씨', category: 'text', status: 'live' },
   // 뽑기·게임
+  { slug: 'what-to-eat', title: '오늘 뭐 먹지 (점심 메뉴 추천)', short: '점심·저녁 메뉴 랜덤 추천, 근처 식당 지도 검색', keywords: '오늘 뭐 먹지, 오늘뭐먹지, 점심 메뉴 추천, 점심메뉴추천, 저녁 메뉴 추천, 메뉴 추천, 메뉴 고르기, 점심 뭐 먹지, 저녁 뭐 먹지, 메뉴 룰렛, 음식 추천, 혼밥 메뉴, 해장 메뉴', category: 'fun', status: 'live' },
   { slug: 'ladder', title: '사다리타기 (온라인 사다리 게임)', short: '참가자와 결과를 넣고 공정하게 사다리 타기', keywords: '사다리, 사다리게임, 내기, 당첨, 뽑기', category: 'fun', status: 'live' },
   { slug: 'lotto-results', title: '로또 당첨번호 조회', short: '회차별 당첨번호·당첨금, 내 번호 등수 확인', keywords: '로또 당첨번호, 로또 번호 조회, 이번주 로또, 로또 당첨 확인, 로또 회차, 로또 당첨금, 로또 결과, 내 번호 확인', category: 'fun', status: 'live' },
   { slug: 'lotto-stats', title: '로또 번호 통계', short: '번호별 당첨 횟수, 많이·오래 안 나온 번호', keywords: '로또 통계, 로또 많이 나온 번호, 로또 번호 분석, 로또 미출현 번호, 로또 홀짝, 로또 번호 빈도', category: 'fun', status: 'live' },
