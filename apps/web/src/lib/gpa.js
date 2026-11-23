@@ -56,9 +56,11 @@ export function calcGpa(rows, scale = '4.5') {
 
 /** 이전 누적(평점·평점 반영 학점)과 이번 학기를 합친 누적 평점 */
 export function combine(prevGpa, prevCredits, curGpa, curCredits) {
-  const pc = cr(prevCredits) || 0;
+  // 누적 학점은 수십~백몇십 학점이라 과목 학점 검사(cr, 30 이하)를 쓰면 안 된다
+  const n0 = Number(prevCredits);
+  const pc = prevCredits !== '' && Number.isFinite(n0) && n0 > 0 && n0 <= 1000 ? n0 : 0;
   const pg = Number(prevGpa);
-  const hasPrev = pc > 0 && Number.isFinite(pg);
+  const hasPrev = pc > 0 && prevGpa !== '' && prevGpa !== null && prevGpa !== undefined && Number.isFinite(pg);
   const hasCur = curCredits > 0 && curGpa !== null && Number.isFinite(curGpa);
   if (!hasPrev && !hasCur) return null;
   const a = hasPrev ? pg * pc : 0;

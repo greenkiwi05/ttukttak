@@ -45,6 +45,14 @@ test('빈 값·이상한 값은 건너뜀', () => {
 
 test('누적 합치기', () => {
   assert.deepEqual(combine(3.5, 30, 4.0, 15), { gpa: 3.6666666666666665, credits: 45 });
+  // 누적 학점이 30을 넘어도 반영 (예전 버그: 과목 학점 검사로 30 초과를 버림)
+  const big = combine(3.62, 45, 50 / 13, 13);
+  assert.equal(big.credits, 58);
+  assert.equal(Math.round(big.gpa * 100) / 100, 3.67);
+  assert.equal(combine(3.5, 130, null, 0).credits, 130);
+  assert.equal(combine(3.5, 0, null, 0), null);
+  assert.equal(combine(3.5, -5, null, 0), null);
+  assert.deepEqual(combine('', 45, 4.0, 15), { gpa: 4, credits: 15 }); // 평점을 비우면 이전 누적은 무시
   assert.deepEqual(combine('', '', 4.0, 15), { gpa: 4, credits: 15 });
   assert.deepEqual(combine(3.5, 30, null, 0), { gpa: 3.5, credits: 30 });
   assert.equal(combine('', '', null, 0), null);

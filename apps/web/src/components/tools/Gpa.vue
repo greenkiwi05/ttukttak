@@ -157,6 +157,12 @@ const converted = computed(() => convertScale(cv.gpa, cv.from, cv.to));
 .g-major { width: 20px; height: 20px; justify-self: center; accent-color: var(--accent); }
 .g-del { border: 0; background: transparent; color: var(--muted); font-size: 1rem; cursor: pointer; min-height: 40px; }
 .g-del:hover { color: var(--text); }
+/* 좁은 화면: 과목 이름 칸을 넓히려고 나머지 칸을 줄인다 */
+@media (max-width: 480px) {
+  .g-head, .g-row { grid-template-columns: minmax(0, 1fr) 50px 68px 26px 22px; gap: 5px; }
+  .g-row input[type='number'] { padding-right: 4px; }
+  .g-row select { padding-left: 6px; padding-right: 2px; }
+}
 .g-actions { display: flex; gap: 8px; margin-top: 10px; }
 .of { font-size: 1rem; font-weight: 600; color: var(--muted); }
 .result hr { border: 0; border-top: 1px solid rgba(0, 0, 0, .08); margin: 12px 0; }
