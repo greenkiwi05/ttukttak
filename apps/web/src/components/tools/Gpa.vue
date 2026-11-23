@@ -111,7 +111,7 @@ const converted = computed(() => convertScale(cv.gpa, cv.from, cv.to));
   </template>
 
   <template v-else-if="tab === 'target'">
-    <div class="row">
+    <div class="row" style="margin-top: 14px">
       <div class="field"><label for="tg">지금 누적 평점</label><input id="tg" v-model.number="t.gpa" type="number" min="0" :max="max" step="0.01" inputmode="decimal" placeholder="예: 3.5" /></div>
       <div class="field"><label for="tc">평점 반영 학점</label><input id="tc" v-model.number="t.credits" type="number" min="0" inputmode="numeric" placeholder="예: 60" /></div>
     </div>
