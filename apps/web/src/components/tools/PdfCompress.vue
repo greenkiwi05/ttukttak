@@ -113,8 +113,8 @@ onBeforeUnmount(() => { cancelled = true; clearOut(); });
 <template>
   <label class="drop" :class="{ over }" @dragover.prevent="over = true" @dragleave="over = false" @drop.prevent="over = false; setFile($event.dataTransfer?.files)">
     <input type="file" accept="application/pdf,.pdf" @change="setFile(($event.target as HTMLInputElement).files); ($event.target as HTMLInputElement).value = ''" />
-    <strong>{{ file ? file.name : 'PDF 파일을 끌어다 놓거나 눌러서 고르세요' }}</strong><br />
-    <small class="muted">{{ file ? `${formatBytes(file.size)} · ${pages}쪽` : '최대 200MB · 서버로 올라가지 않아요' }}</small>
+    <strong role="status">{{ opening && !ask ? 'PDF 여는 중…' : file ? file.name : 'PDF 파일을 끌어다 놓거나 눌러서 고르세요' }}</strong><br />
+    <small class="muted">{{ opening && !ask ? '처음에는 프로그램을 내려받느라 몇 초 걸릴 수 있어요' : file ? `${formatBytes(file.size)} · ${pages}쪽` : '최대 200MB · 서버로 올라가지 않아요' }}</small>
   </label>
   <p v-if="error" class="error" role="alert">{{ error }}</p>
   <PdfPassword v-if="ask" :name="ask.file.name" :wrong="ask.wrong" :busy="opening" @submit="(p) => openFile(ask!.file, p)" @cancel="ask = null" />

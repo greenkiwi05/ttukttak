@@ -199,8 +199,8 @@ const mb = (n: number) => (n / 1024 / 1024).toFixed(1) + 'MB';
   <template v-else>
     <label class="drop" :class="{ over }" @dragover.prevent="over = true" @dragleave="over = false" @drop.prevent="over = false; setSplitFile($event.dataTransfer?.files)">
       <input type="file" accept="application/pdf,.pdf" @change="setSplitFile(($event.target as HTMLInputElement).files); ($event.target as HTMLInputElement).value = ''" />
-      <strong>{{ splitFile ? splitFile.name : '나눌 PDF 파일 하나를 고르세요' }}</strong><br />
-      <small class="muted">{{ splitFile ? `전체 ${pageCount}쪽` : '서버로 올라가지 않아요' }}</small>
+      <strong role="status">{{ busy && !splitFile && !ask ? 'PDF 여는 중…' : splitFile ? splitFile.name : '나눌 PDF 파일 하나를 고르세요' }}</strong><br />
+      <small class="muted">{{ busy && !splitFile && !ask ? '처음에는 프로그램을 내려받느라 몇 초 걸릴 수 있어요' : splitFile ? `전체 ${pageCount}쪽` : '서버로 올라가지 않아요' }}</small>
     </label>
     <template v-if="splitFile">
       <div class="chips" style="margin-top: 14px">
