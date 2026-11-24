@@ -2,7 +2,8 @@
 // PDF → 한글(HWPX) 변환 UI. 글자 정리는 src/lib/pdfToHwpx.js, 그림 꺼내기는 src/lib/pdfImages.js,
 // HTML → HWPX는 hwp-convert(MIT), 압축은 fflate. 모두 이 페이지에서만 동적 import. 파일은 서버로 보내지 않는다.
 import { ref, computed, onBeforeUnmount } from 'vue';
-import { loadPdfjs, openPdf, pdfOpenError } from '../../lib/pdfjs.js';
+import { loadPdfjs, openPdf, pdfOpenError, passwordState } from '../../lib/pdfjs.js';
+import PdfPassword from '../PdfPassword.vue';
 import { groupLines, orderColumns, toBlocks, buildHtml, insertPageBreaks, cleanPreview, hwpxOutName, selectImages, fixPicSizes, binItems, imageSize, pageModeSetup } from '../../lib/pdfToHwpx.js';
 import { formatBytes } from '../../lib/compress.js';
 import { filterFiles } from '../../lib/files.js';
@@ -20,6 +21,8 @@ const error = ref('');
 const over = ref(false);
 const out = ref<{ url: string; blob: Blob; pages: number; paras: number; images: number; scanned: number; preview: string } | null>(null);
 let task: any = null;
+const ask = ref<{ wrong: boolean } | null>(null); // 비밀번호를 물어볼지
+let password: string | undefined; // 연 파일의 비밀번호 (화면을 닫으면 사라짐)
 
 function clearOut() { if (out.value) URL.revokeObjectURL(out.value.url); out.value = null; }
 
@@ -30,8 +33,12 @@ function setFile(list: FileList | null | undefined) {
   const r = filterFiles([f], { exts: ['pdf'], maxSize: MAX, maxCount: 1 });
   if (!r.accepted.length) { error.value = r.rejected[0].reason; return; }
   clearOut();
+  ask.value = null;
+  password = undefined;
   file.value = f;
 }
+
+function withPassword(p: string) { password = p; run(); }
 
 async function run() {
   if (!file.value || busy.value) return;
@@ -39,9 +46,14 @@ async function run() {
   try {
     step.value = 'PDF를 여는 중…';
     const pdfjs: any = await loadPdfjs();
-    task = openPdf(pdfjs, new Uint8Array(await file.value.arrayBuffer()));
+    task = openPdf(pdfjs, new Uint8Array(await file.value.arrayBuffer()), password);
     let doc;
-    try { doc = await task.promise; } catch (e) { throw Object.assign(new Error(pdfOpenError(e)), { user: true }); }
+    try { doc = await task.promise; } catch (e) {
+      const st = passwordState(e);
+      if (st) { ask.value = { wrong: st === 'wrong' }; return; }
+      throw Object.assign(new Error(pdfOpenError(e)), { user: true });
+    }
+    ask.value = null;
     if (doc.numPages > MAX_PAGES) throw Object.assign(new Error(`${MAX_PAGES}쪽까지 변환할 수 있어요. (이 PDF는 ${doc.numPages}쪽)`), { user: true });
     const pageMode = mode.value === 'page';
     const imgs = withImages.value || pageMode ? await import('../../lib/pdfImages.js') : null;
@@ -139,7 +151,8 @@ const outName = computed(() => (file.value ? hwpxOutName(file.value.name) : '변
       <div class="progress" style="height: 8px; margin-top: 12px"><div :style="{ width: progress * 100 + '%' }"></div></div>
       <p class="muted" style="margin: 6px 0 0">{{ step }} {{ Math.round(progress * 100) }}%</p>
     </template>
-    <button v-else class="btn" type="button" @click="run">한글(HWPX)로 변환하기</button>
+    <button v-else-if="!ask" class="btn" type="button" @click="run">한글(HWPX)로 변환하기</button>
+    <PdfPassword v-if="ask" :name="file.name" :wrong="ask.wrong" :busy="busy" @submit="withPassword" @cancel="ask = null; password = undefined" />
   </template>
 
   <div v-if="out && file" class="result" aria-live="polite">

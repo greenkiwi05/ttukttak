@@ -6,7 +6,8 @@ import { filterFiles } from '../../lib/files.js';
 import { COMPRESS_PRESETS, compareSize, compressedName, pagePixels } from '../../lib/pdfCompress.js';
 import { renderScale } from '../../lib/pdfToImage.js';
 import { formatBytes } from '../../lib/compress.js';
-import { loadPdfjs, openPdf, pdfOpenError } from '../../lib/pdfjs.js';
+import { loadPdfjs, openPdf, pdfOpenError, passwordState } from '../../lib/pdfjs.js';
+import PdfPassword from '../PdfPassword.vue';
 
 const file = ref<File | null>(null);
 const pages = ref(0);
@@ -17,6 +18,10 @@ const error = ref('');
 const over = ref(false);
 const out = ref<{ url: string; blob: Blob } | null>(null);
 let cancelled = false;
+const ask = ref<{ file: File; wrong: boolean } | null>(null); // 비밀번호를 물어볼 파일
+const opening = ref(false);
+let password: string | undefined; // 연 파일의 비밀번호 (화면을 닫으면 사라짐)
+let openRun = 0;
 
 function clearOut() {
   if (out.value) URL.revokeObjectURL(out.value.url);
@@ -30,17 +35,34 @@ async function setFile(list: FileList | null | undefined) {
   const r = filterFiles([f], { exts: ['pdf'], maxSize: 200 * 1024 * 1024, maxCount: 1 });
   if (!r.accepted.length) { error.value = r.rejected[0].reason; return; }
   clearOut();
+  ask.value = null;
+  file.value = null;
+  await openFile(f);
+}
+
+async function openFile(f: File, pw?: string) {
+  const my = ++openRun;
+  error.value = '';
+  opening.value = true;
+  let task: any = null;
   try {
     const pdfjs: any = await loadPdfjs();
     // pdf.js 6: 정리는 문서가 아니라 loadingTask.destroy()로 한다
-    const task = openPdf(pdfjs, new Uint8Array(await f.arrayBuffer()));
+    task = openPdf(pdfjs, new Uint8Array(await f.arrayBuffer()), pw);
     const doc = await task.promise;
+    if (my !== openRun) return;
     pages.value = doc.numPages;
-    await task.destroy();
+    password = pw;
+    ask.value = null;
     file.value = f;
   } catch (e) {
-    file.value = null;
-    error.value = pdfOpenError(e);
+    if (my !== openRun) return;
+    const st = passwordState(e);
+    if (st) ask.value = { file: f, wrong: st === 'wrong' };
+    else { ask.value = null; error.value = pdfOpenError(e); }
+  } finally {
+    await task?.destroy();
+    if (my === openRun) opening.value = false;
   }
 }
 
@@ -54,7 +76,7 @@ async function run() {
   const p = COMPRESS_PRESETS.find((x) => x.id === preset.value)!;
   try {
     const [pdfjs, { PDFDocument }] = await Promise.all([loadPdfjs() as Promise<any>, import('pdf-lib')]);
-    const task = openPdf(pdfjs, new Uint8Array(await file.value.arrayBuffer()));
+    const task = openPdf(pdfjs, new Uint8Array(await file.value.arrayBuffer()), password);
     const src = await task.promise;
     const outDoc = await PDFDocument.create();
     for (let i = 1; i <= src.numPages; i++) {
@@ -95,6 +117,7 @@ onBeforeUnmount(() => { cancelled = true; clearOut(); });
     <small class="muted">{{ file ? `${formatBytes(file.size)} · ${pages}쪽` : '최대 200MB · 서버로 올라가지 않아요' }}</small>
   </label>
   <p v-if="error" class="error" role="alert">{{ error }}</p>
+  <PdfPassword v-if="ask" :name="ask.file.name" :wrong="ask.wrong" :busy="opening" @submit="(p) => openFile(ask!.file, p)" @cancel="ask = null" />
 
   <template v-if="file">
     <div class="field" style="margin-top: 16px">

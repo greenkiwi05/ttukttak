@@ -5,7 +5,8 @@ import { filterFiles } from '../../lib/files.js';
 import { parsePageRanges } from '../../lib/pageRange.js';
 import { renderScale, pageImageName, DPI_PRESETS } from '../../lib/pdfToImage.js';
 import { downloadBlob, downloadZip } from '../../lib/download.js';
-import { loadPdfjs, openPdf, pdfOpenError } from '../../lib/pdfjs.js';
+import { loadPdfjs, openPdf, pdfOpenError, passwordState } from '../../lib/pdfjs.js';
+import PdfPassword from '../PdfPassword.vue';
 
 const file = ref<File | null>(null);
 const pageCount = ref(0);
@@ -20,6 +21,8 @@ const over = ref(false);
 const outputs = ref<{ name: string; blob: Blob; url: string }[]>([]);
 const doc = shallowRef<any>(null);
 let task: any = null; // pdf.js 6: 정리는 loadingTask.destroy()
+const ask = ref<{ file: File; wrong: boolean } | null>(null); // 비밀번호를 물어볼 파일
+let openRun = 0; // 파일을 연달아 고르면 마지막 것만
 
 const lib = loadPdfjs as () => Promise<any>;
 function clearOut() {
@@ -34,19 +37,35 @@ async function setFile(list: FileList | null | undefined) {
   const r = filterFiles([f], { exts: ['pdf'], maxSize: 100 * 1024 * 1024, maxCount: 1 });
   if (!r.accepted.length) { error.value = r.rejected[0].reason; return; }
   clearOut();
+  ask.value = null;
+  file.value = null; doc.value = null;
+  await openFile(f);
+}
+
+async function openFile(f: File, password?: string) {
+  const my = ++openRun;
+  error.value = '';
   busy.value = true;
   try {
     const pdfjs = await lib();
+    const data = new Uint8Array(await f.arrayBuffer());
+    if (my !== openRun) return;
     await task?.destroy();
-    task = openPdf(pdfjs, new Uint8Array(await f.arrayBuffer()));
-    doc.value = await task.promise;
+    const t = (task = openPdf(pdfjs, data, password));
+    const d = await t.promise;
+    if (my !== openRun) { t.destroy(); return; }
+    doc.value = d;
     file.value = f;
+    ask.value = null;
     pageCount.value = doc.value.numPages;
     range.value = pageCount.value > 1 ? `1-${pageCount.value}` : '1';
   } catch (e) {
-    error.value = pdfOpenError(e);
+    if (my !== openRun) return;
+    const st = passwordState(e);
+    if (st) ask.value = { file: f, wrong: st === 'wrong' };
+    else { ask.value = null; error.value = pdfOpenError(e); }
   } finally {
-    busy.value = false;
+    if (my === openRun) busy.value = false;
   }
 }
 
@@ -93,6 +112,7 @@ onBeforeUnmount(() => { clearOut(); task?.destroy(); });
     <small class="muted">{{ file ? `전체 ${pageCount}쪽` : '서버로 올라가지 않아요' }}</small>
   </label>
 
+  <PdfPassword v-if="ask" :name="ask.file.name" :wrong="ask.wrong" :busy="busy" @submit="(p) => openFile(ask!.file, p)" @cancel="ask = null" />
   <template v-if="file">
     <div class="field" style="margin-top: 16px">
       <label>해상도</label>
