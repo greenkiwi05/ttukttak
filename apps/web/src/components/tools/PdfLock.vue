@@ -82,13 +82,13 @@ async function lock() {
   w.onmessage = ({ data }) => {
     if (worker !== w) return;
     if (data.error) {
-      fail(data.error === 'load' ? '암호화 프로그램을 불러오지 못했어요. 인터넷 연결을 확인하고 다시 해 보세요.' : data.error === 'verify' ? '비밀번호가 제대로 걸렸는지 확인하지 못해서 파일을 만들지 않았어요. 다른 비밀번호로 다시 해 보세요.' : '이 PDF에는 비밀번호를 걸지 못했어요. 파일이 손상되었을 수 있어요.');
+      fail(data.error === 'load' ? '잠그는 프로그램을 불러오지 못했어요. 인터넷 연결을 확인하고 다시 해 보세요.' : data.error === 'verify' ? '비밀번호가 제대로 걸렸는지 확인하지 못해서 파일을 만들지 않았어요. 다른 비밀번호로 다시 해 보세요.' : '이 PDF에는 비밀번호를 걸지 못했어요. 파일이 손상되었을 수 있어요.');
       return;
     }
     stopWorker();
     done.value = { blob: new Blob([data.bytes], { type: 'application/pdf' }), name: lockedName(f.name) };
   };
-  w.onerror = () => fail('암호화하는 중 문제가 생겼어요. 파일이 너무 크면 나눠서 해 보세요.');
+  w.onerror = () => fail('비밀번호를 거는 중 문제가 생겼어요. 파일이 너무 크면 나눠서 해 보세요.');
   w.postMessage({ bytes, password: pw.value, current }, [bytes]);
 }
 
@@ -120,7 +120,7 @@ onBeforeUnmount(() => { openRun++; stopWorker(); });
   <div v-if="done" class="result" aria-live="polite">
     <div class="sub">이제 비밀번호를 알아야 열 수 있어요</div>
     <div class="big done">{{ done.name }}</div>
-    <p class="sub" style="margin: 6px 0 0">{{ formatBytes(done.blob.size) }} · AES-256</p>
+    <p class="sub" style="margin: 6px 0 0">{{ formatBytes(done.blob.size) }}</p>
     <button type="button" class="btn" @click="downloadBlob(done.blob, done.name)">PDF 다운로드</button>
     <p class="sub" style="margin: 10px 0 0"><b>비밀번호를 잊으면 누구도 열 수 없어요.</b> 원본 PDF는 따로 보관하세요.</p>
   </div>
