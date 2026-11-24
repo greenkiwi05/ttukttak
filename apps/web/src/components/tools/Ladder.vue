@@ -93,7 +93,7 @@ const revealAll = () => { for (let i = 0; i < count.value; i++) if (!shown.value
 
 <style scoped>
 .ladder-inputs { display: grid; gap: 6px; }
-.ladder-inputs input { padding: 8px 6px; font-size: .9rem; text-align: center; min-width: 0; }
+.ladder-inputs input { padding: 8px 4px; font-size: 1rem; text-align: center; min-width: 0; }
 .ladder-wrap { overflow-x: auto; margin-top: 14px; }
 .ladder-names { display: grid; gap: 6px; }
 .ladder-names .chip { padding: 6px 4px; font-size: .85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
