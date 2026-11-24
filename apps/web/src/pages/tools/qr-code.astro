@@ -1,6 +1,8 @@
 ---
 import ToolLayout from '../../layouts/ToolLayout.astro';
 import QrCode from '../../components/tools/QrCode.vue';
+import DirectionTabs from '../../components/DirectionTabs.astro';
+import { QR_TABS } from '../../data/qrTabs.js';
 
 const faq = [
   { q: 'QR코드를 만드는 데 돈이 드나요?', a: '아니요. 무료이고 회원가입도 필요 없어요. 만든 QR코드는 기간 제한 없이 계속 쓸 수 있어요.' },
@@ -17,6 +19,7 @@ const faq = [
   lead="종류를 고르고 내용을 넣으면 QR코드가 바로 만들어져요."
   faq={faq}
 >
+  <DirectionTabs items={QR_TABS} />
   <QrCode client:load />
 
   <Fragment slot="guide">
