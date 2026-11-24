@@ -58,6 +58,7 @@ export const TOOLS = [
   { slug: 'video-to-mp3', title: '동영상 MP3 변환 (소리 추출)', short: '영상에서 소리만 MP3로, 구간 자르기, 서버 업로드 없이', keywords: 'mp4 mp3 변환, 동영상 mp3, 소리 추출, 오디오 추출, 영상 음원 추출, mp3 변환, 벨소리 만들기, m4a, wav', category: 'file', status: 'live' },
   { slug: 'video-to-gif', title: 'GIF 만들기 (동영상 GIF 변환)', short: '영상 구간을 잘라 움짤로, 서버 업로드 없이', keywords: 'gif 만들기, 동영상 gif 변환, 움짤 만들기, mp4 gif, 짤 만들기, gif 변환, 영상 gif', category: 'file', status: 'live' },
   { slug: 'video-compress', title: '동영상 용량 줄이기', short: '화질·목표 용량을 골라 영상 압축, 서버 업로드 없이', keywords: '동영상 용량, 영상 압축, 동영상 압축, mp4, 영상 용량, 비디오', category: 'file', status: 'live' },
+  { slug: 'pdf-password', title: 'PDF 암호 설정 (비밀번호 걸기)', short: 'PDF를 비밀번호로 잠그기, 서버 업로드 없이', keywords: 'pdf 암호 설정, pdf 비밀번호 설정, pdf 비밀번호 걸기, pdf 암호 걸기, pdf 잠금, pdf 잠그기, pdf 보안, pdf 비밀번호 변경', category: 'file', status: 'live' },
   { slug: 'pdf-compress', title: 'PDF 용량 줄이기', short: '스캔·사진 PDF를 작게, 서버 업로드 없이', keywords: 'pdf 압축, pdf 용량, pdf 파일 용량 줄이기, pdf 크기 줄이기, pdf 줄이기', category: 'file', status: 'live' },
   { slug: 'pdf-to-jpg', title: 'PDF JPG 변환', short: 'PDF 페이지를 이미지로, 서버 업로드 없이', keywords: 'pdf 이미지, pdf jpg, pdf png, pdf를 사진으로', category: 'file', status: 'live' },
   { slug: 'pdf-to-hwp', title: 'PDF 한글 변환 (HWP)', short: 'PDF를 한글 문서(HWPX)로, 글자 편집 가능', keywords: 'pdf 한글 변환, pdf hwp, pdf hwpx, pdf를 한글로, pdf 편집, 한글 파일 만들기, pdf 글자 수정, pdf파일 한글변환, pdf 한글로 변환', category: 'file', status: 'live' },
