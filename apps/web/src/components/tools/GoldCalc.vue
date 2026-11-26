@@ -6,6 +6,8 @@ import { UNITS, PURITY, WEIGHT_PRESETS, pricePerGram, valueOf, weightFor, conver
 type Unit = keyof typeof UNITS;
 type Pur = keyof typeof PURITY;
 const KEY = 'ttukttak:gold';
+// 시세를 직접 받아 오지 않는 대신, 시세를 보고 돌아와 넣을 수 있게 네이버 금시세 검색을 새 창으로 연다 (입력값은 보내지 않음)
+const NAVER_GOLD = 'https://search.naver.com/search.naver?query=' + encodeURIComponent('금시세');
 const price = ref('');
 const basis = ref<'don' | 'g'>('don');
 const tab = ref<'weight' | 'budget' | 'unit'>('weight');
@@ -59,6 +61,7 @@ const isPreset = (d: number) => unit.value === 'don' && num(weight.value) === d;
     <p v-if="priceBad" class="error">시세는 숫자로 넣어 주세요.</p>
     <p v-else-if="perGram" class="muted hint">1g {{ won(perGram) }} · 1돈 {{ won(perGram * 3.75) }} 기준으로 계산해요</p>
     <p v-else class="muted hint">금거래소·은행·뉴스에서 본 순금 시세를 넣으세요. 이 기기에 기억해 둬요.</p>
+    <a class="btn-sub see" :href="NAVER_GOLD" target="_blank" rel="noopener">오늘 금 시세 보러 가기 ↗</a>
   </div>
 
   <div class="tabs" role="tablist" style="margin-top: 16px">
@@ -130,6 +133,7 @@ const isPreset = (d: number) => unit.value === 'don' && num(weight.value) === d;
 .price-row input { flex: 1; min-width: 0; }
 .won { font-weight: 600; }
 .hint { margin: 8px 0 0; }
+.see { display: inline-block; margin-top: 10px; text-decoration: none; font-weight: 600; }
 .tt { margin: 22px 0 6px; font-size: 1rem; }
 /* 휴대폰에서도 네 칸이 한 화면에 들어가게 */
 .glance th, .glance td { padding: 8px 6px; }
