@@ -58,6 +58,7 @@ export const TOOLS = [
   { slug: 'image-convert', title: 'PNG JPG 변환·이미지 크기 조절', short: 'PNG·JPG·WEBP 변환, 픽셀·비율로 크기 조절', keywords: '이미지 크기, 사진 크기, 해상도, png, jpg, webp, 리사이즈, 픽셀', category: 'file', status: 'live' },
   { slug: 'video-to-mp3', title: '동영상 MP3 변환 (소리 추출)', short: '영상에서 소리만 MP3로, 구간 자르기, 서버 업로드 없이', keywords: 'mp4 mp3 변환, 동영상 mp3, 소리 추출, 오디오 추출, 영상 음원 추출, mp3 변환, 벨소리 만들기, m4a, wav', category: 'file', status: 'live' },
   { slug: 'video-to-gif', title: 'GIF 만들기 (동영상 GIF 변환)', short: '영상 구간을 잘라 움짤로, 서버 업로드 없이', keywords: 'gif 만들기, 동영상 gif 변환, 움짤 만들기, mp4 gif, 짤 만들기, gif 변환, 영상 gif', category: 'file', status: 'live' },
+  { slug: 'video-to-mp4', title: '동영상 MP4 변환 (MOV MP4 변환)', short: 'MOV·MKV·WEBM을 MP4로, 서버 업로드 없이', keywords: '동영상 mp4 변환, mp4 변환, mov mp4 변환, 동영상 변환, 동영상 파일 변환, 아이폰 동영상 변환, mkv mp4 변환, webm mp4 변환, hevc 변환, 영상 변환', category: 'file', status: 'live' },
   { slug: 'video-compress', title: '동영상 용량 줄이기', short: '화질·목표 용량을 골라 영상 압축, 서버 업로드 없이', keywords: '동영상 용량, 영상 압축, 동영상 압축, mp4, 영상 용량, 비디오', category: 'file', status: 'live' },
   { slug: 'pdf-password', title: 'PDF 암호 설정 (비밀번호 걸기)', short: 'PDF를 비밀번호로 잠그기, 서버 업로드 없이', keywords: 'pdf 암호 설정, pdf 비밀번호 설정, pdf 비밀번호 걸기, pdf 암호 걸기, pdf 잠금, pdf 잠그기, pdf 보안, pdf 비밀번호 변경', category: 'file', status: 'live' },
   { slug: 'pdf-compress', title: 'PDF 용량 줄이기', short: '스캔·사진 PDF를 작게, 서버 업로드 없이', keywords: 'pdf 압축, pdf 용량, pdf 파일 용량 줄이기, pdf 크기 줄이기, pdf 줄이기', category: 'file', status: 'live' },
