@@ -46,6 +46,7 @@ export const TOOLS = [
   { slug: 'unit-convert', title: '단위 변환기', short: '인치·파운드·화씨·갤런 등 단위 바로 변환', keywords: '단위, 인치, cm, 파운드, kg, 화씨, 섭씨, 갤런, 온도, 길이, 무게', category: 'calc', status: 'live' },
   { slug: 'exchange-rate', title: '환율 계산기', short: '오늘 고시 환율로 외화↔원화 바로 계산', keywords: '환율, 오늘 환율, 달러 환율, 엔화 환율, 유로 환율, 엔화 계산기, 달러 계산기, 위안화, 매매기준율, 송금 환율, 환전', category: 'calc', status: 'live' },
   { slug: 'exchange-rate-history', title: '과거 환율 조회', short: '날짜별 환율, 기간별 추이 그래프·월평균', keywords: '과거 환율, 날짜별 환율, 환율 조회, 환율 추이, 환율 그래프, 월평균 환율, 환율 차트, 기준환율 조회, 매매기준율 조회, 작년 환율', category: 'calc', status: 'live' },
+  { slug: 'gold-calculator', title: '금값 계산기 (금 한돈 가격)', short: '금 1돈·g·냥 가격, 18K·14K 금값 계산', keywords: '금값 계산기, 금 한돈 가격, 금한돈가격, 금 1돈 가격, 금1돈시세, 순금 1돈 가격, 18k 금시세, 14k 금시세, 24k 금값, 금 1돈 몇 그램, 돈 그램 환산, 금 한냥, 돌반지, 금 팔때, 금시세 계산', category: 'calc', status: 'live' },
   { slug: 'fuel-cost', title: '주유비 계산기 (기름값 계산)', short: '거리·연비로 주유비, 오늘 평균 기름값 자동', keywords: '주유비, 기름값, 유류비, 연비, 휘발유, 경유, LPG, 유가, 오늘 유가, 주유비 계산, 교통비, 여행 경비, 기름값 계산기, 기름값 계산', category: 'calc', status: 'live' },
   { slug: 'travel-payment', title: '해외 결제 수수료 계산기', short: '여행지 카드 결제, 실제 원화 청구액 계산', keywords: '해외결제, 카드 수수료, 환율, 여행, 발리, 루피아, 일본 여행, 엔화, 미국 팁, 달러, 태국, 베트남, 유럽, DCC, 트래블카드, 트래블월렛, 트래블로그', category: 'calc', status: 'live' },
   { slug: 'savings-interest', title: '적금·예금 이자 계산기', short: '단리·월복리, 세전·세후 이자', keywords: '적금, 예금, 이자, 세후, 단리, 복리, 만기', category: 'calc', status: 'live' },
