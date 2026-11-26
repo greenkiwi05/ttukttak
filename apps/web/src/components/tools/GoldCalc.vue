@@ -36,6 +36,8 @@ const v = computed(() => (perGram.value ? valueOf(weight.value, unit.value, puri
 const w = computed(() => (perGram.value ? weightFor(budget.value, purity.value, perGram.value) : null));
 const table = computed(() => (perGram.value ? priceTable(perGram.value) : []));
 const won = (n: number) => Math.round(n).toLocaleString('ko-KR') + '원';
+// 한눈에 보기 표는 휴대폰 폭에 맞게 만 원 단위 (소수 첫째 자리까지). 정확한 금액은 위 계산 결과에 나온다
+const man = (n: number) => (Math.round(n / 1000) / 10).toLocaleString('ko-KR', { maximumFractionDigits: 1 });
 const units = Object.entries(UNITS) as [Unit, { label: string; grams: number }][];
 const purities = Object.entries(PURITY) as [Pur, { label: string; ratio: number }][];
 const presetLabel = (d: number) => (d === 0.5 ? '반 돈' : d === 10 ? '10돈 (1냥)' : `${d}돈`);
@@ -113,11 +115,11 @@ const isPreset = (d: number) => unit.value === 'don' && num(weight.value) === d;
   <p v-if="tab !== 'unit' && !perGram && !priceBad" class="notice">위에 오늘 순금 시세를 넣으면 금액이 바로 나와요.</p>
 
   <template v-if="table.length && tab !== 'unit'">
-    <h3 class="tt">한눈에 보기 <small class="muted">(금 함량 기준)</small></h3>
+    <h3 class="tt">한눈에 보기 <small class="muted">(단위: 만 원 · 금 함량 기준)</small></h3>
     <div class="table-wrap">
-      <table class="table">
+      <table class="table glance">
         <thead><tr><th>무게</th><th v-for="[k, p] in purities" :key="k">{{ p.label.replace(' (24K)', '') }}</th></tr></thead>
-        <tbody><tr v-for="r in table" :key="r.don"><td>{{ presetLabel(r.don) }}</td><td v-for="[k] in purities" :key="k">{{ won(r.values[k]) }}</td></tr></tbody>
+        <tbody><tr v-for="r in table" :key="r.don"><td>{{ r.don }}돈</td><td v-for="[k] in purities" :key="k">{{ man(r.values[k]) }}</td></tr></tbody>
       </table>
     </div>
   </template>
@@ -129,4 +131,7 @@ const isPreset = (d: number) => unit.value === 'don' && num(weight.value) === d;
 .won { font-weight: 600; }
 .hint { margin: 8px 0 0; }
 .tt { margin: 22px 0 6px; font-size: 1rem; }
+/* 휴대폰에서도 네 칸이 한 화면에 들어가게 */
+.glance th, .glance td { padding: 8px 6px; }
+@media (max-width: 420px) { .glance { font-size: .92rem; } }
 </style>
